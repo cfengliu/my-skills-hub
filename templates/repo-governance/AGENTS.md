@@ -76,7 +76,7 @@ repo 的靜態邊界規則直接由 `AGENTS.md` 與 `docs/` 提供；`runtime-ad
 repo-local skill 不得重寫外部 runtime 已經擁有的 generic workflow。
 repo-local skill 不得接管 runtime working-artifact path selection。
 
-## 2.1) Subagent Usage Contract
+## 2.1) Subagent Boundary Contract
 
 - 外部 runtime 可以使用 subagents 做 exploration、implementation、spec review、code quality review、verification support。
 - subagent dispatch / orchestration 是外部 runtime 的責任，不是 repo-local skill 的責任。
