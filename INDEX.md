@@ -17,7 +17,7 @@
 | `engineering/failure-first` | 先思考失敗模式、復原與降級策略。 |
 | `engineering/security-first` | 先檢查權限、資料保護、濫用與攻擊面。 |
 | `engineering/verification-first` | 把需求轉成測試、型別、CI 與驗證證據。 |
-| `engineering/engineering-first-principles` | 用第一性原理審視工程決策與設計取捨。 |
+| `engineering/engineering-first-principles` | 統合 Engineering skills，依任務風險路由到 problem/boundary/simplicity/change/verification/failure/security first。 |
 
 ### Agent Workflows
 
