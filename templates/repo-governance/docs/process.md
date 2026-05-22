@@ -93,6 +93,14 @@ trivial change 可採輕量驗證：檢查 diff、確認不需 canonical doc syn
 
 複雜任務必須有 plan，但 plan file path、format 與 supporting artifacts 由 external runtime 決定。
 
+### 2.1 Spark Planning Classification
+
+若 external runtime 支援 `gpt-5.3-codex-spark`，planning 階段應先標出可交給 Spark 的小型局部 implementation tasks。
+
+Spark task 只需確認最重要規則：scope 小且明確、限制清楚、主 runtime 知道如何檢查結果。
+
+若 task 是否適合 Spark 不明確，預設留給主 runtime。不得為了使用 Spark 而拆出假小任務。
+
 ## 3) Implementation Start Rule
 
 - 即使是非複雜任務，也要先完成一次簡要規劃思考
@@ -120,69 +128,13 @@ trivial change 可採輕量驗證：檢查 diff、確認不需 canonical doc syn
 
 ### 4.6 Spark Tactical Subagent Policy
 
-若 external runtime 支援 `gpt-5.3-codex-spark`，Spark 只能用於快速互動式 coding。Spark 是快手，不是主腦；主 runtime 必須保留 scope、review、integration、verification 與 final acceptance 的責任。
+若 external runtime 支援 `gpt-5.3-codex-spark`，Spark 只可用於快速互動式 coding：小範圍、邊界清楚、限制清楚、可由主 runtime 快速檢查的局部修改。符合條件的小型局部 coding task 應優先考慮委派給 Spark。
 
-Spark 適合在主 runtime 已切出明確小任務時使用，尤其是需要快速修改、快速試作、快速回傳 diff 的場景。
+Spark 適合 UI/CSS/layout、小 bug、單一 function / 小模組、簡單 state、單檔或小範圍 prototype。Spark 不得處理 repo-wide reasoning、架構、security/auth/permissions、database/migration、payments/key-management、複雜跨模組 refactor、長時間 debugging、test strategy、release verification、production deployment、需求不明或 agent orchestration。
 
-符合 Spark 適用條件的小型局部 coding task，external runtime 應優先考慮委派給 `gpt-5.3-codex-spark`，以縮短互動迭代時間。
+委派 Spark 前，主 runtime 必須定義 scope、目標、限制與檢查方式。Spark 若發現 scope 變大、路徑不清或涉及敏感區域，必須停止並回報，不得繼續猜。
 
-若任務是否適合 Spark 不明確，預設交由主 runtime 處理，不得為了使用 Spark 而拆出假小任務。
-
-Spark 適合處理以下任務：
-
-- 快速調整 UI、CSS、layout、spacing、labels 或 copy
-- 修小 bug
-- 修改單一 function 或小模組
-- 重塑局部邏輯，但不得擴成跨模組 refactor
-- 補簡單 loading、empty、error state
-- 快速產生單檔或小範圍 prototype / draft implementation，交由主 runtime review
-- 在主 runtime 決策前，快速嘗試一個小替代方案
-- 依照主 runtime 的明確指示，做邊改邊收斂的局部 coding iteration
-
-Spark 不得處理以下任務：
-
-- 需要理解整個 repo 的任務
-- 架構決策
-- security-sensitive changes
-- database schema design 或 migrations
-- authentication、authorization、permission logic
-- payments、wallet、custody、signing、key-management logic
-- 跨多檔案或多模組的複雜 refactor
-- 長時間 debugging
-- test strategy 或 release verification
-- production deployment decisions
-- 需求不明、需要產品或設計判斷的任務
-- multi-step planning 或 agent orchestration
-
-使用 Spark 前，主 runtime 必須先定義：
-
-1. Spark 可檢查或修改的精確檔案或小範圍。
-2. Spark 要完成的單一具體變更。
-3. Spark 不得違反的限制。
-4. Spark 必須回報的輸出。
-5. 主 runtime 要如何檢查或驗證結果。
-
-Spark 必須遵守以下操作規則：
-
-- 只做最小正確變更。
-- 不重新設計系統。
-- 不新增 dependency，除非使用者或主 runtime 明確要求。
-- 不碰 unrelated files。
-- 不做 speculative cleanup。
-- 不靜默改變要求範圍外的 behavior。
-- 不主動執行 broad repo-wide commands、test suites 或 destructive commands，除非主 runtime 明確要求。
-- 任務變大、路徑不清、涉及敏感區域或超出局部 edit 時，必須停止並回報主 runtime，不得繼續猜。
-
-Spark 回報至少必須包含：
-
-- touched files
-- edit summary
-- patch 或 edited content
-- commands run（若有）
-- skipped checks and reason（若有）
-- escalation concerns 或 residual risks（若有）
-
-Spark output 永遠不是自動可信結果。主 runtime 必須 inspect diff、執行適當 checks，並在 meaningful completion claim 前滿足 repo-local `verifier` contract。
+Spark output 至少要讓主 runtime 看得出 touched files、edit summary、patch / edited content、commands/skipped checks（若有）與 residual risks（若有）。Spark output 不自動可信；主 runtime 必須 inspect diff、執行必要 checks，並在 meaningful completion claim 前滿足 repo-local `verifier` contract。
 
 ## 5) Runtime Artifact Sync Rule
 
