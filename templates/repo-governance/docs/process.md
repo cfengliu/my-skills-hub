@@ -134,6 +134,8 @@ Spark 適合 UI/CSS/layout、小 bug、單一 function / 小模組、簡單 stat
 
 委派 Spark 前，主 runtime 必須定義 scope、目標、限制與檢查方式。Spark 若發現 scope 變大、路徑不清或涉及敏感區域，必須停止並回報，不得繼續猜。
 
+Spark 委派應明確開頭，例如：`Spawn a worker subagent with model gpt-5.3-codex-spark for this tactical task: ...`
+
 Spark output 至少要讓主 runtime 看得出 touched files、edit summary、patch / edited content、commands/skipped checks（若有）與 residual risks（若有）。Spark output 不自動可信；主 runtime 必須 inspect diff、執行必要 checks，並在 meaningful completion claim 前滿足 repo-local `verifier` contract。
 
 ## 5) Runtime Artifact Sync Rule
