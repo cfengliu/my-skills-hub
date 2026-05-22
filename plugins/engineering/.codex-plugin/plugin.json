@@ -1,0 +1,33 @@
+{
+  "name": "engineering",
+  "version": "0.1.0",
+  "description": "Engineering orchestration skills for problem framing, boundaries, change safety, verification, failure planning, security, and simplicity.",
+  "author": {
+    "name": "Steve"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "codex",
+    "skills",
+    "engineering",
+    "architecture",
+    "verification"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Engineering",
+    "shortDescription": "Engineering-first orchestration skills for Codex.",
+    "longDescription": "A Codex plugin that packages engineering-first skills for problem framing, boundaries, simplicity, change management, verification, failure planning, and security review.",
+    "developerName": "Steve",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use engineering-first-principles to plan this feature.",
+      "Review this design with boundary-first and verification-first.",
+      "Check failure and security risks before launch."
+    ]
+  }
+}

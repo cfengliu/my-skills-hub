@@ -1,23 +1,31 @@
-# Skills Index
+# Skills Hub Index
 
-這個 repo 用「類別資料夾」管理 skills。每個 skill 仍然保持自包含：一個資料夾、一份 `SKILL.md`，需要的 agent 設定放在同一個 skill 資料夾裡。
+這個 repo 用雙區管理 Codex 能力：
 
-## Categories
+- `plugins/`：已產品化、可安裝的 Codex plugins。
+- `skills/`：尚未升級成 plugin 的 standalone skills。
+
+同一個 skill 不應同時存在 `plugins/` 與 `skills/`。升級成 plugin 時要搬移，不要複製。
+
+## Plugins
 
 ### Engineering
 
-給工程、產品建置、系統設計、除錯、驗證、安全與變更管理使用。
+- Path: `plugins/engineering`
+- Purpose: 統合工程設計、變更、安全、失敗模式、驗證與簡化思考的 Codex plugin。
 
 | Skill | Purpose |
 |---|---|
-| `engineering/problem-first` | 先釐清問題、使用者、成功標準與 MVP，避免做錯東西。 |
-| `engineering/simplicity-first` | 壓低複雜度，避免過度設計。 |
-| `engineering/change-first` | 在改動前先理解變更範圍、風險與遷移策略。 |
-| `engineering/boundary-first` | 先切清楚模組、責任與介面邊界。 |
-| `engineering/failure-first` | 先思考失敗模式、復原與降級策略。 |
-| `engineering/security-first` | 先檢查權限、資料保護、濫用與攻擊面。 |
-| `engineering/verification-first` | 把需求轉成測試、型別、CI 與驗證證據。 |
-| `engineering/engineering-first-principles` | 統合 Engineering skills，依任務風險路由到 problem/boundary/simplicity/change/verification/failure/security first。 |
+| `plugins/engineering/skills/engineering-first-principles` | 統合 Engineering skills，依任務風險路由到 problem/boundary/simplicity/change/verification/failure/security first。 |
+| `plugins/engineering/skills/problem-first` | 先釐清問題、使用者、成功標準與 MVP，避免做錯東西。 |
+| `plugins/engineering/skills/simplicity-first` | 壓低複雜度，避免過度設計。 |
+| `plugins/engineering/skills/change-first` | 在改動前先理解變更範圍、風險與遷移策略。 |
+| `plugins/engineering/skills/boundary-first` | 先切清楚模組、責任與介面邊界。 |
+| `plugins/engineering/skills/failure-first` | 先思考失敗模式、復原與降級策略。 |
+| `plugins/engineering/skills/security-first` | 先檢查權限、資料保護、濫用與攻擊面。 |
+| `plugins/engineering/skills/verification-first` | 把需求轉成測試、型別、CI 與驗證證據。 |
+
+## Standalone Skills
 
 ### Agent Workflows
 
@@ -25,22 +33,11 @@
 
 | Skill | Purpose |
 |---|---|
-| `agent-workflows/task-harness` | 先把任務轉成可執行、可驗證、可交給人或 AI Agent 穩定完成的 harness。 |
+| `skills/agent-workflows/task-harness` | 先把任務轉成可執行、可驗證、可交給人或 AI Agent 穩定完成的 harness。 |
 
-## Future Categories
+## Upgrade Rules
 
-之後可以新增：
-
-- `founder/`：策略、募資、公司節奏、決策框架。
-- `marketing/`：定位、訊息、活動、內容、成長實驗。
-- `sales/`：客戶開發、銷售流程、異議處理。
-- `product/`：需求探索、roadmap、使用者研究、產品規格。
-- `operations/`：招聘、流程、財務、營運節奏。
-
-## Naming Rules
-
-- 類別資料夾用單數、領域名或清楚的工作流名稱：`engineering/`, `agent-workflows/`, `founder/`, `marketing/`。
-- 分類可以調整；不要因為現有分類而把 skill 硬塞到不準的位置。
-- skill 資料夾使用 kebab-case：`problem-first`, `positioning-first`。
-- `SKILL.md` frontmatter 的 `name` 必須等於 skill 資料夾名稱，不包含類別前綴。
-- 如果未來某個 agent runtime 不支援巢狀 skill discovery，再新增 `dist/` 作為 flat export；現在先不要加。
+- plugin 是可安裝單位：`plugins/<plugin-name>`。
+- standalone skill 是 incubator：`skills/<category>/<skill-name>`。
+- skill 升級成 plugin 時，用搬移：`skills/<category>/<skill-name>` → `plugins/<plugin-name>/skills/<skill-name>`。
+- 不建立 `dist/`，除非明確遇到 agent runtime 不支援巢狀 discovery。
