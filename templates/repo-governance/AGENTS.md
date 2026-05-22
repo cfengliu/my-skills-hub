@@ -87,6 +87,18 @@ repo-local skill 不得接管 runtime working-artifact path selection。
 - subagent 不得自動越過 human checkpoint gates；涉及 deploy、release、rollout、destructive git action、secrets、production config 時仍需人類同意與必要的 `release-gate`。
 - subagent 回報應明確列出 touched files、commands、pass/fail、blocked/skipped checks 與 residual risks，供主 runtime 與 `verifier` 整合判斷。
 
+### 2.2) Spark Subagent Hard Rules
+
+若 external runtime 支援 `gpt-5.3-codex-spark`，Spark 只能作為快速、狹窄、戰術型 coding subagent 使用。
+
+Spark 是快手，不是主腦。Spark 只可處理小範圍、邊界清楚、侷限於單一檔案或少數檔案、可由主 runtime 快速檢查或驗證的局部實作任務。
+
+Spark 不得作為主要 planner、architect、verifier、review owner、release judge、security reviewer 或長時間自主 agent。
+
+Spark output 永遠不是自動可信結果。主 runtime 仍然負責 scope control、diff inspection、integration、testing、verification 與 final acceptance。Spark review 或 Spark self-check 不得取代 repo-local `verifier`。
+
+Spark 的適用任務、禁止任務、委派前置條件、回報格式與停止條件，依 `docs/process.md` 的 Spark tactical subagent policy 執行。
+
 ## 3) Repo-Local Skill Contract
 
 repo-local expert skills 是 domain-specific knowledge overlays，不是 workflow owners。

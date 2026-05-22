@@ -118,6 +118,68 @@ trivial change 可採輕量驗證：檢查 diff、確認不需 canonical doc syn
 - runtime-internal review 或 subagent review 可作為 evidence，但不取代 repo-local `verifier` completion gate。
 - meaningful completion claim 必須整合 subagent 結果，列出哪些檢查由 subagent 執行、哪些由主 runtime 執行、哪些 skipped 以及原因。
 
+### 4.6 Spark Tactical Subagent Policy
+
+若 external runtime 支援 `gpt-5.3-codex-spark`，Spark 只能用於快速互動式 coding。Spark 是快手，不是主腦；主 runtime 必須保留 scope、review、integration、verification 與 final acceptance 的責任。
+
+Spark 適合在主 runtime 已切出明確小任務時使用，尤其是需要快速修改、快速試作、快速回傳 diff 的場景。
+
+Spark 適合處理以下任務：
+
+- 快速調整 UI、CSS、layout、spacing、labels 或 copy
+- 修小 bug
+- 修改單一 function 或小模組
+- 重塑局部邏輯，但不得擴成跨模組 refactor
+- 補簡單 loading、empty、error state
+- 快速產生單檔或小範圍 prototype / draft implementation，交由主 runtime review
+- 在主 runtime 決策前，快速嘗試一個小替代方案
+- 依照主 runtime 的明確指示，做邊改邊收斂的局部 coding iteration
+
+Spark 不得處理以下任務：
+
+- 需要理解整個 repo 的任務
+- 架構決策
+- security-sensitive changes
+- database schema design 或 migrations
+- authentication、authorization、permission logic
+- payments、wallet、custody、signing、key-management logic
+- 跨多檔案或多模組的複雜 refactor
+- 長時間 debugging
+- test strategy 或 release verification
+- production deployment decisions
+- 需求不明、需要產品或設計判斷的任務
+- multi-step planning 或 agent orchestration
+
+使用 Spark 前，主 runtime 必須先定義：
+
+1. Spark 可檢查或修改的精確檔案或小範圍。
+2. Spark 要完成的單一具體變更。
+3. Spark 不得違反的限制。
+4. Spark 必須回報的輸出。
+5. 主 runtime 要如何檢查或驗證結果。
+
+Spark 必須遵守以下操作規則：
+
+- 只做最小正確變更。
+- 不重新設計系統。
+- 不新增 dependency，除非使用者或主 runtime 明確要求。
+- 不碰 unrelated files。
+- 不做 speculative cleanup。
+- 不靜默改變要求範圍外的 behavior。
+- 不主動執行 broad repo-wide commands、test suites 或 destructive commands，除非主 runtime 明確要求。
+- 任務變大、路徑不清、涉及敏感區域或超出局部 edit 時，必須停止並回報主 runtime，不得繼續猜。
+
+Spark 回報至少必須包含：
+
+- touched files
+- edit summary
+- patch 或 edited content
+- commands run（若有）
+- skipped checks and reason（若有）
+- escalation concerns 或 residual risks（若有）
+
+Spark output 永遠不是自動可信結果。主 runtime 必須 inspect diff、執行適當 checks，並在 meaningful completion claim 前滿足 repo-local `verifier` contract。
+
 ## 5) Runtime Artifact Sync Rule
 
 - external runtime 可在其自有路徑產生 specs、plans、review notes、scratch docs
