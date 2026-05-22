@@ -93,6 +93,8 @@ repo-local skill 不得接管 runtime working-artifact path selection。
 
 Spark 是快手，不是主腦。Spark 只可處理小範圍、邊界清楚、侷限於單一檔案或少數檔案、可由主 runtime 快速檢查或驗證的局部實作任務。
 
+符合 Spark 適用條件的小型局部 coding task，external runtime 應優先考慮委派給 `gpt-5.3-codex-spark`，以縮短互動迭代時間；若適用性不明確，預設交由主 runtime 處理。
+
 Spark 不得作為主要 planner、architect、verifier、review owner、release judge、security reviewer 或長時間自主 agent。
 
 Spark output 永遠不是自動可信結果。主 runtime 仍然負責 scope control、diff inspection、integration、testing、verification 與 final acceptance。Spark review 或 Spark self-check 不得取代 repo-local `verifier`。

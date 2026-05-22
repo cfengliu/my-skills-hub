@@ -124,6 +124,10 @@ trivial change 可採輕量驗證：檢查 diff、確認不需 canonical doc syn
 
 Spark 適合在主 runtime 已切出明確小任務時使用，尤其是需要快速修改、快速試作、快速回傳 diff 的場景。
 
+符合 Spark 適用條件的小型局部 coding task，external runtime 應優先考慮委派給 `gpt-5.3-codex-spark`，以縮短互動迭代時間。
+
+若任務是否適合 Spark 不明確，預設交由主 runtime 處理，不得為了使用 Spark 而拆出假小任務。
+
 Spark 適合處理以下任務：
 
 - 快速調整 UI、CSS、layout、spacing、labels 或 copy
