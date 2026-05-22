@@ -27,6 +27,14 @@
 
 ## Standalone Skills
 
+### Reviews
+
+給文件、設計、架構、程式碼或 diff 做高強度審查，優先拆假設、驗證不變量、找錯誤信心與不必要複雜度。
+
+| Skill | Purpose |
+|---|---|
+| `skills/reviews/first-principles-review` | 從第一原理審查文件、提案、需求、架構、程式碼或 diff，挑戰假設、冗餘與 false success states。 |
+
 ### Agent Workflows
 
 給 AI Agent 任務設計、委派、驗收、回饋迴圈與可重複執行流程使用。
