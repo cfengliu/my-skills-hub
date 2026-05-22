@@ -19,6 +19,14 @@
 | `engineering/verification-first` | 把需求轉成測試、型別、CI 與驗證證據。 |
 | `engineering/engineering-first-principles` | 用第一性原理審視工程決策與設計取捨。 |
 
+### Agent Workflows
+
+給 AI Agent 任務設計、委派、驗收、回饋迴圈與可重複執行流程使用。
+
+| Skill | Purpose |
+|---|---|
+| `agent-workflows/task-harness` | 先把任務轉成可執行、可驗證、可交給人或 AI Agent 穩定完成的 harness。 |
+
 ## Future Categories
 
 之後可以新增：
@@ -31,7 +39,8 @@
 
 ## Naming Rules
 
-- 類別資料夾用單數或領域名：`engineering/`, `founder/`, `marketing/`。
+- 類別資料夾用單數、領域名或清楚的工作流名稱：`engineering/`, `agent-workflows/`, `founder/`, `marketing/`。
+- 分類可以調整；不要因為現有分類而把 skill 硬塞到不準的位置。
 - skill 資料夾使用 kebab-case：`problem-first`, `positioning-first`。
 - `SKILL.md` frontmatter 的 `name` 必須等於 skill 資料夾名稱，不包含類別前綴。
 - 如果未來某個 agent runtime 不支援巢狀 skill discovery，再新增 `dist/` 作為 flat export；現在先不要加。
