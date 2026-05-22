@@ -87,32 +87,91 @@ For broad design, implementation planning, or launch review, run the suite in th
 6. **Failure First** — define timeout, retry, idempotency, fallback, observability, and recovery.
 7. **Security First** — protect assets, trust boundaries, authorization, inputs, secrets, quotas/costs, auditability, and security tests.
 
-## Required output
+## Visible routing behavior
 
-Scale the output to the task.
+When this skill is used, provide a brief visible routing note before planning or execution, unless the user explicitly asks for a one-line answer or explicitly says to skip routing output.
 
-For small tasks, produce:
+The routing note should usually be 1-3 lines and mention:
+
+- task shape
+- selected concerns or skills
+- why those concerns matter
+
+Example:
+
+```md
+Engineering route: this looks like external API + storage + runtime risk, so I’m applying boundary / failure / security / verification before implementation.
+```
+
+Do not dump a full checklist by default. Use the full route packet only when the task needs visible decision tracking:
+
+- planning mode is active
+- the user asks for explicit reasoning
+- the task is high-risk
+- multiple skills are selected and the tradeoffs matter
+- decisions or skipped skills need to be auditable
+
+When the full route packet is needed, use these fields:
 
 ```md
 # Engineering Route
 
-## Selected skills
-
-## Why this route
-
-## Key decisions
-
-## Verification
+- task_shape:
+- selected_skills:
+- skipped_skills_and_why:
+- risk_flags:
+- decisions_needed:
+- verification_strategy:
+- next_action:
 ```
 
-For meaningful features, produce:
+Using this skill only as invisible internal reasoning for non-trivial engineering work counts as non-compliance. The visible note may be short, but it must tell the user what engineering lens is being applied and why.
+
+## Atomic skill loading rule
+
+When an atomic skill is selected for depth, open/read that atomic skill's `SKILL.md` before producing its section.
+
+If the skill is selected only for routing guidance and was not opened/read, mark it as `selected conceptually, not expanded`. If it was opened/read, mark it as `expanded from SKILL.md`.
+
+Do not pretend an atomic skill was applied in depth when only this orchestrator was used.
+
+## Question gate
+
+Before asking the user any question, classify each question as one of:
+
+- `boundary-changing` — the answer changes ownership, API shape, data model, state flow, permissions, or external-service boundary.
+- `risk-changing` — the answer changes security, failure, verification, rollout, cost, compliance, or production-risk treatment.
+- `implementation-detail-only` — the answer only changes local naming, minor UI copy, internal ordering, or another detail that can be decided during execution.
+
+Ask only `boundary-changing` or `risk-changing` questions upfront. Defer `implementation-detail-only` questions until execution, or choose the simplest boring default and record it in `decisions_needed` or `next_action`.
+
+## Planning-mode behavior
+
+In planning mode, produce the full Engineering Route packet first, then ask only questions that materially change the plan. Do not ask broad implementation questions before exposing the route.
+
+## Required output
+
+Scale the output to the task. Every non-trivial output must include either a brief routing note or a full packet. Full packets must include `next_action`; otherwise the route is only a ritual document.
+
+For small tasks, produce the brief routing note:
+
+```md
+Engineering route: <task shape>; applying <selected concerns/skills> because <risk or decision reason>.
+```
+
+For meaningful features, planning-mode work, or high-risk work, produce the full route packet before the design sections:
 
 ```md
 # Engineering Design: <feature/system>
 
 ## Route
-- Selected skills:
-- Skipped skills and why:
+- task_shape:
+- selected_skills:
+- skipped_skills_and_why:
+- risk_flags:
+- decisions_needed:
+- verification_strategy:
+- next_action:
 
 ## 1. Problem
 - User:
@@ -185,10 +244,12 @@ For meaningful features, produce:
 
 1. Classify the task shape.
 2. Select the smallest skill route that covers the actual risks.
-3. State selected skills and skipped skills.
-4. Produce the required output for the task size.
-5. If one section becomes deep or uncertain, switch to the relevant atomic skill and use its required output.
-6. Before finishing, run the launch checklist if the work affects production users, data, money, permissions, availability, or external systems.
+3. Produce or maintain a visible routing note; use the full route packet when the task needs decision tracking.
+4. Apply the question gate before asking the user anything.
+5. If one section needs depth, open/read the relevant atomic skill's `SKILL.md`, mark it as `expanded from SKILL.md`, and use its required output.
+6. If an atomic skill is only used for routing, mark it as `selected conceptually, not expanded`.
+7. Produce the required output for the task size.
+8. Before finishing, run the launch checklist if the work affects production users, data, money, permissions, availability, or external systems.
 
 ## Composition rules
 
