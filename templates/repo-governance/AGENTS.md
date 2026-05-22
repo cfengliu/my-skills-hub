@@ -28,12 +28,26 @@ repo-local expert skills 是可選 knowledge overlays。若目標 repo 有 domai
 操作常數看 `docs/ops.md`。
 `docs/README.md` 是 `docs/` 入口與閱讀順序。
 
+## 0.1) Default Execution Summary
+
+一般任務預設流程：
+
+1. 讀取本 `AGENTS.md` 與最小必要 canonical docs。
+2. 使用 `runtime-adapter` 選擇必要 repo-local expert skills 並注入 repo-truth references。
+3. runtime-generated plans、specs、scratch notes 預設維持 non-canonical，除非使用者或 maintainer 明確 promoted。
+4. 在明確 workspace scope 內實作，且避免 subagents 有重疊 write scope。
+5. 執行最小且足以驗證本次變更的 checks。
+6. meaningful completion claim 前必須跑 `verifier`。
+7. accepted durable behavior、design、ops 或 requirements 改變時，completion claim 前必須同步 canonical docs。
+8. deploy、rollout、migration、destructive environment action 或其他 release-sensitive action 前必須跑 `release-gate`。
+9. 回報 touched files、commands、pass/fail results、skipped checks、doc sync status 與 residual risks。
+
 ## 1) 指令優先序
 
 優先序固定如下：
 
-1. 使用者最新明確指令
-2. 平台 / harness 限制（sandbox、approval、network、secrets）
+1. 平台 / harness / safety 限制（sandbox、approval、network、secrets、data access）
+2. 使用者最新明確指令，但不得違反第 1 層、本 repo safety gates 或 human checkpoint gates
 3. `AGENTS.md`
 4. `docs/process.md`
 5. `docs/ops.md`
@@ -42,6 +56,16 @@ repo-local expert skills 是可選 knowledge overlays。若目標 repo 有 domai
 8. repo 外 workflow runtimes / skills
 
 若規則互相衝突，以較高優先序為準。
+使用者指令只在不違反 platform、harness、safety、secrets 與 repo boundary constraints 的範圍內有效。
+
+## 1.1) Minimum Terms
+
+- `trivial change`：只影響 typo、formatting、non-behavioral comment 或措辭，且不改變 runtime behavior、product acceptance、test expectation、ops rule 或 durable requirement。
+- `meaningful change`：任何 code、config、schema、dependency、public behavior、API contract、test expectation、deployment path、durable documentation、ops rule 或 requirement 的實質變更；不確定時預設 meaningful。
+- `accepted change`：使用者批准、maintainer 接受、已合併、或明確要求成為 durable truth 的變更，且會改變 product behavior、technical design、operational procedure 或 requirements。
+- `release-sensitive action`：deploy、release、rollout、migration、backup、restore、rollback、production-like config、CI/CD release path、auth、identity、payments、billing、secrets、production data 或 environment-changing action。
+- `destructive action`：可能刪除、覆寫、不可逆修改 data/schema/config/branch/worktree/environment 的操作。
+- `canonical doc sync required`：accepted durable behavior、design、ops rule 或 requirement 改變時，completion claim 前必須更新對應 canonical truth；若不需同步，回報中必須說明具體理由。
 
 ## 2) Runtime Model
 
@@ -76,6 +100,12 @@ repo 的靜態邊界規則直接由 `AGENTS.md` 與 `docs/` 提供；`runtime-ad
 repo-local skill 不得重寫外部 runtime 已經擁有的 generic workflow。
 repo-local skill 不得接管 runtime working-artifact path selection。
 
+若必要 repo-local control skill 缺失、不可讀或 runtime 不支援 skills，不得 silent proceed：
+
+- 可直接依本 `AGENTS.md` 與 `docs/` 套用對應 contract。
+- 若缺失的是 gated action 必需的 control skill（例如 release-sensitive action 需要 `release-gate`），預設結果為 `hold`。除非 runtime 能依本 `AGENTS.md` 與 `docs/ops.md` 明確完成等價 release-gate 判定，否則任務必須標記 `blocked` 並請求人工確認。
+- `verifier` 不可用時，meaningful completion claim 至少必須做一個獨立 verification pass：只根據 final diff、canonical docs、commands 與 observed results 驗證，不得依賴 implementer self-justification。
+
 ## 2.1) Subagent Boundary Contract
 
 - 外部 runtime 可以使用 subagents 做 exploration、implementation、spec review、code quality review、verification support。
@@ -83,19 +113,25 @@ repo-local skill 不得接管 runtime working-artifact path selection。
 - subagents 必須遵守本 repo 的 source of truth、workspace 邊界、human checkpoint gates、verification contract、release contract。
 - repo-local expert skills 可以被注入給 subagent 作為 domain guidance，但不得讓 expert skill 接管 subagent workflow。
 - 不同 subagents 若會修改檔案，必須有明確且互不重疊的 write scope，避免互相覆蓋。
-- subagent 的 self-review 或 runtime-internal review 不取代 repo-local `verifier`。
+- subagent 的 self-review 或 runtime-internal review 不取代 repo-local `verifier`；`verifier` independence 依第 7 節定義。
 - subagent 不得自動越過 human checkpoint gates；涉及 deploy、release、rollout、destructive git action、secrets、production config 時仍需人類同意與必要的 `release-gate`。
 - subagent 回報應明確列出 touched files、commands、pass/fail、blocked/skipped checks 與 residual risks，供主 runtime 與 `verifier` 整合判斷。
 
-### 2.2) Spark Subagent Hard Rules
+## 2.2) Tactical Coding Subagent Rules
 
-若 external runtime 支援 `gpt-5.3-codex-spark`，Spark 只能作為快速、狹窄、戰術型 coding subagent 使用；Spark 是快手，不是主腦。
+若 external runtime 支援 fast tactical coding subagent（例如 Spark-class coding subagent），它只能作為快速、狹窄、戰術型 coding subagent 使用；它是快手，不是主腦。
 
-符合 Spark 條件的小型局部 coding task，external runtime 應優先考慮委派給 Spark；若 scope、限制或驗證方式不明確，預設交由主 runtime 處理。
+優先戰術 coding subagent 規則：
 
-若任務進入 planning，plan 應先標出可交給 Spark 的小型局部任務；不確定就留給主 runtime。
+- 若 external runtime 支援 `gpt-5.3-codex-spark`，且其可用性、權限、成本與任務限制允許，應優先作為 fast tactical coding subagent 使用。
+- 若 `gpt-5.3-codex-spark` 不可用、處於 preview 限制、成本不適合、或 runtime 不支援，則使用 runtime 當前推薦的等價 fast tactical coding subagent。
+- 不得因優先戰術 subagent 不可用而阻塞一般 coding workflow；此時由主 runtime 或其他合適 coding subagent 接手。
 
-Spark 不得作為 planner、architect、verifier、review owner、release judge、security reviewer 或長時間自主 agent。Spark output 不自動可信，且不得取代 repo-local `verifier`。
+符合 tactical subagent 條件的小型局部 coding task，external runtime 可優先考慮委派；若 scope、限制或驗證方式不明確，預設交由主 runtime 處理。
+
+若任務進入 planning，plan 可標出適合 tactical subagent 的小型局部任務；不確定就留給主 runtime。
+
+Tactical subagent 不得作為 planner、architect、verifier、review owner、release judge、security reviewer 或長時間自主 agent。其 output 不自動可信，且不得取代 repo-local `verifier`。
 
 ## 3) Repo-Local Skill Contract
 
@@ -135,6 +171,7 @@ expert skills 的輸出應偏向 domain guidance，而不是 workflow choreograp
 - canonical operational truth 放在 `docs/ops.md`
 - runtime working artifacts 例如 specs、plans、review notes、execution scratch docs 可由外部 runtime 寫入其自有路徑，包括 runtime default locations
 - `docs/plans/` 只保留給 repo-authored governance records、manual planning records、historical artifacts；它不是外部 runtime 的必須目的地
+- Runtime-generated plans 不得放入 `docs/plans/`，除非使用者或 maintainer 明確 promoted 成 durable repo governance record。
 - branch naming、worktree naming、runtime artifact path selection 由外部 runtime 決定，除非使用者明確要求其他做法
 - 若行為、設計、ops 或 durable requirements 發生 accepted change，必須在 completion claim 前同步回 canonical truth 檔案
 - 小型、非 durable、未改變 acceptance 的修正採輕量模式；具體門檻由 `docs/process.md` 定義
@@ -158,7 +195,7 @@ expert skills 的輸出應偏向 domain guidance，而不是 workflow choreograp
 - 任何 meaningful change 或 meaningful completion claim 都必須經過 `verifier`。
 - trivial change 可走輕量驗證；但一旦宣稱完成，仍需明確說明檢查結果與是否需要 canonical doc sync。
 - 外部 runtime 的 self-review 或 staged review 不取代 `verifier`。
-- `verifier` 必須獨立於 implementation path。
+- `verifier` 必須獨立於 implementation path。Verifier independence 意味著 verifier 必須依 final diff、repo truth 與 acceptance criteria 評估，不得依賴 implementer self-justification；若無 separate model/subagent，runtime 必須以 separate verification pass 執行，且只使用 diff、relevant docs、commands 與 observed results。
 - `verifier` 回報必須包含：
   - verification commands
   - actual results

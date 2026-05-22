@@ -93,13 +93,19 @@ trivial change 可採輕量驗證：檢查 diff、確認不需 canonical doc syn
 
 複雜任務必須有 plan，但 plan file path、format 與 supporting artifacts 由 external runtime 決定。
 
-### 2.1 Spark Planning Classification
+### 2.1 Tactical Subagent Planning Classification
 
-若 external runtime 支援 `gpt-5.3-codex-spark`，planning 階段應先標出可交給 Spark 的小型局部 implementation tasks。
+若 external runtime 支援 fast tactical coding subagent（例如 Spark-class coding subagent），planning 階段可標出適合委派的小型局部 implementation tasks。
 
-Spark task 只需確認最重要規則：scope 小且明確、限制清楚、主 runtime 知道如何檢查結果。
+優先戰術 coding subagent 規則：
 
-若 task 是否適合 Spark 不明確，預設留給主 runtime。不得為了使用 Spark 而拆出假小任務。
+- 若 external runtime 支援 `gpt-5.3-codex-spark`，且其可用性、權限、成本與任務限制允許，應優先作為 fast tactical coding subagent 使用。
+- 若 `gpt-5.3-codex-spark` 不可用、處於 preview 限制、成本不適合、或 runtime 不支援，則使用 runtime 當前推薦的等價 fast tactical coding subagent。
+- 不得因優先戰術 subagent 不可用而阻塞一般 coding workflow；此時由主 runtime 或其他合適 coding subagent 接手。
+
+Tactical subagent task 只需確認最重要規則：scope 小且明確、限制清楚、主 runtime 知道如何檢查結果。
+
+若 task 是否適合 tactical subagent 不明確，預設留給主 runtime。不得為了使用 subagent 而拆出假小任務。
 
 ## 3) Implementation Start Rule
 
@@ -126,17 +132,19 @@ Spark task 只需確認最重要規則：scope 小且明確、限制清楚、主
 - runtime-internal review 或 subagent review 可作為 evidence，但不取代 repo-local `verifier` completion gate。
 - meaningful completion claim 必須整合 subagent 結果，列出哪些檢查由 subagent 執行、哪些由主 runtime 執行、哪些 skipped 以及原因。
 
-### 4.6 Spark Tactical Subagent Policy
+### 4.6 Tactical Coding Subagent Policy
 
-若 external runtime 支援 `gpt-5.3-codex-spark`，Spark 只可用於快速互動式 coding：小範圍、邊界清楚、限制清楚、可由主 runtime 快速檢查的局部修改。符合條件的小型局部 coding task 應優先考慮委派給 Spark。
+若 external runtime 支援 fast tactical coding subagent（例如 Spark-class coding subagent），該 subagent 只可用於快速互動式 coding：小範圍、邊界清楚、限制清楚、可由主 runtime 快速檢查的局部修改。符合條件的小型局部 coding task 可優先考慮委派。
 
-Spark 適合 UI/CSS/layout、小 bug、單一 function / 小模組、簡單 state、單檔或小範圍 prototype。Spark 不得處理 repo-wide reasoning、架構、security/auth/permissions、database/migration、payments/key-management、複雜跨模組 refactor、長時間 debugging、test strategy、release verification、production deployment、需求不明或 agent orchestration。
+優先戰術 coding subagent 沿用第 2.1 節的 availability、permission、cost 與 fallback policy。
 
-委派 Spark 前，主 runtime 必須定義 scope、目標、限制與檢查方式。Spark 若發現 scope 變大、路徑不清或涉及敏感區域，必須停止並回報，不得繼續猜。
+Tactical subagent 適合 UI/CSS/layout、小 bug、單一 function / 小模組、簡單 state、單檔或小範圍 prototype。Tactical subagent 不得處理 repo-wide reasoning、架構、security/auth/permissions、database/migration、payments/key-management、複雜跨模組 refactor、長時間 debugging、test strategy、release verification、production deployment、需求不明或 agent orchestration。
 
-Spark 委派應明確開頭，例如：`Spawn a worker subagent with model gpt-5.3-codex-spark for this tactical task: ...`
+委派 tactical subagent 前，主 runtime 必須定義 scope、目標、限制與檢查方式。Subagent 若發現 scope 變大、路徑不清或涉及敏感區域，必須停止並回報，不得繼續猜。
 
-Spark output 至少要讓主 runtime 看得出 touched files、edit summary、patch / edited content、commands/skipped checks（若有）與 residual risks（若有）。Spark output 不自動可信；主 runtime 必須 inspect diff、執行必要 checks，並在 meaningful completion claim 前滿足 repo-local `verifier` contract。
+若 runtime 有特定模型或 worker class，委派應明確開頭，例如：`Spawn a tactical coding subagent for this scoped task: ...`
+
+Tactical subagent output 至少要讓主 runtime 看得出 touched files、edit summary、patch / edited content、commands/skipped checks（若有）與 residual risks（若有）。Subagent output 不自動可信；主 runtime 必須 inspect diff、執行必要 checks，並在 meaningful completion claim 前滿足 repo-local `verifier` contract。
 
 ## 5) Runtime Artifact Sync Rule
 
