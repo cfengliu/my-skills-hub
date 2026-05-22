@@ -1,0 +1,4 @@
+interface:
+  display_name: "Simplicity First"
+  short_description: "Prefer the simplest proven solution"
+  default_prompt: "Use $simplicity-first to remove overengineering and pick the smallest reliable design."
