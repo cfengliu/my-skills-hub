@@ -123,6 +123,7 @@ repo-local skill 不得接管 runtime working-artifact path selection。
 
 產出 execution plan 時，必須做 Spark delegation pass：挑出可給 `gpt-5.3-codex-spark` 或等價 fast worker 的小型 coding task，並加入 plan。
 
+- Spark 目前僅支援文字輸入 / 輸出，context window 為 128k。
 - Spark 只做小範圍 coding；不做 planning、architecture、security、migration、release、verification ownership。
 - 每個 Spark task 必須列 goal、write scope、forbidden scope、可否並行、驗證方式。
 - 沒有適合 task 就寫原因；不得硬拆。

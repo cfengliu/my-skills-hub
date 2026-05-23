@@ -101,6 +101,7 @@ trivial change 可採輕量驗證：檢查 diff、確認不需 canonical doc syn
 產出 execution plan 時，必須做 Spark delegation pass：
 
 - 掃描 planned tasks，挑出可給 `gpt-5.3-codex-spark` 或等價 fast worker 的小型 coding task。
+- Codex-Spark 目前僅支援文字輸入 / 輸出，context window 為 128k。
 - 適合條件：scope 小、write scope 明確、可平行、不碰敏感區、主 runtime 可快速驗證。
 - 禁止交給 Spark：planning、architecture、security/auth、migration、payments、secrets、release/deploy、verification ownership、長時間 debugging、跨 repo refactor。
 - 每個 Spark task 必須列：goal、write scope、forbidden scope、可否並行、驗證方式。
