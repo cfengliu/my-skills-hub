@@ -2,6 +2,8 @@
 
 這份文件承接 `AGENTS.md`，只記錄需求、規格、planning、runtime artifacts 與 canonical sync 流程，不重複 AI 對話路由規則或 runtime-internal choreography。
 
+`AGENTS.md` 定義 tactical subagent 的 repo-level 原則與禁止事項；本文件定義 tactical subagent 的 planning / execution 操作細節。
+
 ## 1) Canonical Chains
 
 本 repo 的 canonical process 分成兩條鏈，分別回答不同問題。
@@ -61,6 +63,7 @@ trivial change 可採輕量驗證：檢查 diff、確認不需 canonical doc syn
 
 - Promotion Pipeline 解決「是否可以開始實作」
 - Delivery Closure 解決「是否可以宣稱完成」
+- `docs/requirements/README.md` 與 `docs/plans/README.md` 可描述各自負責的局部階段，但不得改寫這兩條 canonical chains
 - 其他文件若需提及流程，應引用本節，不得重寫 canonical chain
 
 ### 1.4 Completion Claim Taxonomy
@@ -93,7 +96,7 @@ trivial change 可採輕量驗證：檢查 diff、確認不需 canonical doc syn
 
 複雜任務必須有 plan，但 plan file path、format 與 supporting artifacts 由 external runtime 決定。
 
-### 2.1 Tactical Subagent Planning Classification
+### 2.1) Tactical Subagent Planning Classification
 
 若 external runtime 支援 fast tactical coding subagent（例如 Spark-class coding subagent），planning 階段可標出適合委派的小型局部 implementation tasks。
 
@@ -132,7 +135,7 @@ Tactical subagent task 只需確認最重要規則：scope 小且明確、限制
 - runtime-internal review 或 subagent review 可作為 evidence，但不取代 repo-local `verifier` completion gate。
 - meaningful completion claim 必須整合 subagent 結果，列出哪些檢查由 subagent 執行、哪些由主 runtime 執行、哪些 skipped 以及原因。
 
-### 4.6 Tactical Coding Subagent Policy
+### 4.6) Tactical Coding Subagent Policy
 
 若 external runtime 支援 fast tactical coding subagent（例如 Spark-class coding subagent），該 subagent 只可用於快速互動式 coding：小範圍、邊界清楚、限制清楚、可由主 runtime 快速檢查的局部修改。符合條件的小型局部 coding task 可優先考慮委派。
 
@@ -149,6 +152,7 @@ Tactical subagent output 至少要讓主 runtime 看得出 touched files、edit 
 ## 5) Runtime Artifact Sync Rule
 
 - external runtime 可在其自有路徑產生 specs、plans、review notes、scratch docs
+- 若 external runtime 是 Superpowers，artifact path 與歸檔方式依 Superpowers 自身規則；repo 不另外指定或覆寫
 - 這些 artifacts 是 working materials，不因路徑存在而變成 canonical truth
 - accepted behavior changes 必須同步到 `docs/prd.md`，若 repo 使用 PRD 作為 canonical truth
 - accepted technical design changes 必須同步到 `docs/tdd.md`，若 repo 使用 TDD 作為 canonical truth
@@ -187,6 +191,6 @@ Docs sync:
 ## 7) Worktree And Branch Ownership
 
 - external runtime 擁有 branch naming、worktree naming、與 worktree strategy
-- 本 repo 不規定 runtime artifact path 或 branch prefix
+- 本 repo 不再規定 runtime artifact path 或 branch prefix
 - 對不同 objective 使用隔離 worktree 通常較安全，但屬於 runtime workflow decision，不是 repo 必須流程
 - branch / worktree deletion 仍受 `AGENTS.md` 的 human checkpoint gates 約束

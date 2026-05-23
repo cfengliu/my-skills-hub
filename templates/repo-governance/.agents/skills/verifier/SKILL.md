@@ -125,6 +125,7 @@ function verifier(change):
 
 - run the smallest meaningful verification for the touched area
 - prefer stable script entrypoints when available
+- apply the `first-principles-review` skill to the changed artifact, diff, or verification target when available
 - compare the change against repo truth, not just runtime intent
 - check whether product, workflow, or ops docs now need sync
 - challenge assumptions, invariants, duplicated logic, and unnecessary process or abstraction as part of verification

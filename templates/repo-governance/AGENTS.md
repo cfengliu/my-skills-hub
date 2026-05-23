@@ -119,19 +119,13 @@ repo-local skill 不得接管 runtime working-artifact path selection。
 
 ## 2.2) Tactical Coding Subagent Rules
 
-若 external runtime 支援 fast tactical coding subagent（例如 Spark-class coding subagent），它只能作為快速、狹窄、戰術型 coding subagent 使用；它是快手，不是主腦。
-
-優先戰術 coding subagent 規則：
-
-- 若 external runtime 支援 `gpt-5.3-codex-spark`，且其可用性、權限、成本與任務限制允許，應優先作為 fast tactical coding subagent 使用。
-- 若 `gpt-5.3-codex-spark` 不可用、處於 preview 限制、成本不適合、或 runtime 不支援，則使用 runtime 當前推薦的等價 fast tactical coding subagent。
-- 不得因優先戰術 subagent 不可用而阻塞一般 coding workflow；此時由主 runtime 或其他合適 coding subagent 接手。
-
-符合 tactical subagent 條件的小型局部 coding task，external runtime 可優先考慮委派；若 scope、限制或驗證方式不明確，預設交由主 runtime 處理。
-
-若任務進入 planning，plan 可標出適合 tactical subagent 的小型局部任務；不確定就留給主 runtime。
+若 external runtime 支援 fast tactical coding subagent，例如 `gpt-5.3-codex-spark` 或等價 fast worker，它只能作為快速、狹窄、有邊界的 coding helper；它是快手，不是主腦。
 
 Tactical subagent 不得作為 planner、architect、verifier、review owner、release judge、security reviewer 或長時間自主 agent。其 output 不自動可信，且不得取代 repo-local `verifier`。
+
+優先使用 fast tactical coding subagent 不得阻塞一般 coding workflow；若不可用、scope 不明、限制不清或驗證方式不明確，預設由主 runtime 或其他合適 execution path 接手。
+
+Tactical subagent 的 eligibility、planning classification、availability / fallback policy、委派格式、output expectation 與 execution 細節由 `docs/process.md` 定義。
 
 ## 3) Repo-Local Skill Contract
 
@@ -173,6 +167,7 @@ expert skills 的輸出應偏向 domain guidance，而不是 workflow choreograp
 - `docs/plans/` 只保留給 repo-authored governance records、manual planning records、historical artifacts；它不是外部 runtime 的必須目的地
 - Runtime-generated plans 不得放入 `docs/plans/`，除非使用者或 maintainer 明確 promoted 成 durable repo governance record。
 - branch naming、worktree naming、runtime artifact path selection 由外部 runtime 決定，除非使用者明確要求其他做法
+- 若使用 Superpowers runtime，其 specs、plans、review notes 等 artifacts 依 Superpowers 自身歸檔規則存放；除非 accepted changes 同步回 canonical truth，否則仍屬 runtime working artifacts
 - 若行為、設計、ops 或 durable requirements 發生 accepted change，必須在 completion claim 前同步回 canonical truth 檔案
 - 小型、非 durable、未改變 acceptance 的修正採輕量模式；具體門檻由 `docs/process.md` 定義
 
