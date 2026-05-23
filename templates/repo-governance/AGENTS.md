@@ -108,24 +108,22 @@ repo-local skill 不得接管 runtime working-artifact path selection。
 
 ## 2.1) Subagent Boundary Contract
 
-- 外部 runtime 可以使用 subagents 做 exploration、implementation、spec review、code quality review、verification support。
-- subagent dispatch / orchestration 是外部 runtime 的責任，不是 repo-local skill 的責任。
-- subagents 必須遵守本 repo 的 source of truth、workspace 邊界、human checkpoint gates、verification contract、release contract。
-- repo-local expert skills 可以被注入給 subagent 作為 domain guidance，但不得讓 expert skill 接管 subagent workflow。
-- 不同 subagents 若會修改檔案，必須有明確且互不重疊的 write scope，避免互相覆蓋。
-- subagent 的 self-review 或 runtime-internal review 不取代 repo-local `verifier`；`verifier` independence 依第 7 節定義。
+外部 runtime 可以使用 subagents；repo 只管硬邊界，不接管 orchestration。
+
+- 必須遵守本 repo 的 source of truth、workspace 邊界、human checkpoint gates、verification contract 與 release contract。
+- 寫入型 subagent 必須有明確且互不重疊的 write scope。
 - subagent 不得自動越過 human checkpoint gates；涉及 deploy、release、rollout、destructive git action、secrets、production config 時仍需人類同意與必要的 `release-gate`。
-- subagent 回報應明確列出 touched files、commands、pass/fail、blocked/skipped checks 與 residual risks，供主 runtime 與 `verifier` 整合判斷。
+- subagent review 不取代 repo-local `verifier`。
+- subagent 回報必須列出 touched files、commands、pass/fail、skipped checks 與 residual risks。
 
 ## 2.2) Tactical Coding Subagent Rules
 
-若 external runtime 支援 fast tactical coding subagent，例如 `gpt-5.3-codex-spark` 或等價 fast worker，它只能作為快速、狹窄、有邊界的 coding helper；它是快手，不是主腦。
+產出 execution plan 時，必須做 Spark delegation pass：挑出可給 `gpt-5.3-codex-spark` 或等價 fast worker 的小型 coding task，並加入 plan。
 
-Tactical subagent 不得作為 planner、architect、verifier、review owner、release judge、security reviewer 或長時間自主 agent。其 output 不自動可信，且不得取代 repo-local `verifier`。
-
-優先使用 fast tactical coding subagent 不得阻塞一般 coding workflow；若不可用、scope 不明、限制不清或驗證方式不明確，預設由主 runtime 或其他合適 execution path 接手。
-
-Tactical subagent 的 eligibility、planning classification、availability / fallback policy、委派格式、output expectation 與 execution 細節由 `docs/process.md` 定義。
+- Spark 只做小範圍 coding；不做 planning、architecture、security、migration、release、verification ownership。
+- 每個 Spark task 必須列 goal、write scope、forbidden scope、可否並行、驗證方式。
+- 沒有適合 task 就寫原因；不得硬拆。
+- Spark 不可用或 scope 不清時，主 runtime 接手，不得阻塞 workflow。
 
 ## 3) Repo-Local Skill Contract
 
