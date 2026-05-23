@@ -172,14 +172,25 @@ Docs sync:
 
 `not needed` 或 `not applicable` 不得只作為結論；必須連到具體原因，例如未改變產品行為、未改變技術設計、未改變 ops 規則、或未新增 durable requirement。
 
-## 6) UI Sync Rule
+## 6) UI / UX Authority And Sync Rule
 
-若變更涉及以下任一項，且 repo 使用 PRD 作為 canonical truth，必須同步更新 `docs/prd.md`：
+已被使用者或 maintainer 明確確認的 UI / UX decision 是最高產品權威。若 UI / UX 與 PRD、TDD、plan、tests 或既有實作衝突：
+
+1. 以 UI / UX decision 為準。
+2. 將 PRD、TDD、requirements、tests 或 implementation 的衝突處標記為 stale / needs-sync。
+3. completion claim 前同步更新受影響 canonical docs；若暫時無法同步，回報必須明確列出 blocker 與殘留風險。
+
+UI / UX decision 包含但不限於：
 
 - UI 結構
+- layout / visual hierarchy
 - 互動流程
 - 顯示條件
+- 文案與 affordance
+- accessibility / usability expectation
 - 驗收行為
+
+若變更涉及以上任一項，且 repo 使用 PRD 作為 canonical truth，必須同步更新 `docs/prd.md`。若變更也改變技術設計，必須同步更新 `docs/tdd.md`。
 
 可接受格式：
 
@@ -187,7 +198,7 @@ Docs sync:
 - wireframe 式文字
 - 狀態與行為描述
 
-重點是 PRD 必須能反映最新行為，不要求單一格式。
+重點是 canonical docs 必須能反映最新 UI / UX authority，不要求單一格式。
 
 ## 7) Worktree And Branch Ownership
 

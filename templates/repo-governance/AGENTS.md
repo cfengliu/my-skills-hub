@@ -48,15 +48,18 @@ repo-local expert skills 是可選 knowledge overlays。若目標 repo 有 domai
 
 1. 平台 / harness / safety 限制（sandbox、approval、network、secrets、data access）
 2. 使用者最新明確指令，但不得違反第 1 層、本 repo safety gates 或 human checkpoint gates
-3. `AGENTS.md`
-4. `docs/process.md`
-5. `docs/ops.md`
-6. `docs/prd.md`（若存在）
-7. `docs/tdd.md`（若存在）
-8. repo 外 workflow runtimes / skills
+3. 已被使用者 / maintainer 明確確認的 UI / UX decision（若存在）
+4. `AGENTS.md`
+5. `docs/process.md`
+6. `docs/ops.md`
+7. `docs/prd.md`（若存在）
+8. `docs/tdd.md`（若存在）
+9. repo 外 workflow runtimes / skills
 
 若規則互相衝突，以較高優先序為準。
 使用者指令只在不違反 platform、harness、safety、secrets 與 repo boundary constraints 的範圍內有效。
+
+UI / UX authority rule：若已確認的 UI / UX decision 與 PRD、TDD、plan、tests 或既有實作衝突，以 UI / UX decision 為最高產品權威；衝突文件或測試應標記為 stale 並同步修正，而不是反過來壓過 UI / UX。
 
 ## 1.1) Minimum Terms
 
@@ -147,6 +150,7 @@ expert skills 的輸出應偏向 domain guidance，而不是 workflow choreograp
 
 ## 4) Source Of Truth
 
+- confirmed UI / UX decisions：已被使用者或 maintainer 明確確認的畫面、互動、流程、文案、視覺層級與可用性決策；若與 PRD / TDD 衝突，以 UI / UX 為準
 - canonical process boundary：`docs/process.md`
 - operational constants：`docs/ops.md`
 - canonical product behavior and acceptance：`docs/prd.md`（若存在）
@@ -154,6 +158,7 @@ expert skills 的輸出應偏向 domain guidance，而不是 workflow choreograp
 - requirements normalization：`docs/requirements/README.md` 與對應 requirement files（若存在）
 - runtime-generated specs、plans、review notes、scratch docs 不因路徑存在而成為 canonical truth
 - 若 runtime default 與 repo truth 衝突，以 repo truth 為準。
+- 若 confirmed UI / UX decisions 與 repo truth 衝突，先維持 UI / UX decision，再同步更新受影響的 PRD、TDD、requirements、tests 或 implementation。
 
 ## 5) Canonical Truth Locations And Runtime Artifacts
 

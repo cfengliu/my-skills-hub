@@ -40,9 +40,11 @@
 
 ## Interpretation Notes
 
+- confirmed UI / UX decisions are the highest product authority; if they conflict with PRD or TDD, follow UI / UX first and sync the stale docs
 - runtime-generated specs、plans、review notes、scratch docs are non-canonical unless their accepted changes are synced back to canonical truth files
 - external workflow runtime artifacts follow that runtime's archival rules, but remain non-canonical unless synced back to canonical truth files
 - `docs/plans/` may contain useful records, but location alone does not make those records canonical
+- when UI / UX changes, sync to `docs/prd.md` and, when technical design changes, `docs/tdd.md`
 - when behavior changes, sync to `docs/prd.md` if this repo uses PRD as canonical truth
 - when technical design changes, sync to `docs/tdd.md` if this repo uses TDD as canonical truth
 - when operational practice changes, sync to `docs/ops.md`
