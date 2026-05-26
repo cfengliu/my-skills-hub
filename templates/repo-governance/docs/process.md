@@ -151,6 +151,38 @@ Tactical coding subagent output 必須包含 touched files、edit summary、comm
 
 Subagent output 不自動可信。主 runtime 必須 inspect diff、跑必要 checks，並滿足 repo-local `verifier` contract。
 
+## 4.7) Post-Plan Review And Commit Gate
+
+每次 plan execution 結束後，若本次工作進入 commit candidate 狀態，commit 前必須先完成 post-plan review gate。
+
+Post-plan review gate 的目的不是取代 `verifier`，而是在 commit 前補一層工程判斷與第一原理挑戰，避免「檢查有跑但核心不成立」的假成功。
+
+必要步驟：
+
+1. 依第 1.2 節完成適用的 verification；meaningful change 或 meaningful completion claim 仍必須經過 `verifier`。
+2. 使用 `first-principles-review` 檢查 final diff / artifact：
+   - 是否存在 false success state，例如 command pass 但未驗證核心 invariant
+   - 是否有 broken invariant、constraint mismatch、未證明假設
+   - 是否有 accidental redundancy、no-op layer、或不必要 complexity
+3. 使用 `engineering-first-principles` 做最小必要工程路由檢查：
+   - 對小型 doc / governance change，至少確認 selected / skipped skills、key decisions 與 verification evidence
+   - 對 feature / refactor / launch 類工作，依風險升級到對應 atomic skills，不強制全套
+4. 確認 canonical doc sync 狀態：
+   - 已同步，或
+   - 明確說明不需要同步的原因，或
+   - 若需要但尚未同步，標記 blocked，不得 commit
+5. 若沒有 P1/P2 blocker，回報 review verdict、verification evidence、doc sync status 與 residual risks。
+6. commit 前必須詢問使用者是否可以 commit；即使 review pass，也不得自動 commit。
+
+Commit hold 條件：
+
+- verification 或 `verifier` fail
+- post-plan review 發現 P1/P2 blocker
+- canonical doc sync required 但尚未完成
+- working tree 含 unrelated changes 且尚未釐清 scope
+- release-sensitive action 尚未通過 `release-gate`
+- commit message / commit scope 尚未明確
+
 ## 5) Runtime Artifact Sync Rule
 
 - external runtime 可在其自有路徑產生 specs、plans、review notes、scratch docs

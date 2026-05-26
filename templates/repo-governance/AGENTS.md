@@ -38,9 +38,11 @@ repo-local expert skills 是可選 knowledge overlays。若目標 repo 有 domai
 4. 在明確 workspace scope 內實作，且避免 subagents 有重疊 write scope。
 5. 執行最小且足以驗證本次變更的 checks。
 6. meaningful completion claim 前必須跑 `verifier`。
-7. accepted durable behavior、design、ops 或 requirements 改變時，completion claim 前必須同步 canonical docs。
-8. deploy、rollout、migration、destructive environment action 或其他 release-sensitive action 前必須跑 `release-gate`。
-9. 回報 touched files、commands、pass/fail results、skipped checks、doc sync status 與 residual risks。
+7. plan execution 結束後、commit 前，必須執行 post-plan review gate：使用 `first-principles-review` 檢查 false success、broken invariants、redundancy 與 accidental complexity，並使用 `engineering-first-principles` 做最小必要工程風險檢查。
+8. accepted durable behavior、design、ops 或 requirements 改變時，completion claim 前必須同步 canonical docs。
+9. deploy、rollout、migration、destructive environment action 或其他 release-sensitive action 前必須跑 `release-gate`。
+10. 回報 touched files、commands、pass/fail results、skipped checks、doc sync status 與 residual risks。
+11. 若 post-plan review、verification 與 doc sync 判斷皆無 blocker，commit 前仍必須先詢問使用者是否可以 commit；不得自行 commit。
 
 ## 1) 指令優先序
 
