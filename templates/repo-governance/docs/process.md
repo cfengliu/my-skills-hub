@@ -1,8 +1,8 @@
 # Process Rules
 
-這份文件承接 `AGENTS.md`，只記錄需求、規格、planning、runtime artifacts、subagent decision 與 canonical sync 流程，不重複 AI 對話路由規則或 runtime-internal choreography。
+這份文件承接 `AGENTS.md`，只記錄需求、規格、planning、runtime artifacts、task execution routing 與 canonical sync 流程，不重複 AI 對話路由規則或 runtime-internal choreography。
 
-`AGENTS.md` 定義 subagent 的 repo-level 原則與禁止事項；本文件定義 planning / execution 時如何做輕量 subagent decision。
+`AGENTS.md` 定義 subagent 的 repo-level 原則與禁止事項；本文件定義 planning / execution 時如何做 task execution routing。
 
 ## 1) Canonical Chains
 
