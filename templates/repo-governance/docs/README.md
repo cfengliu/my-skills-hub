@@ -5,20 +5,27 @@
 
 ## Start Here
 
+Always start with:
+
 1. `AGENTS.md`
-2. `docs/process.md`
-3. `docs/ops.md`
-4. `docs/prd.md`（若此 repo 有產品行為與驗收規格）
-5. `docs/tdd.md`（若此 repo 有長期技術設計）
-6. `docs/requirements/README.md`（若此 repo 追蹤 durable requirements）
-7. `docs/plans/README.md`（若此 repo 保留 repo-authored planning records）
+
+Then load only what the task needs:
+
+- Process / planning / verification / doc sync / commit gate：`docs/process.md`
+- Commands / model policy / dev server / deploy / destructive actions：`docs/ops.md`
+- Product behavior, UI / UX, acceptance：`docs/prd.md`, if present
+- Technical design, architecture, API, schema：`docs/tdd.md`, if present
+- Durable requirements：`docs/requirements/README.md`, if present
+- Historical repo-authored plans：`docs/plans/README.md`, only when explicitly relevant
+
+Do not read every doc by default.
 
 ## Canonical Truth
 
 - `docs/process.md`
   - canonical process、planning gate、canonical sync rules、runtime ownership notes
 - `docs/ops.md`
-  - operational constants and deployment/runtime procedures
+  - model policy, operational constants, and deployment/runtime procedures
 - `docs/prd.md`
   - canonical product behavior and acceptance, if applicable
 - `docs/tdd.md`

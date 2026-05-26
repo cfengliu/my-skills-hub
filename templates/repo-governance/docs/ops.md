@@ -10,6 +10,29 @@
 - default local URL：`<LOCAL_DEV_URL_OR_NOT_APPLICABLE>`
 - production or release target：`<DEPLOY_TARGET_OR_NOT_APPLICABLE>`
 
+## Model Policy
+
+模型選擇是 operational constant，不是 `AGENTS.md` 的固定產品規格。套用 template 後，請依目標 repo、平台可用性、成本與風險更新。
+
+- main planning / reasoning / final judgment model：`<MAIN_REASONING_MODEL_OR_PLATFORM_DEFAULT>`
+- low-cost task execution subagent model：`<LOW_COST_TASK_EXECUTION_SUBAGENT_MODEL_OR_NOT_APPLICABLE>`
+- fast text iteration model：`<FAST_TEXT_ITERATION_MODEL_OR_NOT_APPLICABLE>`
+- last reviewed：`<YYYY-MM-DD>`
+
+Example mapping，可依當下平台支援替換：
+
+- main planning / reasoning / final judgment model：`gpt-5.5`
+- low-cost task execution subagent model：`gpt-5.4-mini`
+- fast text iteration model：`gpt-5.3-codex-spark`
+
+原則：
+
+- planning、architecture、ambiguous reasoning、security、release、migration、integration judgment 與 verifier final judgment 使用 main planning / reasoning / final judgment model。
+- explicit plan / task list 產生後，bounded、low-risk、cheap-to-verify 的 execution tasks should prefer the low-cost task execution subagent model。
+- fast text iteration model 只用於 scope 小、text-only、失敗便宜、且主 runtime 可快速 review 的迭代。
+- subagent 不擁有 planning、architecture、security、release、migration、destructive action、verification ownership 或 final completion judgment。
+- main runtime 必須 inspect subagent diff、整合結果、執行必要 checks，並滿足 `verifier` contract。
+
 ## Dev Server Rule
 
 - 僅在「本次有修改 repo 內檔案，且需要 browser 預覽或人工驗收前端畫面」時，才自動啟動開發伺服器。
@@ -46,7 +69,7 @@
 - migration command：`<MIGRATION_COMMAND_OR_NOT_APPLICABLE>`
 - post-deploy checks：`<POST_DEPLOY_CHECKS_OR_NOT_APPLICABLE>`
 
-任何 deploy / release / rollout / destructive environment action 前，都必須先跑 `.agents/skills/release-gate/SKILL.md`。
+任何 release-sensitive action 或 destructive environment action 前，都必須先跑 `.agents/skills/release-gate/SKILL.md`。
 
 ## Destructive Change Rule
 

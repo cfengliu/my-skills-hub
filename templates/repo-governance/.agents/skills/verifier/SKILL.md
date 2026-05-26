@@ -85,6 +85,20 @@ recommended_next_action: report-verified | fix | request-human | run-release-gat
 
 For skipped or blocked checks, include the concrete reason instead of implying success.
 
+## First-Principles Verification Checklist
+
+Use this checklist during verification. Keep findings short and evidence-based.
+
+1. Does the final diff actually satisfy the user request?
+2. Is this a false success caused by weak checks?
+3. Did the change break a repo invariant or product acceptance rule?
+4. Is there accidental complexity?
+5. Is there duplicated or dead logic?
+6. Are tests meaningful for the changed behavior?
+7. Are skipped checks justified?
+8. Do PRD, TDD, ops, or requirements need sync?
+9. Is any release-sensitive or destructive gate involved?
+
 ## Pseudocode
 
 ```text
@@ -125,7 +139,7 @@ function verifier(change):
 
 - run the smallest meaningful verification for the touched area
 - prefer stable script entrypoints when available
-- apply the `first-principles-review` skill to the changed artifact, diff, or verification target when available
+- apply the first-principles review method to the changed artifact, diff, or verification target; use an installed `first-principles-review` skill only when available
 - compare the change against repo truth, not just runtime intent
 - check whether product, workflow, or ops docs now need sync
 - challenge assumptions, invariants, duplicated logic, and unnecessary process or abstraction as part of verification
