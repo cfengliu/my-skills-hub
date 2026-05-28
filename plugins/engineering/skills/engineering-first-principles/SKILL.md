@@ -1,6 +1,6 @@
 ---
 name: engineering-first-principles
-description: "Use when designing, implementing, reviewing, refactoring, launching, or debugging a software system or feature and you need to coordinate the engineering-first skill suite. Acts as the orchestrator/router for Problem First, Boundary First, Simplicity First, Change First, Verification First, Failure First, and Security First without replacing those atomic skills."
+description: "Use when designing, implementing, reviewing, refactoring, launching, or debugging a software system or feature and you need to coordinate the engineering-first skill suite. Acts as the orchestrator/router for Problem First, Boundary First, Simplicity First, Change First, Verification First, Failure First, and Security First, with a built-in structural pressure-test stance that challenges decision-bearing structures after enough problem framing and before committing to design or implementation."
 ---
 
 # Engineering First Principles
@@ -11,7 +11,7 @@ Use it to decide which atomic engineering skills to apply, in what order, and wh
 
 ## Purpose
 
-Turn an engineering task into a clear, simple, change-tolerant, verifiable, recoverable, and defensible plan.
+Turn an engineering task into a clear, pressure-tested, simple, change-tolerant, verifiable, recoverable, and defensible plan.
 
 This skill is useful when the task crosses more than one engineering concern:
 
@@ -38,6 +38,8 @@ task-harness
       -> security-first
 ```
 
+The structural pressure-test stance is applied implicitly by the orchestrator after enough problem framing and before committing to design or implementation.
+
 Use `task-harness` before this skill when the user request is vague, delegated to another agent, or needs a repeatable acceptance harness.
 
 Use this skill when the task needs system-level engineering judgment.
@@ -56,9 +58,38 @@ Use the atomic skills when the task needs deeper treatment of one concern.
 | `failure-first` | timeouts, retries, idempotency, fallback, observability, recovery | uncontrolled production failure |
 | `security-first` | users, data, permissions, files, secrets, external input, abuse | unauthorized access or data/cost leakage |
 
+## Structural pressure-test stance
+
+After enough problem framing to understand the task, and before committing to design or implementation, adopt the posture of a senior engineer who pressure-tests decision-bearing structures before trusting them.
+
+This is an always-on orchestration stance, not an atomic skill. Do not list it in `selected_skills`, do not claim it was loaded from a separate atomic skill, and do not represent it as a separate route step.
+
+Pressure-test relevant decision-bearing structures: problem shape, module boundary, data ownership, API contract, state transition, permission model, failure path, verification plan, rollout path, and abstraction layer. Look for:
+
+- hidden assumptions with no evidence
+- weak boundaries or shared ownership
+- false certainty in risky decisions
+- premature abstraction or unnecessary architecture
+- success criteria that cannot be verified
+- simpler boring options skipped too quickly
+
+For small or low-risk tasks, apply the stance silently. Make it visible only when it changes a decision, exposes a material risk, or prevents unnecessary work. For non-trivial work, output only the 1-3 highest-value pressure-tests.
+
+Keep the critique direct, concrete, and useful. Challenge the structure, not the person. Every visible pressure-test should either change a decision, expose a risk, request evidence, or suggest a safer next step.
+
+Useful prompts:
+
+- What has to be true for this to be a good idea?
+- Where is ownership enforced, not just documented?
+- Which decision becomes expensive to reverse?
+- What is the boring version, and why is it insufficient?
+- What can prove this before we build the full design?
+
 ## Routing matrix
 
 Choose the lightest path that covers the risk.
+
+The structural pressure-test stance applies implicitly to every route before committing to design or implementation. It is not an atomic skill and should not appear in `selected_skills`.
 
 | Task shape | Recommended path |
 |---|---|
@@ -70,6 +101,8 @@ Choose the lightest path that covers the risk.
 | Auth, permissions, data, payment, files, or secrets | `security-first` -> `boundary-first` -> `failure-first` -> `verification-first` |
 | Background job or async workflow | `failure-first` -> `boundary-first` -> `verification-first` |
 | Bug fix | `verification-first` -> `failure-first` if production behavior is involved |
+| Architecture or implementation plan review | `problem-first` if goals are unclear -> `boundary-first` -> `simplicity-first` -> `change-first` -> `verification-first` |
+| Production or security-sensitive review | relevant route + `failure-first` and/or `security-first` |
 | Launch review | `verification-first` -> `failure-first` -> `security-first` |
 | AI agent task or delegated work | `task-harness` -> relevant engineering skills |
 
@@ -77,7 +110,7 @@ If the user explicitly asks for one atomic skill, use that skill directly. Do no
 
 ## Default order
 
-For broad design, implementation planning, or launch review, run the suite in this order:
+For broad design, implementation planning, or launch review, run the atomic skills in this order:
 
 1. **Problem First** — define the actual problem, users, success criteria, non-goals, constraints, and MVP.
 2. **Boundary First** — define modules, ownership, API contracts, state transitions, permission boundaries, and external-service boundaries.
@@ -86,6 +119,8 @@ For broad design, implementation planning, or launch review, run the suite in th
 5. **Verification First** — convert requirements, boundaries, permissions, and failure cases into tests/checks.
 6. **Failure First** — define timeout, retry, idempotency, fallback, observability, and recovery.
 7. **Security First** — protect assets, trust boundaries, authorization, inputs, secrets, quotas/costs, auditability, and security tests.
+
+Apply the structural pressure-test stance implicitly after enough problem framing and before committing to design or implementation.
 
 ## Visible routing behavior
 
@@ -100,7 +135,7 @@ The routing note should usually be 1-3 lines and mention:
 Example:
 
 ```md
-Engineering route: this looks like external API + storage + runtime risk, so I’m applying boundary / failure / security / verification before implementation.
+Engineering route: this looks like external API + storage + runtime risk, so I’m applying boundary / failure / security / verification before implementation, with an implicit structural pressure-test before accepting the shape.
 ```
 
 Do not dump a full checklist by default. Use the full route packet only when the task needs visible decision tracking:
@@ -118,6 +153,7 @@ When the full route packet is needed, use these fields:
 
 - task_shape:
 - selected_skills:
+- pressure_test_stance:
 - skipped_skills_and_why:
 - risk_flags:
 - decisions_needed:
@@ -133,7 +169,7 @@ When an atomic skill is selected for depth, open/read that atomic skill's `SKILL
 
 If the skill is selected only for routing guidance and was not opened/read, mark it as `selected conceptually, not expanded`. If it was opened/read, mark it as `expanded from SKILL.md`.
 
-Do not pretend an atomic skill was applied in depth when only this orchestrator was used.
+Do not pretend an atomic skill was applied in depth when only this orchestrator was used. Do not mark the structural pressure-test stance as an expanded atomic skill.
 
 ## Question gate
 
@@ -153,6 +189,8 @@ In planning mode, produce the full Engineering Route packet first, then ask only
 
 Scale the output to the task. Every non-trivial output must include either a brief routing note or a full packet. Full packets must include `next_action`; otherwise the route is only a ritual document.
 
+Do not mention the pressure-test stance in small-task routing notes unless it changes the decision or exposes a material risk.
+
 For small tasks, produce the brief routing note:
 
 ```md
@@ -167,6 +205,7 @@ For meaningful features, planning-mode work, or high-risk work, produce the full
 ## Route
 - task_shape:
 - selected_skills:
+- pressure_test_stance: Applied implicitly as an always-on pressure-test layer, not an atomic skill.
 - skipped_skills_and_why:
 - risk_flags:
 - decisions_needed:
@@ -183,7 +222,12 @@ For meaningful features, planning-mode work, or high-risk work, produce the full
 - Constraints:
 - MVP:
 
-## 2. Boundary
+## 2. Structural pressure-test
+- Key assumption to pressure-test:
+- Weakest structural decision:
+- Safer next step:
+
+## 3. Boundary
 - Modules and responsibilities:
 - Data ownership:
 - API contracts:
@@ -191,19 +235,19 @@ For meaningful features, planning-mode work, or high-risk work, produce the full
 - Permission boundaries:
 - External service boundaries:
 
-## 3. Simplicity
+## 4. Simplicity
 - Smallest viable architecture:
 - Things intentionally not built:
 - Abstractions intentionally delayed:
 - Boring technology choices:
 
-## 4. Change
+## 5. Change
 - Likely change points:
 - Isolated now:
 - Not abstracted yet:
 - Replacement or migration strategy:
 
-## 5. Verification
+## 6. Verification
 - Requirements to tests:
 - Happy-path tests:
 - Error-path tests:
@@ -212,7 +256,7 @@ For meaningful features, planning-mode work, or high-risk work, produce the full
 - CI checks:
 - Regression tests:
 
-## 6. Failure
+## 7. Failure
 - Failure modes:
 - Timeout policy:
 - Retry policy:
@@ -221,7 +265,7 @@ For meaningful features, planning-mode work, or high-risk work, produce the full
 - Observability:
 - Recovery/compensation:
 
-## 7. Security
+## 8. Security
 - Assets:
 - Trust boundaries:
 - Authentication and authorization:
@@ -233,6 +277,7 @@ For meaningful features, planning-mode work, or high-risk work, produce the full
 
 ## Implementation checklist
 - [ ] Build the core happy path first.
+- [ ] Pressure-test assumptions and revisit weak decisions.
 - [ ] Keep module/data/state ownership explicit.
 - [ ] Add only the abstractions justified by current risk.
 - [ ] Add tests/checks from the Verification section.
@@ -243,18 +288,20 @@ For meaningful features, planning-mode work, or high-risk work, produce the full
 ## Process
 
 1. Classify the task shape.
-2. Select the smallest skill route that covers the actual risks.
-3. Produce or maintain a visible routing note; use the full route packet when the task needs decision tracking.
-4. Apply the question gate before asking the user anything.
-5. If one section needs depth, open/read the relevant atomic skill's `SKILL.md`, mark it as `expanded from SKILL.md`, and use its required output.
-6. If an atomic skill is only used for routing, mark it as `selected conceptually, not expanded`.
-7. Produce the required output for the task size.
-8. Before finishing, run the launch checklist if the work affects production users, data, money, permissions, availability, or external systems.
+2. Select the smallest atomic skill route that covers the actual risks.
+3. Apply the built-in structural pressure-test stance after enough problem framing and before committing to design or implementation.
+4. Produce or maintain a visible routing note; use the full route packet when the task needs decision tracking.
+5. Apply the question gate before asking the user anything.
+6. If one atomic skill section needs depth, open/read the relevant atomic skill's `SKILL.md`, mark it as `expanded from SKILL.md`, and use its required output.
+7. If an atomic skill is only used for routing, mark it as `selected conceptually, not expanded`.
+8. Produce the required output for the task size.
+9. Before finishing, run the launch checklist if the work affects production users, data, money, permissions, availability, or external systems.
 
 ## Composition rules
 
 - Do not duplicate long atomic-skill guidance here.
 - Do not run the full suite for tiny changes unless risk justifies it.
+- Do not skip the structural pressure-test stance; silently apply it for small or low-risk tasks, and make only the 1-3 highest-value pressure-tests visible for non-trivial work.
 - Do not skip `problem-first` when the user goal or success criteria are unclear.
 - Do not skip `security-first` when the task touches users, permissions, secrets, payments, files, external input, logs, or cost.
 - Do not skip `failure-first` when the task touches production flows, async work, external APIs, retries, jobs, payments, or background processing.
@@ -266,6 +313,7 @@ For meaningful features, planning-mode work, or high-risk work, produce the full
 | Method | Confirm before shipping |
 |---|---|
 | Problem | Success criteria are met and non-goals did not creep in. |
+| Structural pressure-test stance | Assumptions, boundaries, ownership, abstractions, verification, failure paths, and expensive-to-reverse decisions were pressure-tested before committing. |
 | Boundary | Module responsibility, data owner, API contract, and state owner are clear. |
 | Simplicity | No unnecessary abstraction/service/framework/config remains. |
 | Change | Main likely change points are isolated without fantasy abstractions. |
@@ -279,6 +327,7 @@ Before returning, answer:
 
 1. Did this task need the full suite, or only selected atomic skills?
 2. Are selected and skipped skills explicit?
-3. Is the output directly usable for design, implementation, review, or launch?
-4. Is there concrete verification evidence or a plan to create it?
-5. Are production, security, and failure risks handled when relevant?
+3. Was the structural pressure-test stance applied without pretending it is an atomic skill?
+4. Is the output directly usable for design, implementation, review, or launch?
+5. Is there concrete verification evidence or a plan to create it?
+6. Are production, security, and failure risks handled when relevant?

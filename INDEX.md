@@ -13,11 +13,11 @@
 ### Engineering
 
 - Path: `plugins/engineering`
-- Purpose: 統合工程設計、變更、安全、失敗模式、驗證與簡化思考的 Codex plugin。
+- Purpose: 統合工程設計、結構壓測、變更、安全、失敗模式、驗證與簡化思考的 Codex plugin。
 
 | Skill | Purpose |
 |---|---|
-| `plugins/engineering/skills/engineering-first-principles` | 統合 Engineering skills，依任務風險路由到 problem/boundary/simplicity/change/verification/failure/security first。 |
+| `plugins/engineering/skills/engineering-first-principles` | 統合 Engineering skills，依任務風險路由到 problem/boundary/simplicity/change/verification/failure/security first，並內建在設計或實作前壓測關鍵結構判斷的常駐工程判斷 layer。 |
 | `plugins/engineering/skills/problem-first` | 先釐清問題、使用者、成功標準與 MVP，避免做錯東西。 |
 | `plugins/engineering/skills/simplicity-first` | 壓低複雜度，避免過度設計。 |
 | `plugins/engineering/skills/change-first` | 在改動前先理解變更範圍、風險與遷移策略。 |
