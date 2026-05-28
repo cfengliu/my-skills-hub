@@ -100,96 +100,110 @@ trivial change 可採輕量驗證：檢查 diff、確認不需 canonical doc syn
 
 複雜任務必須有 explicit plan，但 plan file path、format 與 supporting artifacts 由 external runtime 決定。
 
-### 2.1) Task Execution Routing
+### 2.1) 任務執行路由與直接派工
 
-Planning and final judgment stay with the main runtime.
+Planning 與 final judgment 保留給 main runtime。
 
-After an explicit plan or task list exists, route each execution task independently.
+explicit plan 或 task list 出現後，main runtime 必須先完成 **Subagent Routing Gate**，才能執行 plan tasks。
 
-Default routing:
+這是 routing gate，不是 delegation requirement。Subagent routing judgment 是必要的；實際 delegation 是選擇性的。小任務或只能 inline 的任務，可用輕量 `Subagents: none; ...` 形式滿足 gate。
 
-```text
-planning / architecture / risk / integration / verification judgment -> main runtime
-eligible bounded low-risk execution task -> low-cost task execution subagent
-complex / ambiguous / high-risk / hard-to-verify execution task -> main runtime
-```
+詳細 routing classification rules 放在 `.agents/skills/subagent-routing/SKILL.md`；本節定義何時需要 gate，以及已路由工作如何往下走。若文字有差異，`AGENTS.md` 的 safety boundaries 與 `docs/process.md` 的 process gates 優先；該 skill 僅在其 scope 內控制 routing output shape 與分類細節。
 
-A task is eligible for the low-cost task execution subagent only when all conditions are true:
+此 gate 要求 main runtime 掃過完整 plan / task list，並明確分類：
 
-- task is an execution task, not planning、architecture、security、release、migration、or verification ownership
-- goal and acceptance are clear
-- read scope and write scope are explicit
-- forbidden scope is explicit
-- expected output can be short and structured
-- main runtime can inspect and verify the result cheaply
-- task does not involve secrets、production config、auth、billing、payments、destructive action、or release-sensitive action
-- task does not require broad cross-module redesign or ambiguous reasoning
+- 可 delegated 給 subagents 的 tasks
+- 必須留在 main runtime 的 tasks
+- 不可 delegated 的 tasks，並附理由
 
-Escalate to main runtime when any condition is true:
+輸出必須包含 **Subagent Routing Decision**。多任務或 delegation candidates 使用完整格式；小任務或 inline-only tasks 使用輕量格式。
 
-- requirements are unclear
-- implementation requires architecture decision
-- change affects schema、API contract、security boundary、auth、billing、payments、deployment path、or durable ops behavior
-- task spans multiple high-coupling modules
-- failure mode is hard to detect with local checks
-- tests are failing for unclear reasons
-- subagent would need large repo context to understand the task
+此 gate 寫出前，不得開始 plan execution。
 
-Parallelism is optional.
-
-- If tasks are independent and write scopes do not overlap, they may run in parallel.
-- A bounded task may be delegated sequentially even when it cannot run in parallel.
-- If write scopes overlap, main runtime must coordinate ordering and inspect each diff before continuing.
-
-If using a subagent, the plan must include:
+完整 Subagent Routing Decision 格式：
 
 ```text
-Subagent task:
-- task name:
-- model:
-- goal:
-- read scope:
-- write scope:
-- forbidden scope:
-- can run in parallel:
-- expected output:
-- verification method:
-- escalation trigger:
+Subagent Routing Decision（子代理路由決策）：
+- Delegated tasks（委派任務）：
+  - task:
+    model:
+    goal（目標）:
+    read scope（讀取範圍）:
+    write scope（寫入範圍）:
+    forbidden scope（禁止範圍）:
+    can run in parallel（可否並行）:
+    expected output（預期輸出）:
+    verification method（驗證方式）:
+    escalation trigger（升級條件）:
+- Main-runtime tasks（主 runtime 任務）：
+  - task:
+    reason（理由）:
+- Non-delegable tasks（不可委派任務）：
+  - task:
+    reason（理由）:
 ```
 
-If no task is eligible, write:
+若沒有 task 符合條件，寫：
 
 ```text
-Subagents: none; tasks are too small, too ambiguous, too risky, or cheaper to do inline.
+Subagent Routing Decision（子代理路由決策）：
+Subagents: none; task is small enough to execute inline.（無子代理；任務夠小，可 inline 執行。）
+- Main-runtime tasks（主 runtime 任務）：
+  - task:
+    reason（理由）: cheaper and safer to do inline
+- Non-delegable tasks（不可委派任務）： none
 ```
 
-Do not force artificial task splitting.
+這會滿足小任務或 inline-only tasks 的 gate。
+
+gate 存在後，逐一獨立 route 每個 execution task。
+
+預設 routing：
+
+```text
+planning / architecture / risk / integration / verification judgment -> main runtime（規劃、架構、風險、整合、驗證判斷交給主 runtime）
+eligible bounded low-risk execution task -> low-cost task execution subagent, when available（符合條件、有界、低風險的執行任務，在可用時交給低成本任務執行子代理）
+complex / ambiguous / high-risk / hard-to-verify execution task -> main runtime（複雜、不明確、高風險或難驗證的執行任務交給主 runtime）
+```
+
+完整 delegable、inline、main-runtime-only 與 blocked classification rules 以 `.agents/skills/subagent-routing/SKILL.md` 為準。
+
+Parallelism 是選擇性的。
+
+- 若 tasks 彼此獨立且 write scopes 不重疊，可以 parallel 執行。
+- bounded task 即使不能 parallel，也可以 sequentially delegated。
+- 若 write scopes 重疊，main runtime 必須協調順序，且每步繼續前都要 inspect diff。
+
+不要為了 delegation 強行切分任務。
 
 ## 3) Implementation Start Rule
 
 - 即使是非複雜任務，也要先完成一次簡要規劃思考。
+- 簡要規劃思考可以是 runtime internal reasoning，不等於 explicit plan，也不自動觸發 Subagent Routing Gate。只有對使用者或 artifact 明確產出的 plan / task list，才觸發 routing gate。
 - 只有在使用者已明確下達開發指令後，才可開始實作。
 - planning 完成後，可直接在同一 session 執行，不必再等待額外流程切換，除非使用者或平台要求。
 
 ## 4) Plan Execution
 
-- 若平台支援且任務可拆分，依第 2.1 節 route execution tasks；main runtime remains accountable for integration and final judgment。
+- 硬性前置條件：plan execution 開始前，main runtime 必須已完成第 2.1 節的 Subagent Routing Gate。小任務或 inline-only tasks 使用輕量 `Subagents: none; ...` 形式即可。
+- 若缺少 Subagent Routing Decision，執行前先停下來補上。
+- 若平台支援且任務可拆分，依第 2.1 節 route execution tasks；main runtime 仍對 integration 與 final judgment 負責。
 - 進入執行後，原則上應完成 plan 全部 tasks。
 - 只有以下情況可暫停：
   - blocker
   - 需求衝突且需要使用者決策
   - 使用者明確要求中止或改道
 
-### 4.5) Subagent Execution Boundary
+### 4.5) Subagent 執行邊界
 
-If subagents are used, the main runtime remains accountable.
+若使用 subagents，main runtime 仍然負責。
 
-- Subagents must stay within assigned read/write scope.
-- Parallel write scopes must not overlap.
-- Exploration / verifier sidecar subagents must not modify files.
-- If a subagent hits scope expansion, forbidden scope, secrets, production config, release-sensitive action, destructive action, destructive git action, or requirement conflict, it must report `blocked`.
-- Subagent output must include touched files, edit summary, commands run or skipped, blocked items, and residual risks.
-- Subagent output is evidence, not authority. The main runtime must inspect the diff, run necessary checks, and satisfy the repo-local `verifier` contract.
+- Subagents 必須留在指定 read/write scope 內。
+- Parallel write scopes 不可重疊。
+- Exploration / verifier sidecar subagents 不可修改檔案。
+- 若 subagent 遇到 scope expansion、forbidden scope、secrets、production config、release-sensitive action、destructive action、destructive git action 或 requirement conflict，必須回報 `blocked`。
+- Subagent output 必須包含 touched files、edit summary、commands run or skipped、blocked items 與 residual risks。
+- Subagent output 是 evidence，不是 authority。Main runtime 必須 inspect diff、執行必要 checks，並滿足 repo-local `verifier` contract。
 
 ## 4.6) Post-Plan Review And Commit Gate
 

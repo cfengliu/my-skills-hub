@@ -58,6 +58,7 @@
 | `templates/repo-governance/docs/process.md` | promotion pipeline、delivery closure、planning threshold、planned task execution routing、runtime artifact sync 與 completion claim taxonomy 模板。 |
 | `templates/repo-governance/docs/ops.md` | model policy、dev server、verification、backup/restore、deploy/release 與 destructive change 操作常數模板。 |
 | `templates/repo-governance/.agents/skills/runtime-adapter` | generic repo-local control skill：選擇最小必要 expert skills 並注入 canonical repo truth。 |
+| `templates/repo-governance/.agents/skills/subagent-routing` | 泛用 repo-local control skill：在明確 plan / task list 出現後，將任務分類為 main-runtime-only、delegable、inline 或 blocked，且不執行任務。 |
 | `templates/repo-governance/.agents/skills/release-gate` | generic repo-local control skill：對 release-sensitive actions 與 destructive environment actions 做 go / hold / require-human 判定。 |
 | `templates/repo-governance/.agents/skills/verifier` | generic repo-local control skill：獨立驗證 correctness、regressions、repo-truth alignment 與 doc sync。 |
 
