@@ -11,6 +11,13 @@ Independently validate correctness, regressions, repo-truth alignment, doc sync,
 
 Verifier output is evidence for completion eligibility. It does not approve release-sensitive actions.
 
+## Policy Sources
+
+- Verification requirements, completion taxonomy, completion report, and commit rules: `docs/governance/managed/verification.md`
+- Doc sync matrix and stale-doc handling: `docs/governance/managed/doc-sync.md`
+- Release-sensitive rule-out or escalation: `docs/governance/managed/release.md`
+- Repo commands and environments: `docs/governance/local/ops.md`
+
 ## Inputs
 
 - changed files
@@ -68,25 +75,15 @@ residual_risks:
 recommended_next_action: report-verified | fix | request-human | run-release-gate
 ```
 
-## Verification Checklist
+## Verification Procedure
 
-1. Does the final diff satisfy the user request?
-2. Is this a false success caused by weak checks?
-3. Did the change break repo truth or accepted product behavior?
-4. Are tests or checks meaningful for the changed behavior?
-5. Are skipped checks justified with concrete residual risk?
-6. Do PRD, TDD, roadmap, epics, or ops need sync?
-7. Is any release-sensitive or destructive gate involved?
-8. Is there accidental complexity, duplicated logic, or dead process?
-
-## Do
-
-- run the smallest meaningful checks for the touched area
-- prefer stable commands from `docs/governance/local/ops.md`
-- compare the change against repo truth, not just runtime intent
-- call out missing coverage and blocked checks
-- include subagent reports as evidence, not authority
-- explicitly record release-gate rule-out reason when not run
+1. Load `docs/governance/managed/verification.md` and the smallest relevant repo-truth files.
+2. Check whether the final diff satisfies the user request and accepted repo truth.
+3. Run or inspect the smallest meaningful checks for the touched area.
+4. Challenge false-success states: weak checks, unused schemas, empty reports, uncovered behavior, wrong paths, or runtime artifacts treated as canonical.
+5. Apply `docs/governance/managed/doc-sync.md` to decide whether PRD, TDD, roadmap, epics, or ops need updates.
+6. Record skipped checks with concrete reasons and residual risk.
+7. Record release-gate rule-out reason or recommend `run-release-gate` when release-sensitive signals exist.
 
 ## Do Not
 

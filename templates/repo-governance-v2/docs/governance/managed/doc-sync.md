@@ -6,9 +6,13 @@ Repo-specific specialization belongs in docs/governance/local/*.
 -->
 # Documentation Sync Rules
 
+This file owns PRD, TDD, roadmap, epics, ops sync, and stale-doc handling.
+
 ## Sync Principle
 
 Accepted durable changes must be synchronized into the appropriate canonical source before meaningful completion claim.
+
+Empty sections, placeholders, or missing local files mean `unknown`, not accepted truth.
 
 ## PRD Sync
 

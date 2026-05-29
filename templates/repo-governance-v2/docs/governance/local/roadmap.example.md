@@ -13,6 +13,8 @@ This file is the priority dashboard for what to do next.
 
 Roadmap decides sequencing. PRD owns product behavior and acceptance. TDD owns technical design. Epics own large workstream requirement details.
 
+Empty sections and placeholders are `unknown`, not accepted priority truth. Add only sequencing decisions that have been accepted by the user or maintainer.
+
 ## Current Focus
 
 -
@@ -26,7 +28,7 @@ Roadmap decides sequencing. PRD owns product behavior and acceptance. TDD owns t
 ## Next
 
 | ID | Work | Trigger | Detail Ref |
-|---|---|---|---|
+|---|---|---|
 | `R-002` | `<workstream>` | `<when this becomes next>` | `epics/E-002-<topic>.md` |
 
 ## Later

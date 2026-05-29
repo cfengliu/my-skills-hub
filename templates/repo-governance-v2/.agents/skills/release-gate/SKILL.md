@@ -11,18 +11,17 @@ Make the repo-local `go`, `hold`, or `require-human` decision for release-sensit
 
 Release-gate does not verify generic code correctness. Verifier must pass first when a meaningful change is involved.
 
+## Policy Sources
+
+- Release-sensitive, destructive, production-data, and human checkpoint policy: `docs/governance/managed/release.md`
+- Repo-specific release commands, environments, backup, rollback, and operator notes: `docs/governance/local/ops.md`
+- Verification prerequisite for meaningful changes: `docs/governance/managed/verification.md`
+
 ## When to Use
 
-Use before:
+Use when the user request, intended command, changed files, or target environment may touch deploy, release, rollout, migration, production-like config, production data, destructive actions, secrets, auth, payments, billing, or permission boundaries.
 
-- deploy, release, or rollout
-- schema or data migration
-- destructive schema or data changes
-- production-like config changes
-- production data access or mutation
-- backup, restore, or rollback-sensitive operations
-- secrets or credentials wiring
-- auth, identity, payments, billing, or permission-boundary changes
+If no release-sensitive signal is present, record the rule-out reason in verifier or final reporting.
 
 ## Inputs
 
@@ -50,26 +49,14 @@ residual_release_risk:
 next_action: proceed | fix | ask-human | run-verifier
 ```
 
-## Decision Rules
+## Decision Procedure
 
-Return `require-human` when secrets, production data, production config, destructive actions, or human checkpoint gates are involved.
-
-Return `hold` when required verification, backup, target environment, rollback path, or post-action checks are missing.
-
-Return `go` only when required preconditions are satisfied and no human checkpoint remains.
-
-## Detector Signals
-
-Treat these as release-sensitive unless explicitly ruled out with evidence:
-
-- deploy / release / rollout / migrate / backup / restore / rollback commands
-- schema or migration files
-- production-like config
-- `.env*`, secrets docs, credentials wiring
-- CI/CD release path files
-- auth, identity, payments, billing, permission boundaries
-- production data access or mutation
-- destructive environment actions
+1. Load `docs/governance/managed/release.md` and `docs/governance/local/ops.md`.
+2. Identify release-sensitive actions, target environment, affected data, schema, config, secrets, auth, billing, and CI/CD path.
+3. Confirm meaningful changes have passed verifier or equivalent independent verification.
+4. Return `require-human` when a human checkpoint remains.
+5. Return `hold` when verification, backup, target environment, rollback path, or post-action checks are missing.
+6. Return `go` only when required preconditions are satisfied and no human checkpoint remains.
 
 ## Common Mistakes
 

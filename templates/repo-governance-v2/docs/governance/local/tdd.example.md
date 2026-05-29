@@ -13,6 +13,8 @@ This file owns accepted technical design, architecture boundaries, API contracts
 
 It is not a backlog tracker. Use `roadmap.md` for sequencing and `epics/` for large requirement ledgers.
 
+Empty sections and placeholders are `unknown`, not accepted technical truth. Add only decisions that have been accepted by the user or maintainer.
+
 ## Architecture Summary
 
 - runtime:

@@ -9,14 +9,14 @@ description: Use after an explicit plan or task list exists and before consideri
 
 Classify planned tasks before delegation. This skill only performs routing classification.
 
-It does not:
+It does not execute tasks, edit files, start subagents, verify completion, approve release, or make final judgment.
 
-- execute tasks
-- edit files
-- start subagents
-- verify completion
-- approve release
-- make final judgment
+## Policy Sources
+
+- Subagent safety boundary: `docs/governance/managed/subagents.md`
+- Hard gates and truth priority: `AGENTS.md`
+- Verification and completion ownership: `docs/governance/managed/verification.md`
+- Release-sensitive boundaries: `docs/governance/managed/release.md`
 
 ## Inputs
 
@@ -50,36 +50,13 @@ subagent_routing_decision:
       reason: "missing requirement, unsafe scope, or conflict"
 ```
 
-## Delegable Criteria
+## Decision Procedure
 
-A task may be delegated only when all are true:
-
-- bounded and low risk
-- clear goal and acceptance
-- explicit read/write/forbidden scope
-- independently reviewable
-- cheaply verifiable
-- not security-critical
-- failure is easy to detect and repair
-
-## Never Delegate
-
-- user intent clarification
-- planning ownership
-- requirement interpretation
-- architecture decisions
-- security decisions
-- auth, permission, payments, billing
-- secrets handling
-- migration, deployment, release, rollback, production config
-- destructive actions
-- commit decisions
-- final diff review
-- final completion judgment
-- verifier ownership
-- release-gate ownership
-- broad cross-module refactors
-- unclear tasks
+1. Load `docs/governance/managed/subagents.md`.
+2. Classify each planned task as `main-runtime-only`, `delegable`, `inline`, or `blocked_or_unclear`.
+3. Delegate only bounded, low-risk, explicitly scoped tasks whose output can be independently reviewed and verified.
+4. Keep planning, requirement interpretation, architecture, security, release, destructive actions, verifier ownership, release-gate ownership, final diff review, and final judgment in the main runtime.
+5. If scope is unclear or a hard gate may be crossed, mark the task blocked or main-runtime-only.
 
 ## Authority Boundary
 

@@ -13,6 +13,8 @@ This file owns accepted product behavior, user-facing flows, UI / UX decisions, 
 
 It is not a backlog tracker. Use `roadmap.md` for sequencing and `epics/` for large requirement ledgers.
 
+Empty sections and placeholders are `unknown`, not accepted product truth. Add only decisions that have been accepted by the user or maintainer.
+
 ## Product Summary
 
 - product:

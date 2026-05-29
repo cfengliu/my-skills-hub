@@ -6,7 +6,7 @@ Repo-specific specialization belongs in docs/governance/local/*.
 -->
 # Subagent Boundaries
 
-This file defines repo-level subagent safety boundaries. It does not define a full orchestration workflow.
+This file owns repo-level subagent safety boundaries. It does not define a full orchestration workflow.
 
 ## When Subagents May Be Used
 

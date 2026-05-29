@@ -9,23 +9,16 @@ description: Use at task start when an external workflow runtime needs repo gove
 
 This skill provides repo governance context to the active runtime.
 
-It does not own:
+It does not own planning, implementation, subagent orchestration, verification, release approval, artifact paths, branch strategy, or workflow routing.
 
-- planning
-- implementation
-- subagent orchestration
-- verification
-- release approval
-- artifact paths
-- branch strategy
-- workflow routing
+It may only help the runtime identify relevant governance files, hard gates, local truth boundaries, and repo-specific context entrypoints.
 
-It may only help the runtime identify:
+## Policy Sources
 
-- relevant governance files
-- hard gates
-- local truth boundaries
-- repo-specific context entrypoints
+- Entrypoint, hard gates, and truth priority: `AGENTS.md`
+- Lookup guide: `docs/governance/README.md`
+- Task classes and canonical lookup: `docs/governance/managed/process.md`
+- Upgrade contract: `docs/governance/MANIFEST.md`
 
 ## When to Use
 
@@ -73,13 +66,6 @@ Use `unknown` when evidence is insufficient. Do not classify uncertain tasks as 
 - Use the relevant epic file only when the task touches a large workstream's child requirement details.
 
 Do not load every local file by default.
-
-## Do
-
-- keep the packet small
-- point to canonical governance refs
-- flag likely verifier or release-gate needs
-- mention local truth boundaries when relevant
 
 ## Do Not
 

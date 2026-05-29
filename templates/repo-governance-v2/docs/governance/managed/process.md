@@ -6,7 +6,21 @@ Repo-specific specialization belongs in docs/governance/local/*.
 -->
 # Process Rules
 
-This file defines planning, minimum doc loading, runtime artifact handling, canonical lookup, and recovery rules. Verification, release, completion, subagent boundaries, and doc sync live in their dedicated managed files.
+This file owns task classes, planning, minimum doc loading, runtime artifact handling, canonical lookup, and recovery rules.
+
+Verification and completion live in `verification.md`. Release-sensitive gates live in `release.md`. Subagent boundaries live in `subagents.md`. Documentation sync lives in `doc-sync.md`.
+
+## Task Classes
+
+Classify work as:
+
+- `trivial`: typo fixes, formatting, non-behavioral comments, wording, or local documentation phrasing only; no runtime behavior, product acceptance, tests, ops rules, schemas, configuration, APIs, dependency behavior, release paths, or durable requirements change.
+- `meaningful`: any substantive change to code, config, schema, dependency behavior, public behavior, UI structure, interaction flow, API contract, test expectation, deployment path, durable docs, ops rules, or requirements.
+- `release-sensitive`: deploy, release, rollout, migration, backup, restore, rollback, production-like config, CI/CD release path, auth, identity, payments, billing, secrets, production data, or environment-changing action.
+- `destructive`: an action that may delete, overwrite, or irreversibly modify data, schema, config, branch, worktree, environment, or production-like state.
+- `blocked`: missing permission, missing environment, failing checks, requirement conflict, or human decision needed.
+
+When uncertain, classify upward toward the safer category.
 
 ## Canonical Chains
 
@@ -28,7 +42,7 @@ Promotion answers whether implementation may start. Delivery closure answers whe
 
 Start from `AGENTS.md`. Then load only files relevant to the task:
 
-- terminology / task class: `docs/governance/managed/terminology.md`
+- task class, planning, runtime artifacts, or canonical lookup: `docs/governance/managed/process.md`
 - local commands / environment: `docs/governance/local/ops.md`
 - product or UI behavior: `docs/governance/local/prd.md`
 - technical design or API / schema / boundary decisions: `docs/governance/local/tdd.md`
@@ -54,18 +68,6 @@ Trivial changes may use lightweight inline planning.
 
 Plan file paths, branch strategy, worktree strategy, and runtime artifacts are owned by the active workflow runtime unless repo-local rules explicitly say otherwise.
 
-## Task Classification
-
-Classify work as:
-
-- `trivial`
-- `meaningful`
-- `release-sensitive`
-- `destructive`
-- `blocked`
-
-When uncertain, classify upward toward the safer category.
-
 ## Runtime Artifacts
 
 Runtime-generated specs, plans, scratch notes, review notes, and execution artifacts are working materials. They are not canonical just because they exist or live under a particular path.
@@ -82,6 +84,8 @@ Use this order for local repo truth:
 4. `docs/governance/local/epics/*` for large workstream child requirement detail, source, promotion status, evidence, and next step.
 5. `docs/governance/local/ops.md` for commands, environments, release process, operator notes path, and operational constants.
 6. existing implementation and tests, only when not contradicted by higher-priority truth.
+
+Empty sections, placeholders, or missing local files mean `unknown`, not accepted truth.
 
 If a lower-priority source conflicts with higher-priority local truth, mark or sync the stale source before a meaningful completion claim.
 
