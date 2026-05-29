@@ -13,6 +13,8 @@ Epics are requirement ledgers for large workstreams.
 
 Use an epic when a roadmap item needs child requirements, source tracking, PRD/TDD promotion status, evidence, or multi-session delivery history.
 
+Empty sections and placeholders are `unknown`, not accepted requirement truth. Only accepted child requirements should be promoted into PRD or TDD.
+
 Do not use epics as the priority source. Priority lives in `../roadmap.md`.
 
 Do not use epics as final product or technical truth:

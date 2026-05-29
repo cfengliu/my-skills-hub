@@ -6,6 +6,10 @@ Repo-specific specialization belongs in docs/governance/local/*.
 -->
 # Release Rules
 
+This file owns release-sensitive, destructive, production-data, and human checkpoint gates.
+
+Verification passing is not release approval. Meaningful changes still require verification before release-gate can return `go`.
+
 ## Release-sensitive Detector
 
 Treat the following as release-sensitive unless explicitly ruled out with evidence:
@@ -35,6 +39,39 @@ Before any release-sensitive action:
 - `require-human`: do not proceed without explicit human confirmation.
 
 If the decision is missing, unclear, `hold`, or `require-human`, stop and ask for human confirmation or fix the blocker.
+
+## Human Checkpoint Gates
+
+Do not automatically cross these gates:
+
+- deploy / release / rollout
+- destructive schema or data change
+- auth / identity change
+- payments / billing change
+- secrets
+- production config
+- production data access or mutation
+- destructive git action
+- branch deletion
+- worktree deletion
+
+## Secrets
+
+Never write secrets into tracked files.
+
+Forbidden in tracked files:
+
+- passwords
+- private keys
+- `.env`
+- API tokens
+- DB passwords
+- cloud credentials
+- production credentials
+- access tokens
+- private operator notes
+
+If local operator context is needed, use the repo-approved local notes path defined in `docs/governance/local/ops.md`, if present.
 
 ## Production Data Rules
 

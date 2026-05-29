@@ -11,6 +11,8 @@ Do not overwrite during template upgrades.
 
 This file records repo-owned operational truth.
 
+Empty fields, placeholders, or `unknown` values are not accepted operational truth. Treat them as missing information until a maintainer fills them in.
+
 ## Project Constants
 
 - project name: `<PROJECT_NAME>`

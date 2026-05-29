@@ -65,30 +65,28 @@
 ### Repo Governance v2
 
 - Path: `templates/repo-governance-v2`
-- Purpose: 可複製、可升級的 AI 協作治理模板；將 template-owned managed governance、repo-owned local truth、可升級 control skills 與 initialization examples 明確分離，避免升級覆蓋 local repo 特色。
+- Purpose: 可複製、可升級的 full AI 協作治理套件；以 `MANIFEST.md` 作為 upgrade contract 唯一 owner，並將 template-owned managed governance、repo-owned local truth、control skills 與 initialization examples 分離，避免升級覆蓋 local repo 特色或產生規則 drift。
 
 | Asset | Purpose |
 |---|---|
-| `templates/repo-governance-v2/AGENTS.md` | 薄入口與硬邊界模板，定義 non-overridable gates、managed/local ownership、local PRD/TDD/roadmap/epics truth model、runtime artifacts、human checkpoints、verification、release、secrets 與 completion report 最低要求。 |
+| `templates/repo-governance-v2/AGENTS.md` | 薄入口與硬邊界模板，定義 non-overridable gates、truth priority、managed/local ownership、local truth model、runtime artifacts 與 minimum completion requirements，細節指向 managed docs。 |
 | `templates/repo-governance-v2/docs/governance/VERSION` | governance template 版本號。 |
-| `templates/repo-governance-v2/docs/governance/MANIFEST.md` | template upgrade allowlist / denylist 與 initialization-only path 宣告。 |
-| `templates/repo-governance-v2/docs/governance/README.md` | governance 入口、local ops/prd/tdd/roadmap/epics 初始化步驟、legacy compatibility policy 與 compatibility check checklist。 |
-| `templates/repo-governance-v2/docs/governance/managed/terminology.md` | template-owned 術語定義：trivial、meaningful、accepted、release-sensitive、destructive、canonical source、runtime artifact、human checkpoint。 |
-| `templates/repo-governance-v2/docs/governance/managed/process.md` | planning threshold、minimum doc loading、task classification、runtime artifact handling、canonical lookup 與 recovery rules。 |
-| `templates/repo-governance-v2/docs/governance/managed/completion.md` | completion taxonomy、report schema、partial completion 與 commit rules。 |
-| `templates/repo-governance-v2/docs/governance/managed/verification.md` | verifier requirement、independent verification standard、false-success checks 與 skipped-check wording。 |
-| `templates/repo-governance-v2/docs/governance/managed/subagents.md` | subagent 邊界、不可委派任務、required output 與 main runtime authority。 |
-| `templates/repo-governance-v2/docs/governance/managed/release.md` | release-sensitive detector、release-gate decision、production data 與 destructive environment action rules。 |
+| `templates/repo-governance-v2/docs/governance/MANIFEST.md` | template upgrade contract owner：version、upgrade allowlist / denylist、initialization-only paths、required files、header rules 與 compatibility checklist。 |
+| `templates/repo-governance-v2/docs/governance/README.md` | governance 入口與 lookup guide，說明 initialization、upgrade、compatibility 與 local truth roles。 |
+| `templates/repo-governance-v2/docs/governance/managed/process.md` | task classes、canonical chains、minimum doc loading、planning threshold、runtime artifact handling、canonical lookup 與 recovery rules。 |
+| `templates/repo-governance-v2/docs/governance/managed/verification.md` | verification requirement、completion taxonomy、completion reports、independent verification standard、false-success checks、skipped-check wording 與 commit rules。 |
+| `templates/repo-governance-v2/docs/governance/managed/release.md` | release-sensitive detector、release-gate requirement、human checkpoints、secrets、production data 與 destructive environment action rules。 |
+| `templates/repo-governance-v2/docs/governance/managed/subagents.md` | subagent 邊界、不可委派任務、required output、main runtime authority 與 parallelism rules。 |
 | `templates/repo-governance-v2/docs/governance/managed/doc-sync.md` | PRD、TDD、roadmap、epics、ops sync 與 stale doc marking 規則。 |
-| `templates/repo-governance-v2/docs/governance/local/ops.example.md` | repo-owned ops 初始化範例，記錄 commands、environment、release、model policy 與 operator notes path。 |
-| `templates/repo-governance-v2/docs/governance/local/prd.example.md` | repo-owned PRD 初始化範例，記錄 accepted product behavior、UI / UX、user flows 與 acceptance criteria。 |
-| `templates/repo-governance-v2/docs/governance/local/tdd.example.md` | repo-owned TDD 初始化範例，記錄 accepted technical design、architecture boundaries、API/data contracts 與 verification strategy。 |
-| `templates/repo-governance-v2/docs/governance/local/roadmap.example.md` | repo-owned roadmap 初始化範例，記錄 Now / Next / Later / Done / Parked 與 next step，不承載長篇需求明細。 |
-| `templates/repo-governance-v2/docs/governance/local/epics/README.example.md` | repo-owned epic ledger 初始化範例，定義 E-xxx 檔名、child requirement 欄位、PRD/TDD promotion 與 roadmap 分工。 |
-| `templates/repo-governance-v2/.agents/skills/runtime-adapter` | repo-local context injector，只回傳 governance refs、hard gates、local truth boundaries 與 local context entrypoints，不接管 workflow routing。 |
+| `templates/repo-governance-v2/docs/governance/local/ops.example.md` | repo-owned ops 初始化範例，記錄 commands、environment、release、model policy 與 operator notes path；placeholder 不等於 accepted truth。 |
+| `templates/repo-governance-v2/docs/governance/local/prd.example.md` | repo-owned PRD 初始化範例，記錄 accepted product behavior、UI / UX、user flows 與 acceptance criteria；empty section 視為 unknown。 |
+| `templates/repo-governance-v2/docs/governance/local/tdd.example.md` | repo-owned TDD 初始化範例，記錄 accepted technical design、architecture boundaries、API/data contracts 與 verification strategy；empty section 視為 unknown。 |
+| `templates/repo-governance-v2/docs/governance/local/roadmap.example.md` | repo-owned roadmap 初始化範例，記錄 Now / Next / Later / Done / Parked 與 next step，不承載長篇需求明細；empty section 視為 unknown。 |
+| `templates/repo-governance-v2/docs/governance/local/epics/README.example.md` | repo-owned epic ledger 初始化範例，定義 E-xxx 檔名、child requirement 欄位、PRD/TDD promotion 與 roadmap 分工；empty section 視為 unknown。 |
+| `templates/repo-governance-v2/.agents/skills/runtime-adapter` | repo-local context injector，回傳 governance refs、hard gates、local truth boundaries 與 local context entrypoints，不接管 workflow routing。 |
 | `templates/repo-governance-v2/.agents/skills/subagent-routing` | subagent routing classifier：將 explicit plan/tasks 分成 inline、delegable、main-runtime-only 或 blocked，不執行任務。 |
-| `templates/repo-governance-v2/.agents/skills/verifier` | meaningful change / completion claim 的獨立驗證 control skill，檢查 correctness、repo truth、doc sync、false success 與 residual risk。 |
-| `templates/repo-governance-v2/.agents/skills/release-gate` | release-sensitive / destructive environment action 的 go / hold / require-human 判定 control skill。 |
+| `templates/repo-governance-v2/.agents/skills/verifier` | meaningful change / completion claim 的獨立驗證 control skill，保留 output schema 並依 managed verification/doc-sync/release policy 判斷。 |
+| `templates/repo-governance-v2/.agents/skills/release-gate` | release-sensitive / destructive environment action 的 go / hold / require-human 判定 control skill，依 managed release policy 與 local ops 執行。 |
 | `templates/repo-governance-v2/.agents/skills/local/README.md` | repo-owned local agent skills extension 區，template upgrade 不可覆蓋。 |
 
 ## Upgrade Rules
