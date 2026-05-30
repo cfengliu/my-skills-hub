@@ -13,6 +13,8 @@ Epics are requirement ledgers for large workstreams.
 
 Use an epic when a roadmap item needs child requirements, source tracking, PRD/TDD promotion status, evidence, or multi-session delivery history.
 
+Requirements use `E-001-001`. Delivery slices use `E-001A`.
+
 Empty sections and placeholders are `unknown`, not accepted requirement truth. Only accepted child requirements should be promoted into PRD or TDD.
 
 Do not use epics as the priority source. Priority lives in `../roadmap.md`.
@@ -32,9 +34,11 @@ E-001-<topic>.md
 E-002-<topic>.md
 ```
 
-Use child requirement IDs that match the parent epic prefix:
+Use delivery slice and child requirement IDs that match the parent epic prefix:
 
 ```text
+E-001A
+E-001B
 E-001-001
 E-001-002
 ```
@@ -64,17 +68,34 @@ What must be true when this epic is successfully delivered.
 
 -
 
-## Requirements
+## Delivery Slices
+
+Delivery slice is an implementation batch. It does not replace Requirement List.
+
+### E-001A <Delivery Slice Title>
+
+- delivery status: not-started | in-progress | partially-done | pending-acceptance | done | parked | cancelled
+- covers: E-001-001, E-001-002
+- minimum completion:
+  -
+- next:
+
+## Requirement List
 
 ### E-001-001 <Requirement Title>
 
-- status: not-started | in-progress | partially-done | pending-acceptance | done | parked | cancelled
 - type: accepted | needs-clarification | proof-of-concept | technical-research
-- summary:
-- source:
+- delivery status: not-started | in-progress | partially-done | pending-acceptance | done | parked | cancelled
+- acceptance status: not-reviewed | accepted | rejected | blocked
+- Slice: E-001A | not-used
 - PRD: not-promoted | promoted | not-needed
 - TDD: not-promoted | promoted | not-needed
-- evidence:
+- decisions:
+  -
+- existing evidence:
+  -
+- gaps:
+  -
 - next:
 
 ## Open Questions
@@ -93,6 +114,7 @@ What must be true when this epic is successfully delivered.
 
 - Roadmap decides whether an epic is Now, Next, Later, Done, or Parked.
 - Epics track details; they do not set priority by themselves.
+- Delivery slices define implementation batches; Requirement List owns requirement status, acceptance, evidence, gaps, and next step.
 - Only accepted child requirements should be promoted into `../prd.md` or `../tdd.md`.
 - Do not mark a child requirement `done` unless implementation and verification evidence both exist.
 - If evidence is mixed, use `partially-done` instead of `done`.

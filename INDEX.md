@@ -81,8 +81,8 @@
 | `templates/repo-governance-v2/docs/governance/local/ops.example.md` | repo-owned ops 初始化範例，記錄 commands、environment、release、model policy 與 operator notes path；placeholder 不等於 accepted truth。 |
 | `templates/repo-governance-v2/docs/governance/local/prd.example.md` | repo-owned PRD 初始化範例，記錄 accepted product behavior、UI / UX、user flows 與 acceptance criteria；empty section 視為 unknown。 |
 | `templates/repo-governance-v2/docs/governance/local/tdd.example.md` | repo-owned TDD 初始化範例，記錄 accepted technical design、architecture boundaries、API/data contracts 與 verification strategy；empty section 視為 unknown。 |
-| `templates/repo-governance-v2/docs/governance/local/roadmap.example.md` | repo-owned roadmap 初始化範例，記錄 Now / Next / Later / Done / Parked 與 next step，不承載長篇需求明細；empty section 視為 unknown。 |
-| `templates/repo-governance-v2/docs/governance/local/epics/README.example.md` | repo-owned epic ledger 初始化範例，定義 E-xxx 檔名、child requirement 欄位、PRD/TDD promotion 與 roadmap 分工；empty section 視為 unknown。 |
+| `templates/repo-governance-v2/docs/governance/local/roadmap.example.md` | repo-owned roadmap 初始化範例，記錄 Now / Next / Later / Done / Parked sequencing，不承載 requirement 明細；empty section 視為 unknown。 |
+| `templates/repo-governance-v2/docs/governance/local/epics/README.example.md` | repo-owned epic ledger 初始化範例，定義 `E-001A` delivery slices、`E-001-001` requirements、Requirement List ownership 與 PRD/TDD promotion；empty section 視為 unknown。 |
 | `templates/repo-governance-v2/.agents/skills/runtime-adapter` | repo-local context injector，回傳 governance refs、hard gates、local truth boundaries 與 local context entrypoints，不接管 workflow routing。 |
 | `templates/repo-governance-v2/.agents/skills/subagent-routing` | subagent routing classifier：將 explicit plan/tasks 分成 inline、delegable、main-runtime-only 或 blocked，不執行任務。 |
 | `templates/repo-governance-v2/.agents/skills/verifier` | meaningful change / completion claim 的獨立驗證 control skill，保留 output schema 並依 managed verification/doc-sync/release policy 判斷。 |

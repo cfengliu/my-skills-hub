@@ -28,6 +28,8 @@ Update `docs/governance/local/roadmap.md` when priority, Now / Next / Later / Do
 
 Roadmap should stay short. It should point to epic detail instead of duplicating full child requirement text.
 
+Roadmap IDs may point to delivery slices (`E-003A`) or requirements (`E-003-001`). Requirement List owns requirement status, acceptance, evidence, gaps, and next step.
+
 ## Epic Sync
 
 Update the relevant file under `docs/governance/local/epics/` when a large workstream child requirement changes status, source, PRD/TDD promotion, evidence, or next step.

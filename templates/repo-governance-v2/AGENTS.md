@@ -113,7 +113,7 @@ Repo-owned local truth uses these roles:
 
 Empty sections, placeholders, or missing local files mean `unknown`, not accepted truth.
 
-Roadmap decides sequencing only. Epics track details only. PRD owns final accepted product truth. TDD owns final accepted technical truth. Ops owns operational truth. If roadmap, epic, plan, or historical docs conflict with the domain owner, treat the stale source as stale and synchronize before making a meaningful completion claim.
+Roadmap decides sequencing only. Epics track details only. PRD owns final accepted product truth. TDD owns final accepted technical truth. Ops owns operational truth. Requirements use `E-003-001`; delivery slices use `E-003A`; Requirement List owns requirement status, acceptance, evidence, gaps, and next step. If roadmap, epic, plan, or historical docs conflict with the domain owner, treat the stale source as stale and synchronize before making a meaningful completion claim.
 
 ## 6) Runtime Artifacts
 

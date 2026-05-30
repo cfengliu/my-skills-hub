@@ -253,12 +253,12 @@ flowchart TD
 
 ## 相容性檢查
 
-聲稱 repo 使用 governance v2.2 前，依 `docs/governance/MANIFEST.md` 的 compatibility checklist 檢查。
+聲稱 repo 使用 governance v2.2.1 前，依 `docs/governance/MANIFEST.md` 的 compatibility checklist 檢查。
 
 最少要確認：
 
 - `AGENTS.md` 存在並指向 `docs/governance/*`。
-- `VERSION` 是 `2.2.0` 或更新。
+- `VERSION` 是 `2.2.1` 或更新。
 - `MANIFEST.md` 存在且是 upgrade contract owner。
 - 五個 managed modules 都存在。
 - 四個 managed control skills 都存在。
