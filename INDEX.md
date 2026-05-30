@@ -87,6 +87,7 @@
 | `templates/repo-governance-v2/.agents/skills/subagent-routing` | subagent routing classifier：將 explicit plan/tasks 分成 inline、delegable、main-runtime-only 或 blocked，不執行任務。 |
 | `templates/repo-governance-v2/.agents/skills/verifier` | meaningful change / completion claim 的獨立驗證 control skill，保留 output schema 並依 managed verification/doc-sync/release policy 判斷。 |
 | `templates/repo-governance-v2/.agents/skills/release-gate` | release-sensitive / destructive environment action 的 go / hold / require-human 判定 control skill，依 managed release policy 與 local ops 執行。 |
+| `templates/repo-governance-v2/.agents/skills/drift-repair` | roadmap、epic、PRD、TDD、ops local truth 發生 stale status、錯誤引用或證據不一致時，修復可由 repo evidence 支撐的治理文件 drift。 |
 | `templates/repo-governance-v2/.agents/skills/local/README.md` | repo-owned local agent skills extension 區，template upgrade 不可覆蓋。 |
 
 ## Upgrade Rules

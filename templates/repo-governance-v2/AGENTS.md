@@ -74,6 +74,7 @@ Template-managed control skills:
 - `.agents/skills/subagent-routing/SKILL.md`
 - `.agents/skills/verifier/SKILL.md`
 - `.agents/skills/release-gate/SKILL.md`
+- `.agents/skills/drift-repair/SKILL.md`
 
 Repo-owned local truth after initialization:
 
@@ -115,7 +116,19 @@ Empty sections, placeholders, or missing local files mean `unknown`, not accepte
 
 Roadmap decides sequencing only. Epics track details only. PRD owns final accepted product truth. TDD owns final accepted technical truth. Ops owns operational truth. Requirements use `E-003-001`; delivery slices use `E-003A`; Requirement List owns requirement status, acceptance, evidence, gaps, and next step. If roadmap, epic, plan, or historical docs conflict with the domain owner, treat the stale source as stale and synchronize before making a meaningful completion claim.
 
-## 6) Runtime Artifacts
+## 6) Roadmap And Epic Coordination
+
+For progress, roadmap, epic, next-work, done-state, or drift requests:
+
+- Do not answer from chat memory alone.
+- Read `docs/governance/local/roadmap.md` and the relevant files under `docs/governance/local/epics/`.
+- If the user asks about implementation status, check concrete evidence paths named by the epic or roadmap.
+- If roadmap and epic conflict, report the drift before giving a next-work readout.
+- Use `.agents/skills/drift-repair/SKILL.md` when the user asks to repair or reconcile drift.
+- Do not invent priority, accepted requirements, completion evidence, or verification results.
+- Completion claims still require verifier or an equivalent independent verification pass.
+
+## 7) Runtime Artifacts
 
 Runtime-generated specs, plans, scratch notes, review notes, execution artifacts, and temporary files are working materials.
 
@@ -123,7 +136,7 @@ They become canonical only if the user or maintainer explicitly promotes them in
 
 Path alone does not make an artifact canonical.
 
-## 7) Minimum Completion Requirements
+## 8) Minimum Completion Requirements
 
 Meaningful completion reports must include:
 

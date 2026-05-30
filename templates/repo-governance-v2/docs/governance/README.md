@@ -6,7 +6,7 @@ Repo-specific specialization belongs in docs/governance/local/*.
 -->
 # Repo Governance
 
-Repo-governance v2.2 是給 AI-assisted repo 使用的完整治理套件。
+Repo-governance v2.2.2 是給 AI-assisted repo 使用的完整治理套件。
 
 它不是輕量 template；它是可升級的 repo 憲法系統：
 
@@ -26,7 +26,7 @@ Repo-governance v2.2 是給 AI-assisted repo 使用的完整治理套件。
 
 ## 架構
 
-v2.2 有兩條使用路徑、三層責任、五個 managed rule owners。
+v2.2.2 有兩條使用路徑、三層責任、五個 managed rule owners。
 
 ### 兩條使用路徑
 
@@ -220,8 +220,9 @@ Control skills 是 template-owned，要 schema 自含，但 policy 引用 manage
 | `.agents/skills/verifier/SKILL.md` | meaningful change / completion claim 前做獨立驗證。 | `managed/verification.md`, `managed/doc-sync.md`, `managed/release.md`, `local/ops.md` |
 | `.agents/skills/release-gate/SKILL.md` | release-sensitive / destructive environment action 前做 `go` / `hold` / `require-human` 判定。 | `managed/release.md`, `local/ops.md`, `managed/verification.md` |
 | `.agents/skills/subagent-routing/SKILL.md` | explicit plan / task list 出現後，分類任務為 inline、delegable、main-runtime-only 或 blocked。 | `managed/subagents.md`, `managed/process.md`, `managed/verification.md`, `managed/release.md` |
+| `.agents/skills/drift-repair/SKILL.md` | 修復 roadmap、epic、PRD、TDD、ops 之間的 stale status、錯誤引用與證據不一致。 | `managed/doc-sync.md`, `managed/process.md`, `managed/verification.md`, `local/roadmap.md`, `local/epics/` |
 
-Repo-specific expert skills 可存在於 `.agents/skills/<skill-name>/SKILL.md`，但不包含上述四個 managed control skills。這些 expert skills 是 consuming repo-owned，template upgrade 不可覆蓋；`runtime-adapter` 需讀取 frontmatter 並選擇本次任務相關的 expert skills。
+Repo-specific expert skills 可存在於 `.agents/skills/<skill-name>/SKILL.md`，但不包含上述五個 managed control skills。這些 expert skills 是 consuming repo-owned，template upgrade 不可覆蓋；`runtime-adapter` 需讀取 frontmatter 並選擇本次任務相關的 expert skills。
 
 ## 升級
 
@@ -253,15 +254,15 @@ flowchart TD
 
 ## 相容性檢查
 
-聲稱 repo 使用 governance v2.2.1 前，依 `docs/governance/MANIFEST.md` 的 compatibility checklist 檢查。
+聲稱 repo 使用 governance v2.2.2 前，依 `docs/governance/MANIFEST.md` 的 compatibility checklist 檢查。
 
 最少要確認：
 
 - `AGENTS.md` 存在並指向 `docs/governance/*`。
-- `VERSION` 是 `2.2.1` 或更新。
+- `VERSION` 是 `2.2.2` 或更新。
 - `MANIFEST.md` 存在且是 upgrade contract owner。
 - 五個 managed modules 都存在。
-- 四個 managed control skills 都存在。
+- 五個 managed control skills 都存在。
 - 初始化後的 repo local files 存在。
 - managed / repo-owned headers 符合 manifest 要求。
 - repo-owned expert skills 若存在，仍保留且沒有被 template-owned control skill allowlist 覆蓋。

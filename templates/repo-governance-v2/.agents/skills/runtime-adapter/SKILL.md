@@ -73,6 +73,7 @@ Exclude the template-managed control skill set:
 - `subagent-routing`
 - `verifier`
 - `release-gate`
+- `drift-repair`
 
 Treat remaining skills as repo-owned expert skills. They remain active even when they are not under `.agents/skills/local/*`.
 

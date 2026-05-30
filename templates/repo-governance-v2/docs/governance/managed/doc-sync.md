@@ -54,6 +54,12 @@ Update `docs/governance/local/ops.md` when commands, environments, release proce
 
 If a conflicting doc cannot be synchronized immediately, mark it stale in the stale source or record the conflict in the relevant local file, then report the blocker and residual risk.
 
+## Drift Repair
+
+Use `.agents/skills/drift-repair/SKILL.md` when roadmap, epic, PRD, TDD, or ops local truth conflict.
+
+Drift repair may fix mechanical inconsistencies in roadmap and epic files when repo evidence is present. It must not invent accepted priority, product behavior, technical design, operational constants, or verification evidence.
+
 ## Completion Reporting
 
 Meaningful completion reports must include doc sync status for applicable sources:
