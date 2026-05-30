@@ -16,7 +16,7 @@ Classify work as:
 
 - `trivial`: typo fixes, formatting, non-behavioral comments, wording, or local documentation phrasing only; no runtime behavior, product acceptance, tests, ops rules, schemas, configuration, APIs, dependency behavior, release paths, or durable requirements change.
 - `meaningful`: any substantive change to code, config, schema, dependency behavior, public behavior, UI structure, interaction flow, API contract, test expectation, deployment path, durable docs, ops rules, or requirements.
-- `release-sensitive`: deploy, release, rollout, migration, backup, restore, rollback, production-like config, CI/CD release path, auth, identity, payments, billing, secrets, production data, or environment-changing action.
+- `release-sensitive`: deploy, release, rollout, migration, backup, restore, rollback, production-like config, CI/CD release path, auth, identity, payments, billing, secrets, production data, external API/provider calls that send sensitive data, mutate external state, or use production-like credentials, data leaving the repo or trusted environment, runtime-affecting third-party downloads, or environment-changing action.
 - `destructive`: an action that may delete, overwrite, or irreversibly modify data, schema, config, branch, worktree, environment, or production-like state.
 - `blocked`: missing permission, missing environment, failing checks, requirement conflict, or human decision needed.
 

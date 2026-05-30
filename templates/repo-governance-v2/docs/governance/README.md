@@ -125,7 +125,7 @@ docs/governance/managed/completion.md  -> merged into managed/verification.md
 
 | 關注點 | 負責檔案 |
 |---|---|
-| Entry, hard gates, truth priority | `AGENTS.md` |
+| Entry, hard gates, domain-based source lookup | `AGENTS.md` |
 | Version | `docs/governance/VERSION` |
 | 升級 allowlist、denylist、required files、compatibility | `docs/governance/MANIFEST.md` |
 | Commands, environments, model policy, release constants | `docs/governance/local/ops.md` |
@@ -133,7 +133,8 @@ docs/governance/managed/completion.md  -> merged into managed/verification.md
 | Technical design and boundaries | `docs/governance/local/tdd.md` |
 | Priority and sequencing | `docs/governance/local/roadmap.md` |
 | Large workstream details | `docs/governance/local/epics/*` |
-| Runtime control output schemas and procedures | `.agents/skills/*/SKILL.md` |
+| Runtime control output schemas and procedures | template-managed control skills under `.agents/skills/{runtime-adapter,subagent-routing,verifier,release-gate}/` |
+| Repo-specific expert invariants | repo-owned expert skills under `.agents/skills/*`, excluding managed control skills |
 
 ## 日常查找表
 
@@ -166,6 +167,8 @@ docs/governance/local/epics/README.example.md  -> docs/governance/local/epics/RE
 ```
 
 初始化後，真實的 `docs/governance/local/*` 是 repo-owned truth。template 升級時不可覆蓋。
+
+`.example.md` files belong to the source template package. An initialized consuming repo may omit them after the matching repo-owned local files exist.
 
 `ops.md` 建議先填，因為 commands、environment、model policy、release constants 會影響 agent 怎麼驗證與執行。
 
@@ -204,11 +207,12 @@ flowchart TD
 - PRD 擁有最終 accepted product truth。
 - TDD 擁有最終 accepted technical truth。
 - Ops 擁有 repo-specific operational truth。
-- Roadmap 或 epic 若跟 PRD/TDD 衝突，較低優先來源視為 stale，meaningful completion claim 前必須同步或標記 blocker。
+- Operational matters 一律以 `ops.md` 為準；roadmap、epic、plan 或歷史文件裡的舊 command / deploy / migration 說法不得覆蓋 ops。
+- Roadmap 或 epic 若跟該 domain owner（PRD / TDD / Ops）衝突，較低權威來源視為 stale，meaningful completion claim 前必須同步或標記 blocker。
 
 ## Control skills 職責
 
-Control skills 要 schema 自含，但 policy 引用 managed docs；不要在 skill 裡重寫整套治理規則。
+Control skills 是 template-owned，要 schema 自含，但 policy 引用 managed docs；不要在 skill 裡重寫整套治理規則。
 
 | Skill | 用途 | 政策來源 |
 |---|---|---|
@@ -216,6 +220,8 @@ Control skills 要 schema 自含，但 policy 引用 managed docs；不要在 sk
 | `.agents/skills/verifier/SKILL.md` | meaningful change / completion claim 前做獨立驗證。 | `managed/verification.md`, `managed/doc-sync.md`, `managed/release.md`, `local/ops.md` |
 | `.agents/skills/release-gate/SKILL.md` | release-sensitive / destructive environment action 前做 `go` / `hold` / `require-human` 判定。 | `managed/release.md`, `local/ops.md`, `managed/verification.md` |
 | `.agents/skills/subagent-routing/SKILL.md` | explicit plan / task list 出現後，分類任務為 inline、delegable、main-runtime-only 或 blocked。 | `managed/subagents.md`, `managed/process.md`, `managed/verification.md`, `managed/release.md` |
+
+Repo-specific expert skills 可存在於 `.agents/skills/<skill-name>/SKILL.md`，但不包含上述四個 managed control skills。這些 expert skills 是 consuming repo-owned，template upgrade 不可覆蓋；`runtime-adapter` 需讀取 frontmatter 並選擇本次任務相關的 expert skills。
 
 ## 升級
 
@@ -226,7 +232,7 @@ Control skills 要 schema 自含，但 policy 引用 managed docs；不要在 sk
 3. 只替換 manifest allowlist 允許的 paths。
 4. 移除所有 denylist paths。
 5. 不要用 `.example.md` 覆蓋已初始化的 local files。
-6. 保留 repo-owned local truth、local skills、legacy repo-owned docs。
+6. 保留 repo-owned local truth、`.agents/skills/local/*`、repo-owned expert skills 與 legacy repo-owned docs。
 7. 跑 `MANIFEST.md` 裡的 compatibility checklist。
 
 如果 path 沒有明確允許自動覆蓋，預設不要覆蓋。
@@ -256,13 +262,15 @@ flowchart TD
 - `MANIFEST.md` 存在且是 upgrade contract owner。
 - 五個 managed modules 都存在。
 - 四個 managed control skills 都存在。
-- local examples 在 template 內存在。
 - 初始化後的 repo local files 存在。
-- managed / example / repo-owned headers 符合 manifest 要求。
+- managed / repo-owned headers 符合 manifest 要求。
+- repo-owned expert skills 若存在，仍保留且沒有被 template-owned control skill allowlist 覆蓋。
 - upgrade denylist 排除 `docs/governance/local/*` 與 `.agents/skills/local/*`。
 - Roadmap 不複製完整 epic child requirement text。
 - Epics 不聲稱 override PRD、TDD、hard gates 或 roadmap priority。
 - 空 local sections 與 placeholders 被視為 `unknown`，不是 accepted truth。
+
+若是在驗證 source template package 本身，才額外確認 local examples 存在且 example headers 符合 manifest。已初始化 consuming repo 不需要 vendor `.example.md` files。
 
 ## 舊版相容
 

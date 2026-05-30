@@ -21,6 +21,9 @@ Treat the following as release-sensitive unless explicitly ruled out with eviden
 - `.env*`, secrets documentation, credentials wiring, or production-like config
 - auth, identity, payments, billing, or permission boundary changes
 - production data access or mutation
+- external API/provider calls that send sensitive data, mutate external state, or use production-like credentials
+- sending repo, user, private, test, or generated data outside the repo or trusted environment
+- downloading third-party assets, datasets, models, large binaries, or executable artifacts that are persisted into the repo or affect runtime behavior
 - destructive environment actions
 
 ## Release-gate Requirement
@@ -28,7 +31,7 @@ Treat the following as release-sensitive unless explicitly ruled out with eviden
 Before any release-sensitive action:
 
 1. Read `docs/governance/local/ops.md`.
-2. Identify target environment and affected data, schema, config, secrets, auth, billing, and CI/CD path.
+2. Identify target environment and affected data, schema, config, secrets, auth, billing, external services, data leaving the repo, downloads, and CI/CD path.
 3. Run release-gate or an equivalent release-gate pass.
 4. Continue only if the decision is `go`.
 
@@ -51,6 +54,9 @@ Do not automatically cross these gates:
 - secrets
 - production config
 - production data access or mutation
+- external API/provider call with repo, user, private, test, or generated data, production-like credentials, or external state mutation
+- repo, user, private, test, or generated data transfer outside the repo or trusted environment
+- third-party asset, dataset, model, large binary, or executable artifact download that is persisted into the repo or affects runtime behavior
 - destructive git action
 - branch deletion
 - worktree deletion
