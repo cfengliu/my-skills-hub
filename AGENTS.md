@@ -5,6 +5,10 @@
 - 一律用台灣中文回答。
 - code comment 一律用英文。
 
+## 輸出時
+
+- 制定或修改規則、模板時，AI 必須逐句檢查「這句有沒有必要」；沒有必要就刪掉，只輸出能推進決策、修改或驗證的內容。
+
 ## Repo 目標
 
 - 這個 repo 只放可安裝、可維護的 Codex plugins、尚未產品化的 standalone skills，以及可複製到其他 repo 的 templates。
