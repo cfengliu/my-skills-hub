@@ -36,6 +36,16 @@ Update the relevant file under `docs/governance/local/epics/` when a large works
 
 Create an epic file only when a roadmap item needs child requirement tracking, source history, multi-phase delivery, or repeated updates across sessions.
 
+## Epic Structure
+
+Use `E-003A` for delivery slices and `E-003-001` for stable requirements.
+
+Use delivery slices only when stable requirements need phased implementation, multi-session delivery, or multiple PRs. A slice is an implementation batch; it does not replace Requirement List.
+
+Each delivery slice should include delivery status, covered requirements, minimum completion, and next step.
+
+Requirement List owns requirement status, acceptance status, PRD/TDD promotion, decisions, existing evidence, gaps, and next step.
+
 ## Ops Sync
 
 Update `docs/governance/local/ops.md` when commands, environments, release process, model policy, operator notes path, or operational constants change.
