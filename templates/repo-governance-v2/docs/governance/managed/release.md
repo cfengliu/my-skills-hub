@@ -21,9 +21,9 @@ Treat the following as release-sensitive unless explicitly ruled out with eviden
 - `.env*`, secrets documentation, credentials wiring, or production-like config
 - auth, identity, payments, billing, or permission boundary changes
 - production data access or mutation
-- external API/provider calls that send sensitive data, mutate external state, or use production-like credentials
+- external API calls or provider calls
 - sending repo, user, private, test, or generated data outside the repo or trusted environment
-- downloading third-party assets, datasets, models, large binaries, or executable artifacts that are persisted into the repo or affect runtime behavior
+- downloading third-party assets, datasets, models, large binaries, or executable artifacts into the repo or runtime
 - destructive environment actions
 
 ## Release-gate Requirement
@@ -54,9 +54,9 @@ Do not automatically cross these gates:
 - secrets
 - production config
 - production data access or mutation
-- external API/provider call with repo, user, private, test, or generated data, production-like credentials, or external state mutation
+- external API/provider call with repo, user, private, test, or generated data
 - repo, user, private, test, or generated data transfer outside the repo or trusted environment
-- third-party asset, dataset, model, large binary, or executable artifact download that is persisted into the repo or affects runtime behavior
+- third-party asset, dataset, model, large binary, or executable artifact download into the repo or runtime
 - destructive git action
 - branch deletion
 - worktree deletion

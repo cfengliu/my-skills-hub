@@ -1,6 +1,6 @@
 ---
 name: release-gate
-description: Use before deploy, release, rollout, migration, production-like configuration, production data access or mutation, external API/provider calls that send sensitive data or mutate external state, runtime-affecting third-party downloads, destructive actions, or any environment-changing action to produce a repo-local go, hold, or require-human decision.
+description: Use before deploy, release, rollout, migration, production-like configuration, production data access or mutation, external API/provider calls with repo or user data, third-party downloads, destructive actions, or any environment-changing action to produce a repo-local go, hold, or require-human decision.
 ---
 
 # Release Gate
@@ -19,7 +19,7 @@ Release-gate does not verify generic code correctness. Verifier must pass first 
 
 ## When to Use
 
-Use when the user request, intended command, changed files, or target environment may touch deploy, release, rollout, migration, production-like config, production data, destructive actions, secrets, auth, payments, billing, permission boundaries, external API/provider calls that send repo, user, private, test, or generated data outside the repo or trusted environment, external API/provider calls that mutate external state or use production-like credentials, or third-party downloads that are executable, large, persisted into the repo, or affect runtime behavior.
+Use when the user request, intended command, changed files, or target environment may touch deploy, release, rollout, migration, production-like config, production data, destructive actions, secrets, auth, payments, billing, permission boundaries, external API/provider calls, sending repo, user, private, test, or generated data outside the repo or trusted environment, or downloading third-party assets, datasets, models, large binaries, or executable artifacts into the repo or runtime.
 
 If no release-sensitive signal is present, record the rule-out reason in verifier or final reporting.
 
@@ -64,4 +64,4 @@ next_action: proceed | fix | ask-human | run-verifier
 - bypassing backup for destructive data changes
 - proceeding without target environment clarity
 - approving release when verifier failed or was skipped for meaningful changes
-- treating sensitive external API calls, data transfer outside the trusted environment, or runtime-affecting third-party downloads as ordinary verification
+- treating external API calls, data transfer outside the trusted environment, or third-party downloads as ordinary verification
