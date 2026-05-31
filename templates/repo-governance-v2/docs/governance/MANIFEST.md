@@ -10,7 +10,7 @@ This manifest owns the template upgrade and compatibility contract.
 
 ## Version
 
-`2.2.2`
+`2.2.3`
 
 ## Replaceable During Upgrade
 
@@ -26,8 +26,9 @@ Only these paths may be replaced automatically during a template upgrade:
 - `.agents/skills/subagent-routing/*`
 - `.agents/skills/runtime-adapter/*`
 - `.agents/skills/drift-repair/*`
+- `.agents/skills/decision-advisor/*`
 
-These five skill paths are the template-managed control skill set. Other `.agents/skills/*` paths are not implied by this allowlist.
+These six skill paths are the template-managed control skill set. Other `.agents/skills/*` paths are not implied by this allowlist.
 
 ## Never Overwrite During Upgrade
 
@@ -76,6 +77,7 @@ Managed control skills:
 - `.agents/skills/verifier/SKILL.md`
 - `.agents/skills/release-gate/SKILL.md`
 - `.agents/skills/drift-repair/SKILL.md`
+- `.agents/skills/decision-advisor/SKILL.md`
 
 Repo-owned extension area:
 
@@ -137,10 +139,10 @@ If a path is not clearly allowed, do not overwrite it automatically.
 
 ## Compatibility Checklist
 
-Before claiming a repo is using governance v2.2.2, check:
+Before claiming a repo is using governance v2.2.3, check:
 
 - `AGENTS.md` exists and points to `docs/governance/*`.
-- `docs/governance/VERSION` exists and is `2.2.2` or newer.
+- `docs/governance/VERSION` exists and is `2.2.3` or newer.
 - `docs/governance/MANIFEST.md` exists and owns the upgrade contract.
 - Required managed governance modules exist.
 - Required managed control skills exist.

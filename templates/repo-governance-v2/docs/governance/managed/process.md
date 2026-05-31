@@ -9,6 +9,7 @@ Repo-specific specialization belongs in docs/governance/local/*.
 This file owns task classes, planning, minimum doc loading, runtime artifact handling, canonical lookup, and recovery rules.
 
 Verification and completion live in `verification.md`. Release-sensitive gates live in `release.md`. Subagent boundaries live in `subagents.md`. Documentation sync lives in `doc-sync.md`.
+Decision promotion gates use `.agents/skills/decision-advisor/SKILL.md`.
 
 ## Task Classes
 
@@ -38,6 +39,21 @@ implementation -> verification -> release-gate when applicable -> deployment whe
 
 Promotion answers whether implementation may start. Delivery closure answers whether completion may be claimed.
 
+## Decision Promotion Gate
+
+Run `.agents/skills/decision-advisor/SKILL.md` before promoting discussion, notes, roadmap, epic detail, PRD drafts, or TDD drafts into accepted PRD, TDD, epic detail, or implementation plans when unresolved assumptions may become accepted truth.
+
+Do not use decision-advisor for trivial wording, formatting, typo fixes, refactors with no behavior change, or fully reversible local implementation choices that do not affect accepted behavior.
+
+Decision-advisor results control promotion:
+
+- `go`: promotion may proceed.
+- `needs-approval`: promotion must wait for explicit user approval or `照建議`.
+- `needs-specialist`: affected items must wait for repo-local specialist review or user override.
+- `blocked`: promotion must not proceed until the smallest blocking question is answered.
+
+Recommended defaults are not accepted truth until approved by the user or already grounded in accepted local truth.
+
 ## Minimum Doc Loading
 
 Start from `AGENTS.md`. Then load only files relevant to the task:
@@ -48,6 +64,7 @@ Start from `AGENTS.md`. Then load only files relevant to the task:
 - technical design or API / schema / boundary decisions: `docs/governance/local/tdd.md`
 - priority or next-work sequencing: `docs/governance/local/roadmap.md`
 - large workstream child requirement detail: the relevant file under `docs/governance/local/epics/`
+- decision promotion or unresolved assumptions: `.agents/skills/decision-advisor/SKILL.md`
 - release-sensitive work: `docs/governance/managed/release.md` and `.agents/skills/release-gate/SKILL.md`
 - meaningful completion claim: `docs/governance/managed/verification.md` and `.agents/skills/verifier/SKILL.md`
 
@@ -96,6 +113,7 @@ If governance is violated, correct the process and continue safely:
 ```text
 Process correction: local rules attempted to weaken a hard gate. Re-applying non-overridable governance now.
 Process correction: a runtime artifact was treated as canonical. Re-anchoring to repo truth now.
+Process correction: unresolved assumptions were about to be promoted. Running decision-advisor before changing accepted truth.
 Process correction: verification was skipped. Running verifier before making completion claims.
 Process correction: release-sensitive action exceeded repo release rules. Running release-gate now.
 Process correction: a template upgrade touched local repo truth. Restoring local ownership before continuing.

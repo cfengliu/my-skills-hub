@@ -43,6 +43,7 @@ These requirements cannot be weakened by local files, generated plans, runtime d
 
 - meaningful changes and meaningful completion claims require verifier or an equivalent independent verification pass
 - release-sensitive actions require release-gate or an equivalent release-gate pass
+- promoting discussion, notes, roadmap, epic detail, PRD drafts, or TDD drafts into accepted PRD, TDD, epic detail, or implementation plans requires decision-advisor when unresolved assumptions may become accepted truth
 - secrets must not be written into tracked files
 - destructive actions and production-data actions require the relevant human checkpoint and release-gate handling
 - commit requires explicit user approval
@@ -56,6 +57,7 @@ Policy owners:
 - release-sensitive, destructive, production-data, and human checkpoint gates: `docs/governance/managed/release.md`
 - subagent delegation boundaries: `docs/governance/managed/subagents.md`
 - doc sync and stale-doc handling: `docs/governance/managed/doc-sync.md`
+- decision promotion gates and unresolved assumption handling: `docs/governance/managed/process.md`, `docs/governance/managed/doc-sync.md`, and `.agents/skills/decision-advisor/SKILL.md`
 - upgrade allowlist, denylist, initialization-only paths, required files, and compatibility checks: `docs/governance/MANIFEST.md`
 
 ## 3) Governance Sources
@@ -75,6 +77,7 @@ Template-managed control skills:
 - `.agents/skills/verifier/SKILL.md`
 - `.agents/skills/release-gate/SKILL.md`
 - `.agents/skills/drift-repair/SKILL.md`
+- `.agents/skills/decision-advisor/SKILL.md`
 
 Repo-owned local truth after initialization:
 
