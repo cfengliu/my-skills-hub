@@ -1,51 +1,99 @@
 export function parseEpicMarkdown(markdown, filePath) {
-  const heading = parseEpicHeading(markdown, filePath);
-  const deliverySlicesSection = extractSection(markdown, "Delivery Slices");
-  const requirementListSection = extractSection(markdown, "Requirement List");
+  const parseableMarkdown = removeFencedCodeBlocks(markdown);
+  const heading = parseEpicHeading(parseableMarkdown, filePath);
+
+  if (!heading.isValid) {
+    return emptyEpic(heading.id, filePath);
+  }
+
+  const deliverySlicesSection = extractSection(parseableMarkdown, "Delivery Slices");
+  const requirementListSection = extractSection(parseableMarkdown, "Requirement List");
 
   return {
     id: heading.id,
     title: heading.title,
-    status: firstNonEmptyLine(extractSection(markdown, "Status")),
+    status: firstNonEmptyLine(extractSection(parseableMarkdown, "Status")),
     filePath,
     sourceRef: filePath,
-    slices: splitH3Blocks(deliverySlicesSection).map((block) => parseSliceBlock(block, filePath)),
-    requirements: splitH3Blocks(requirementListSection).map((block) =>
-      parseRequirementBlock(block, filePath),
-    ),
+    slices: splitH3Blocks(deliverySlicesSection)
+      .map((block) => parseSliceBlock(block, filePath))
+      .filter(Boolean),
+    requirements: splitH3Blocks(requirementListSection)
+      .map((block) => parseRequirementBlock(block, filePath))
+      .filter(Boolean),
   };
+}
+
+function emptyEpic(id, filePath) {
+  return {
+    id,
+    title: "",
+    status: "",
+    filePath,
+    sourceRef: filePath,
+    slices: [],
+    requirements: [],
+  };
+}
+
+function removeFencedCodeBlocks(markdown) {
+  const lines = markdown.split(/\r?\n/);
+  const keptLines = [];
+  let fenceMarker = null;
+
+  for (const line of lines) {
+    const fenceMatch = line.trim().match(/^(```|~~~)/);
+    if (fenceMatch) {
+      if (!fenceMarker) {
+        fenceMarker = fenceMatch[1];
+        continue;
+      }
+
+      if (fenceMatch[1] === fenceMarker) {
+        fenceMarker = null;
+        continue;
+      }
+    }
+
+    if (!fenceMarker) keptLines.push(line);
+  }
+
+  return keptLines.join("\n");
 }
 
 function parseEpicHeading(markdown, filePath) {
   const headingLine = markdown
     .split(/\r?\n/)
     .find((line) => line.trim().startsWith("# "));
-  const match = headingLine?.trim().match(/^#\s+(E-\d+)\s*(.*)$/);
+  const match = headingLine?.trim().match(/^#\s+(E-\d+)(?:\s+(.*))?$/);
 
   return {
     id: match?.[1] ?? inferEpicId(filePath),
     title: cleanValue(match?.[2] ?? ""),
+    isValid: Boolean(match),
   };
 }
 
 function inferEpicId(filePath) {
-  return filePath.match(/(?:^|\/)(E-\d+)[^/]*$/)?.[1] ?? "";
+  return filePath.match(/(?:^|\/)(E-\d+)[^/]*$/)?.[1] ?? "unknown";
 }
 
 function parseSliceBlock(block, filePath) {
   const heading = parseH3Heading(block.heading, /^(E-\d+[A-Z])\s*(.*)$/);
+  if (!heading.id) return null;
 
   return {
     id: heading.id,
     title: heading.title,
     deliveryStatus: fieldValue(block.body, "delivery status"),
     covers: splitCommaList(fieldValue(block.body, "covers")),
-    sourceRef: `${filePath}#${slugify(block.heading)}`,
+    sourceRef: `${filePath}#${slugify(heading.id)}`,
   };
 }
 
 function parseRequirementBlock(block, filePath) {
   const heading = parseH3Heading(block.heading, /^(E-\d+-\d+)\s*(.*)$/);
+  if (!heading.id) return null;
 
   return {
     id: heading.id,
@@ -57,7 +105,7 @@ function parseRequirementBlock(block, filePath) {
     prd: fieldValue(block.body, "PRD"),
     tdd: fieldValue(block.body, "TDD"),
     existingEvidence: listUnderField(block.body, "existing evidence"),
-    sourceRef: `${filePath}#${slugify(block.heading)}`,
+    sourceRef: `${filePath}#${slugify(heading.id)}`,
   };
 }
 
@@ -77,7 +125,7 @@ function extractSection(markdown, heading) {
   if (startIndex === -1) return "";
 
   const endIndex = lines.findIndex(
-    (line, index) => index > startIndex && /^##\s+/.test(line),
+    (line, index) => index > startIndex && /^##\s+/.test(line.trim()),
   );
   const sectionEnd = endIndex === -1 ? lines.length : endIndex;
   return lines.slice(startIndex + 1, sectionEnd).join("\n");
@@ -116,14 +164,14 @@ function firstNonEmptyLine(section) {
 
 function fieldValue(markdown, fieldName) {
   const fieldPattern = escapeRegex(fieldName).replace(/\s+/g, "\\s+");
-  const match = markdown.match(new RegExp(`^\\s*-\\s*${fieldPattern}\\s*:\\s*(.*)$`, "im"));
+  const match = markdown.match(new RegExp(`^-\\s*${fieldPattern}\\s*:\\s*(.*)$`, "im"));
   return cleanValue(match?.[1] ?? "");
 }
 
 function listUnderField(markdown, fieldName) {
   const lines = markdown.split(/\r?\n/);
   const fieldPattern = new RegExp(
-    `^\\s*-\\s*${escapeRegex(fieldName).replace(/\s+/g, "\\s+")}\\s*:\\s*(.*)$`,
+    `^-\\s*${escapeRegex(fieldName).replace(/\s+/g, "\\s+")}\\s*:\\s*(.*)$`,
     "i",
   );
   const fieldIndex = lines.findIndex((line) => fieldPattern.test(line));
@@ -132,9 +180,9 @@ function listUnderField(markdown, fieldName) {
   const values = [];
   for (let index = fieldIndex + 1; index < lines.length; index += 1) {
     const line = lines[index];
-    if (/^\s*-\s+[^:]+:\s*/.test(line)) break;
+    if (/^-\s+[^:]+:\s*/.test(line)) break;
 
-    const itemMatch = line.match(/^\s{2,}-\s*(.*)$/);
+    const itemMatch = line.match(/^\s{2}-\s*(.*)$/);
     if (!itemMatch) {
       if (!line.trim()) continue;
       break;
