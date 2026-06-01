@@ -126,6 +126,23 @@ test("dynamic import exposes helpers without starting the server", async () => {
   assert.equal(typeof module.readDashboardModel, "function");
 });
 
+test("dynamic import exposes helpers even when PORT is invalid", async () => {
+  const originalPort = process.env.PORT;
+  process.env.PORT = "abc";
+
+  try {
+    const module = await import("../../templates/repo-governance-v2/tools/war-room/server.mjs?invalid-port-smoke");
+
+    assert.equal(typeof module.readDashboardModel, "function");
+  } finally {
+    if (originalPort === undefined) {
+      delete process.env.PORT;
+    } else {
+      process.env.PORT = originalPort;
+    }
+  }
+});
+
 test("parsePort reports invalid PORT values clearly", () => {
   assert.throws(() => parsePort("abc"), /Invalid PORT: abc/);
 });

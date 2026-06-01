@@ -13,10 +13,11 @@ import { renderDashboardHtml } from "./lib/render-html.mjs";
 const scriptPath = fileURLToPath(import.meta.url);
 const toolRoot = path.dirname(scriptPath);
 const defaultRepoRoot = path.resolve(toolRoot, "../..");
-const repoRoot = path.resolve(process.argv[2] ?? defaultRepoRoot);
-const port = parsePort(process.env.PORT ?? "4767");
 
 async function main() {
+  const repoRoot = path.resolve(process.argv[2] ?? defaultRepoRoot);
+  const port = parsePort(process.env.PORT ?? "4767");
+
   const server = http.createServer(async (_request, response) => {
     try {
       const model = await readDashboardModel(repoRoot);
