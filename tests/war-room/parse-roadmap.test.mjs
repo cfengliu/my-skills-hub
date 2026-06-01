@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { parseRoadmapMarkdown } from "../../templates/repo-governance-v2/tools/war-room/lib/parse-roadmap.mjs";
 
 test("parseRoadmapMarkdown extracts roadmap lanes and item refs", () => {
@@ -73,4 +74,37 @@ test("parseRoadmapMarkdown ignores placeholder rows", () => {
 
   assert.equal(result.lanes.now.length, 1);
   assert.equal(result.lanes.now[0].id, "E-001A");
+});
+
+test("parseRoadmapMarkdown ignores canonical example placeholder items", () => {
+  const filePath = "templates/repo-governance-v2/docs/governance/local/roadmap.example.md";
+  const markdown = readFileSync(filePath, "utf8");
+
+  const result = parseRoadmapMarkdown(markdown, filePath);
+
+  assert.deepEqual(result.lanes, {
+    now: [],
+    next: [],
+    later: [],
+    doneRecently: [],
+    cancelledOrParked: [],
+  });
+});
+
+test("parseRoadmapMarkdown preserves escaped pipes inside table cells", () => {
+  const markdown = `# Roadmap
+
+## Now
+
+| ID | Work | Why Now | Detail Ref |
+|---|---|---|---|
+| \`E-001A\` | Support A \\| B labels | Needed for review | \`epics/E-001-war-room.md\` |`;
+
+  const result = parseRoadmapMarkdown(markdown, "docs/governance/local/roadmap.md");
+
+  assert.equal(result.lanes.now.length, 1);
+  assert.equal(result.lanes.now[0].id, "E-001A");
+  assert.equal(result.lanes.now[0].work, "Support A | B labels");
+  assert.equal(result.lanes.now[0].note, "Needed for review");
+  assert.equal(result.lanes.now[0].detailRef, "epics/E-001-war-room.md");
 });

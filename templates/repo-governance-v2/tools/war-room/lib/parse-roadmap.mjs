@@ -27,35 +27,54 @@ export function parseRoadmapMarkdown(markdown, filePath) {
 }
 
 function normalizeRoadmapRow(row, laneKey, filePath) {
-  const id = cleanCell(row.ID);
-  if (!isRealId(id)) return null;
-
   if (laneKey === "doneRecently") {
+    const requiredCells = cleanRequiredCells([
+      row.ID,
+      row["Completed Work"],
+      row["Evidence Ref"],
+    ]);
+    if (!requiredCells) return null;
+
+    const [id, work, evidenceRef] = requiredCells;
     return {
       id,
-      work: cleanCell(row["Completed Work"]),
-      evidenceRef: cleanCell(row["Evidence Ref"]),
+      work,
+      evidenceRef,
       sourceRef: `${filePath}#done-recently`,
     };
   }
 
   if (laneKey === "cancelledOrParked") {
+    const requiredCells = cleanRequiredCells([row.ID, row.Work, row.Reason]);
+    if (!requiredCells) return null;
+
+    const [id, work, note] = requiredCells;
     return {
       id,
-      work: cleanCell(row.Work),
-      note: cleanCell(row.Reason),
+      work,
+      note,
       sourceRef: `${filePath}#cancelled-or-parked`,
     };
   }
 
+  const requiredCells = cleanRequiredCells([
+    row.ID,
+    row.Work,
+    row["Why Now"] ?? row.Trigger ?? row["Why Later"],
+    row["Detail Ref"],
+  ]);
+  if (!requiredCells) return null;
+
+  const [id, work, note, detailRef] = requiredCells;
   return {
     id,
-    work: cleanCell(row.Work),
-    note: cleanCell(row["Why Now"] ?? row.Trigger ?? row["Why Later"]),
-    detailRef: cleanCell(row["Detail Ref"]),
+    work,
+    note,
+    detailRef,
     sourceRef: `${filePath}#${toAnchor(laneKey)}`,
   };
 }
+
 
 function extractSection(markdown, heading) {
   const lines = markdown.split(/\r?\n/);
@@ -87,7 +106,31 @@ function parseMarkdownTable(section) {
 }
 
 function splitTableRow(line) {
-  return line.slice(1, -1).split("|");
+  const cells = [];
+  let cell = "";
+  const content = line.slice(1, -1);
+
+  for (let index = 0; index < content.length; index += 1) {
+    const character = content[index];
+    const nextCharacter = content[index + 1];
+
+    if (character === "\\" && nextCharacter === "|") {
+      cell += "|";
+      index += 1;
+      continue;
+    }
+
+    if (character === "|") {
+      cells.push(cell);
+      cell = "";
+      continue;
+    }
+
+    cell += character;
+  }
+
+  cells.push(cell);
+  return cells;
 }
 
 function cleanCell(value = "") {
@@ -97,14 +140,15 @@ function cleanCell(value = "") {
     .trim();
 }
 
-function isRealId(value) {
-  return Boolean(value) && value !== "-" && !value.includes("<") && !value.includes(">");
+function cleanRequiredCells(values) {
+  const cells = values.map((value) => cleanCell(value));
+  return cells.every(isRealCell) ? cells : null;
+}
+
+function isRealCell(value) {
+  return Boolean(value) && value !== "-" && !/<[^>]*>/.test(value);
 }
 
 function toAnchor(laneKey) {
   return laneKey.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
-}
-
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
