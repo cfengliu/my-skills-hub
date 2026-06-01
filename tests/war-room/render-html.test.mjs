@@ -36,3 +36,38 @@ test("renderDashboardHtml renders summary, lanes, epic progress, completions, an
   assert.match(html, /Missing ref/);
   assert.match(html, /tests\/war-room\/render-html\.test\.mjs/);
 });
+
+test("renderDashboardHtml counts only accepted and in-progress epics as active", () => {
+  const html = renderDashboardHtml({
+    roadmap: { lanes: {} },
+    epics: [
+      { id: "E-001", title: "Accepted", status: "accepted" },
+      { id: "E-002", title: "In progress", status: "in-progress" },
+      { id: "E-003", title: "Proposed", status: "proposed" },
+      { id: "E-004", title: "Parked", status: "parked" },
+    ],
+    warnings: [],
+  });
+
+  assert.match(html, /<span>Active Epics<\/span><strong>2<\/strong>/);
+});
+
+test("renderDashboardHtml counts blocked and rejected acceptance statuses", () => {
+  const html = renderDashboardHtml({
+    roadmap: { lanes: {} },
+    epics: [
+      {
+        id: "E-001",
+        title: "War Room",
+        status: "in-progress",
+        requirements: [
+          { id: "E-001-001", title: "Blocked", deliveryStatus: "todo", acceptanceStatus: "blocked" },
+          { id: "E-001-002", title: "Rejected", deliveryStatus: "todo", acceptanceStatus: "rejected" },
+        ],
+      },
+    ],
+    warnings: [],
+  });
+
+  assert.match(html, /<li>Blocked \/ rejected: 2<\/li>/);
+});

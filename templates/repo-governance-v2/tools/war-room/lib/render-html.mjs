@@ -53,7 +53,7 @@ export function renderDashboardHtml({ roadmap, epics, warnings }) {
 }
 
 function renderSummary(lanes, epics, warnings) {
-  const activeEpics = epics.filter((epic) => epic.status !== "done" && epic.status !== "cancelled").length;
+  const activeEpics = epics.filter((epic) => ["accepted", "in-progress"].includes(epic.status)).length;
   const metrics = [
     ["Now", count(lanes.now)],
     ["Next", count(lanes.next)],
@@ -112,10 +112,7 @@ function renderEpicCard(epic) {
   const slices = epic.slices ?? [];
   const requirements = epic.requirements ?? [];
   const doneRequirements = requirements.filter((requirement) => requirement.deliveryStatus === "done").length;
-  const blockedOrRejected = [
-    ...slices.filter((slice) => slice.deliveryStatus === "blocked"),
-    ...requirements.filter((requirement) => requirement.deliveryStatus === "blocked" || requirement.acceptanceStatus === "rejected"),
-  ].length;
+  const blockedOrRejected = requirements.filter((requirement) => ["blocked", "rejected"].includes(requirement.acceptanceStatus)).length;
   const missingEvidence = requirements.filter(
     (requirement) => requirement.deliveryStatus === "done" && (requirement.existingEvidence ?? []).length === 0,
   ).length;
