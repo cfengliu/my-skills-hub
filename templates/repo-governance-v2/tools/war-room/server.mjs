@@ -4,7 +4,7 @@ import http from "node:http";
 import { existsSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseRoadmapMarkdown } from "./lib/parse-roadmap.mjs";
 import { parseEpicMarkdown } from "./lib/parse-epics.mjs";
 import { detectDrift } from "./lib/detect-drift.mjs";
@@ -14,7 +14,7 @@ const scriptPath = fileURLToPath(import.meta.url);
 const toolRoot = path.dirname(scriptPath);
 const defaultRepoRoot = path.resolve(toolRoot, "../..");
 const repoRoot = path.resolve(process.argv[2] ?? defaultRepoRoot);
-const port = Number(process.env.PORT ?? 4767);
+const port = parsePort(process.env.PORT ?? "4767");
 
 async function main() {
   const server = http.createServer(async (_request, response) => {
@@ -61,16 +61,27 @@ export async function readDashboardModel(root) {
   return { roadmap, epics, warnings };
 }
 
+export function parsePort(value) {
+  const port = Number(value);
+
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error(`Invalid PORT: ${value}`);
+  }
+
+  return port;
+}
+
 async function listEpicFiles(epicsRoot) {
   const entries = await readdir(epicsRoot, { withFileTypes: true });
   return entries
     .filter((entry) => entry.isFile())
     .map((entry) => entry.name)
     .filter((name) => /^E-\d+-.+\.md$/.test(name))
+    .filter((name) => !name.endsWith(".example.md"))
     .sort();
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch((error) => {
     console.error(error);
     process.exitCode = 1;
