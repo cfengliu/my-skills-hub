@@ -2,8 +2,9 @@ const ROADMAP_LANES = ["now", "next", "later", "doneRecently", "cancelledOrParke
 
 export function detectDrift({ roadmap, epics }) {
   const warnings = [];
-  const targetsById = indexTargets(epics ?? []);
-  const requirementsById = indexRequirements(epics ?? []);
+  const { targetsById, requirementsById, duplicateWarnings } = indexEpics(epics ?? []);
+
+  warnings.push(...duplicateWarnings);
 
   for (const item of getRoadmapItems(roadmap)) {
     const target = targetsById.get(item.id);
@@ -48,20 +49,16 @@ export function detectDrift({ roadmap, epics }) {
     for (const slice of epic.slices ?? []) {
       if (slice.deliveryStatus !== "done") continue;
 
-      const openRequirement = (slice.covers ?? []).find((requirementId) => {
+      for (const requirementId of slice.covers ?? []) {
         const requirement = requirementsById.get(requirementId);
-        return !requirement || requirement.deliveryStatus !== "done";
-      });
-
-      if (openRequirement) {
-        const requirement = requirementsById.get(openRequirement);
+        if (requirement?.deliveryStatus === "done") continue;
 
         warnings.push({
           severity: "warning",
           code: "slice-done-with-open-requirements",
-          message: `Slice ${slice.id} is done but covers missing or open requirement ${openRequirement}.`,
+          message: `Slice ${slice.id} is done but covers missing or open requirement ${requirementId}.`,
           sourceRef: slice.sourceRef,
-          relatedRef: requirement?.sourceRef ?? openRequirement,
+          relatedRef: requirement?.sourceRef ?? `missing requirement ${requirementId}`,
         });
       }
     }
@@ -77,18 +74,24 @@ function getRoadmapItems(roadmap) {
   });
 }
 
-function indexTargets(epics) {
-  const targets = new Map();
+function indexEpics(epics) {
+  const targetsById = new Map();
+  const requirementsById = new Map();
+  const duplicateWarnings = [];
 
   for (const epic of epics) {
-    targets.set(epic.id, {
+    addTarget({
+      targetsById,
+      duplicateWarnings,
       id: epic.id,
       deliveryStatus: epic.status,
       sourceRef: epic.sourceRef ?? epic.filePath ?? epic.id,
     });
 
     for (const slice of epic.slices ?? []) {
-      targets.set(slice.id, {
+      addTarget({
+        targetsById,
+        duplicateWarnings,
         id: slice.id,
         deliveryStatus: slice.deliveryStatus,
         sourceRef: slice.sourceRef,
@@ -96,25 +99,36 @@ function indexTargets(epics) {
     }
 
     for (const requirement of epic.requirements ?? []) {
-      targets.set(requirement.id, {
+      addTarget({
+        targetsById,
+        duplicateWarnings,
         id: requirement.id,
         deliveryStatus: requirement.deliveryStatus,
         sourceRef: requirement.sourceRef,
       });
+
+      if (!requirementsById.has(requirement.id)) {
+        requirementsById.set(requirement.id, requirement);
+      }
     }
   }
 
-  return targets;
+  return { targetsById, requirementsById, duplicateWarnings };
 }
 
-function indexRequirements(epics) {
-  const requirements = new Map();
-
-  for (const epic of epics) {
-    for (const requirement of epic.requirements ?? []) {
-      requirements.set(requirement.id, requirement);
-    }
+function addTarget({ targetsById, duplicateWarnings, id, deliveryStatus, sourceRef }) {
+  if (!targetsById.has(id)) {
+    targetsById.set(id, { id, deliveryStatus, sourceRef });
+    return;
   }
 
-  return requirements;
+  const firstTarget = targetsById.get(id);
+
+  duplicateWarnings.push({
+    severity: "warning",
+    code: "duplicate-id",
+    message: `Duplicate id ${id} appears in ${firstTarget.sourceRef} and ${sourceRef}. Keeping the first target.`,
+    sourceRef,
+    relatedRef: firstTarget.sourceRef,
+  });
 }
