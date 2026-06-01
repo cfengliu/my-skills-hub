@@ -71,3 +71,64 @@ test("renderDashboardHtml counts blocked and rejected acceptance statuses", () =
 
   assert.match(html, /<li>Blocked \/ rejected: 2<\/li>/);
 });
+
+test("renderDashboardHtml escapes markdown-controlled values", () => {
+  const html = renderDashboardHtml({
+    roadmap: {
+      lanes: {
+        now: [{ id: "<script>", work: "Roadmap & item", note: "Quote \" here", sourceRef: "roadmap'source" }],
+      },
+    },
+    epics: [
+      {
+        id: "E-001",
+        title: "Epic <script>",
+        status: "accepted & \"quoted\"",
+        filePath: "epics/'file'.md",
+      },
+    ],
+    warnings: [
+      { severity: "warning", code: "unsafe", message: "Warning <script> & bad", sourceRef: "warning\"source'" },
+    ],
+  });
+
+  assert.match(html, /&lt;script&gt;/);
+  assert.match(html, /&quot;/);
+  assert.match(html, /&#39;/);
+  assert.match(html, /&amp;/);
+  assert.doesNotMatch(html, /<script>/);
+});
+
+test("renderDashboardHtml tolerates missing arrays and default input", () => {
+  assert.doesNotThrow(() => renderDashboardHtml());
+
+  let html;
+  assert.doesNotThrow(() => {
+    html = renderDashboardHtml({ roadmap: {}, epics: undefined, warnings: undefined });
+  });
+
+  assert.match(html, /No items\./);
+  assert.match(html, /No epics\./);
+  assert.match(html, /No drift warnings\./);
+});
+
+test("renderDashboardHtml counts done requirements with undefined existingEvidence as missing evidence", () => {
+  let html;
+
+  assert.doesNotThrow(() => {
+    html = renderDashboardHtml({
+      roadmap: { lanes: {} },
+      epics: [
+        {
+          id: "E-001",
+          title: "War Room",
+          status: "in-progress",
+          requirements: [{ id: "E-001-001", title: "Render", deliveryStatus: "done" }],
+        },
+      ],
+      warnings: [],
+    });
+  });
+
+  assert.match(html, /<li>Missing evidence: 1<\/li>/);
+});

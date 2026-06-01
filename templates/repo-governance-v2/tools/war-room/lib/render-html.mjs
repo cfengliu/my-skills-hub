@@ -6,7 +6,7 @@ const ROADMAP_LANES = [
   { key: "cancelledOrParked", label: "Cancelled / Parked" },
 ];
 
-export function renderDashboardHtml({ roadmap, epics, warnings }) {
+export function renderDashboardHtml({ roadmap, epics, warnings } = {}) {
   const safeRoadmap = roadmap ?? {};
   const safeEpics = epics ?? [];
   const safeWarnings = warnings ?? [];
