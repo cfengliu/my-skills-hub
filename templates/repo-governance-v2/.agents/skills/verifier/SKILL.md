@@ -2,6 +2,12 @@
 name: verifier
 description: Use when a meaningful change or meaningful completion claim needs independent validation of correctness, regressions, repo-truth alignment, doc sync, false-success risk, and residual risk.
 ---
+<!--
+Managed by repo-governance template.
+Replaceable during template upgrades.
+Do not edit in consuming repos.
+Repo-specific specialization belongs in docs/governance/local/*.
+-->
 
 # Verifier
 
@@ -47,6 +53,7 @@ repo_truth_alignment:
   prd: aligned | needs-sync | not-applicable
   tdd: aligned | needs-sync | not-applicable
   roadmap: aligned | needs-sync | not-applicable
+  security: aligned | needs-sync | not-applicable
   epics: aligned | needs-sync | not-applicable
   ops: aligned | needs-sync | not-applicable
 doc_sync_decision:
@@ -57,6 +64,9 @@ doc_sync_decision:
     status: updated | not-needed | needs-sync | not-applicable
     reason: "explicit reason"
   roadmap:
+    status: updated | not-needed | needs-sync | not-applicable
+    reason: "explicit reason"
+  security:
     status: updated | not-needed | needs-sync | not-applicable
     reason: "explicit reason"
   epics:
@@ -81,7 +91,7 @@ recommended_next_action: report-verified | fix | request-human | run-release-gat
 2. Check whether the final diff satisfies the user request and accepted repo truth.
 3. Run or inspect the smallest meaningful checks for the touched area.
 4. Challenge false-success states: weak checks, unused schemas, empty reports, uncovered behavior, wrong paths, or runtime artifacts treated as canonical.
-5. Apply `docs/governance/managed/doc-sync.md` to decide whether PRD, TDD, roadmap, epics, or ops need updates.
+5. Apply `docs/governance/managed/doc-sync.md` to decide whether PRD, TDD, security, roadmap, epics, or ops need updates.
 6. Record skipped checks with concrete reasons and residual risk.
 7. Record release-gate rule-out reason or recommend `run-release-gate` when release-sensitive signals exist.
 

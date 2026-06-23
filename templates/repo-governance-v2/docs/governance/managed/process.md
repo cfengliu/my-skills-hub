@@ -62,7 +62,7 @@ Methodology derivation does not trigger for intake, roadmap sequencing, epic tra
 
 ## Decision Promotion Gate
 
-Run `.agents/skills/decision-advisor/SKILL.md` before promoting discussion, notes, roadmap, epic detail, PRD drafts, or Technical Design drafts into accepted PRD, Technical Design (`tdd.md`), epic detail, or implementation plans when unresolved assumptions may become accepted truth.
+Run `.agents/skills/decision-advisor/SKILL.md` before promoting discussion, notes, roadmap, epic detail, PRD drafts, Technical Design drafts, or security drafts into accepted PRD, Technical Design (`tdd.md`), security, epic detail, or implementation plans when unresolved assumptions may become accepted truth.
 
 Do not use decision-advisor for trivial wording, formatting, typo fixes, refactors with no behavior change, or fully reversible local implementation choices that do not affect accepted behavior.
 
@@ -81,6 +81,7 @@ Start from `AGENTS.md`. Then load only files relevant to the task:
 
 - task class, planning, runtime artifacts, or canonical lookup: `docs/governance/managed/process.md`
 - local commands / environment: `docs/governance/local/ops.md`
+- security, privacy, PII, auth/authz, audit, retention, secrets, or abuse controls: `docs/governance/local/security.md`
 - product or UI behavior: `docs/governance/local/prd.md`
 - technical design or API / schema / boundary decisions: `docs/governance/local/tdd.md`
 - priority or next-work sequencing: `docs/governance/local/roadmap.md`
@@ -118,10 +119,11 @@ Use this order for local repo truth:
 
 1. `docs/governance/local/prd.md` for accepted product behavior, UI / UX, user-facing flows, and acceptance criteria.
 2. `docs/governance/local/tdd.md` for accepted technical design, architecture boundaries, API contracts, data models, and verification strategy.
-3. `docs/governance/local/roadmap.md` for Now / Next / Later / Done / Parked priority and sequencing.
-4. `docs/governance/local/epics/*` for large workstream child requirement detail, source, promotion status, evidence, and next step.
-5. `docs/governance/local/ops.md` for commands, environments, release process, operator notes path, and operational constants.
-6. existing implementation and tests, only when not contradicted by higher-priority truth.
+3. `docs/governance/local/security.md` for security, privacy, PII handling, auth/authz boundaries, auditability, retention, secrets handling, and abuse controls.
+4. `docs/governance/local/roadmap.md` for Now / Next / Later / Done / Parked priority and sequencing.
+5. `docs/governance/local/epics/*` for large workstream child requirement detail, source, promotion status, evidence, and next step.
+6. `docs/governance/local/ops.md` for commands, environments, release process, operator notes path, and operational constants.
+7. existing implementation and tests, only when not contradicted by higher-priority truth.
 
 Empty sections, placeholders, or missing local files mean `unknown`, not accepted truth.
 

@@ -6,7 +6,7 @@ Repo-specific specialization belongs in docs/governance/local/*.
 -->
 # Repo Governance
 
-Repo-governance v2.2.3 是給 AI-assisted repo 使用的完整治理套件。
+Repo-governance v2.2.4 是給 AI-assisted repo 使用的完整治理套件。
 
 它不是輕量 template；它是可升級的 repo 憲法系統：
 
@@ -26,7 +26,7 @@ Repo-governance v2.2.3 是給 AI-assisted repo 使用的完整治理套件。
 
 ## 架構
 
-v2.2.3 有兩條使用路徑、三層責任、五個 managed rule owners、六個 managed control skills。
+v2.2.4 有兩條使用路徑、三層責任、五個 managed rule owners、六個 managed control skills。
 
 ### 兩條使用路徑
 
@@ -60,6 +60,12 @@ requirement / product change:
 AGENTS.md
 -> docs/governance/local/prd.md
 -> docs/governance/local/roadmap.md or local/epics/, if tracked
+-> docs/governance/managed/doc-sync.md
+
+security / privacy / auth / PII change:
+AGENTS.md
+-> docs/governance/local/security.md
+-> docs/governance/local/tdd.md or local/ops.md, if implementation or operations are affected
 -> docs/governance/managed/doc-sync.md
 ```
 
@@ -101,6 +107,7 @@ Layer 3: Repo-owned local truth
 - docs/governance/local/prd.md
 - docs/governance/local/tdd.md
 - docs/governance/local/roadmap.md
+- docs/governance/local/security.md
 - docs/governance/local/epics/
 ```
 
@@ -119,7 +126,7 @@ docs/governance/managed/completion.md  -> merged into managed/verification.md
 | Verification, completion taxonomy, reports, commit rules | `docs/governance/managed/verification.md` |
 | Release-sensitive, destructive, production-data, human checkpoint gates | `docs/governance/managed/release.md` |
 | Subagent delegation boundaries | `docs/governance/managed/subagents.md` |
-| PRD / TDD / roadmap / epics / ops sync | `docs/governance/managed/doc-sync.md` |
+| PRD / TDD / security / roadmap / epics / ops sync | `docs/governance/managed/doc-sync.md` |
 
 ## 權威邊界
 
@@ -129,6 +136,7 @@ docs/governance/managed/completion.md  -> merged into managed/verification.md
 | Version | `docs/governance/VERSION` |
 | 升級 allowlist、denylist、required files、compatibility | `docs/governance/MANIFEST.md` |
 | Commands, environments, model policy, release constants | `docs/governance/local/ops.md` |
+| Security, privacy, PII, auth/authz boundaries, audit, retention, secrets, abuse controls | `docs/governance/local/security.md` |
 | Product behavior and acceptance | `docs/governance/local/prd.md` |
 | Technical design and boundaries | `docs/governance/local/tdd.md` |
 | Priority and sequencing | `docs/governance/local/roadmap.md` |
@@ -148,6 +156,7 @@ docs/governance/managed/completion.md  -> merged into managed/verification.md
 | subagent delegation boundaries | `docs/governance/managed/subagents.md` |
 | doc sync、stale docs | `docs/governance/managed/doc-sync.md` |
 | repo commands、environment、model policy、release constants | `docs/governance/local/ops.md` |
+| security、privacy、PII、auth/authz、audit、retention、secrets、abuse controls | `docs/governance/local/security.md` |
 | product behavior、UI / UX、acceptance | `docs/governance/local/prd.md` |
 | technical design、architecture、API / data contracts | `docs/governance/local/tdd.md` |
 | priority、Now / Next / Later / Done / Parked | `docs/governance/local/roadmap.md` |
@@ -163,6 +172,7 @@ docs/governance/local/ops.example.md           -> docs/governance/local/ops.md
 docs/governance/local/prd.example.md           -> docs/governance/local/prd.md
 docs/governance/local/tdd.example.md           -> docs/governance/local/tdd.md
 docs/governance/local/roadmap.example.md       -> docs/governance/local/roadmap.md
+docs/governance/local/security.example.md       -> docs/governance/local/security.md
 docs/governance/local/epics/README.example.md  -> docs/governance/local/epics/README.md
 ```
 
@@ -171,6 +181,8 @@ docs/governance/local/epics/README.example.md  -> docs/governance/local/epics/RE
 `.example.md` files belong to the source template package. An initialized consuming repo may omit them after the matching repo-owned local files exist.
 
 `ops.md` 建議先填，因為 commands、environment、model policy、release constants 會影響 agent 怎麼驗證與執行。
+
+`security.md` 建議在接 auth、PII、payments、uploads、webhooks、AI provider、admin surface 或 production data 前填。
 
 只有大型 workstream 需要 child requirement tracking、source history、multi-session delivery 或 evidence history 時，才建立 epic file：
 
@@ -187,14 +199,16 @@ flowchart TD
   A["Copy template into repo"] --> B["Read README.md"]
   B --> C["Copy local/*.example.md to local/*.md"]
   C --> D["Fill ops.md first"]
-  D --> E["Fill PRD/TDD/roadmap as applicable"]
-  E --> F["Create epics only for large workstreams"]
-  F --> G["Run compatibility checklist from MANIFEST.md"]
+  D --> E["Fill security.md before sensitive surfaces"]
+  E --> F["Fill PRD/TDD/roadmap as applicable"]
+  F --> G["Create epics only for large workstreams"]
+  G --> H["Run compatibility checklist from MANIFEST.md"]
 ```
 
 ## Local truth 職責
 
 - `ops.md`：commands、environments、release process、model policy、operator notes path。
+- `security.md`：security、privacy、PII handling、authentication and authorization boundaries、auditability、retention、secrets handling、abuse controls。
 - `prd.md`：accepted product behavior、UI / UX decisions、user-facing flows、acceptance criteria。
 - `tdd.md`：accepted technical design、architecture boundaries、API contracts、data models、verification strategy。
 - `roadmap.md`：Now / Next / Later / Done / Parked 的 priority dashboard。
@@ -207,8 +221,10 @@ flowchart TD
 - PRD 擁有最終 accepted product truth。
 - TDD 擁有最終 accepted technical truth。
 - Ops 擁有 repo-specific operational truth。
+- Security 擁有 repo-specific security and privacy truth。
 - Operational matters 一律以 `ops.md` 為準；roadmap、epic、plan 或歷史文件裡的舊 command / deploy / migration 說法不得覆蓋 ops。
-- Roadmap 或 epic 若跟該 domain owner（PRD / TDD / Ops）衝突，較低權威來源視為 stale，meaningful completion claim 前必須同步或標記 blocker。
+- Security / privacy / PII / auth boundary / audit / retention / secrets / abuse-control matters 一律以 `security.md` 為準。
+- Roadmap 或 epic 若跟該 domain owner（PRD / TDD / Ops / Security）衝突，較低權威來源視為 stale，meaningful completion claim 前必須同步或標記 blocker。
 
 ## Control skills 職責
 
@@ -220,8 +236,8 @@ Control skills 是 template-owned，要 schema 自含，但 policy 引用 manage
 | `.agents/skills/verifier/SKILL.md` | meaningful change / completion claim 前做獨立驗證。 | `managed/verification.md`, `managed/doc-sync.md`, `managed/release.md`, `local/ops.md` |
 | `.agents/skills/release-gate/SKILL.md` | release-sensitive / destructive environment action 前做 `go` / `hold` / `require-human` 判定。 | `managed/release.md`, `local/ops.md`, `managed/verification.md` |
 | `.agents/skills/subagent-routing/SKILL.md` | explicit plan / task list 出現後，分類任務為 inline、delegable、main-runtime-only 或 blocked。 | `managed/subagents.md`, `managed/process.md`, `managed/verification.md`, `managed/release.md` |
-| `.agents/skills/drift-repair/SKILL.md` | 修復 roadmap、epic、PRD、TDD、ops 之間的 stale status、錯誤引用與證據不一致。 | `managed/doc-sync.md`, `managed/process.md`, `managed/verification.md`, `local/roadmap.md`, `local/epics/` |
-| `.agents/skills/decision-advisor/SKILL.md` | promotion 前萃取 human decisions、recommended defaults、missing specialist capabilities，避免 unresolved assumptions 變成 accepted truth。 | `managed/process.md`, `managed/doc-sync.md`, `local/prd.md`, `local/tdd.md`, `local/epics/` |
+| `.agents/skills/drift-repair/SKILL.md` | 修復 roadmap、epic、PRD、TDD、security、ops 之間的 stale status、錯誤引用與證據不一致。 | `managed/doc-sync.md`, `managed/process.md`, `managed/verification.md`, `local/roadmap.md`, `local/epics/` |
+| `.agents/skills/decision-advisor/SKILL.md` | promotion 前萃取 human decisions、recommended defaults、missing specialist capabilities，避免 unresolved assumptions 變成 accepted truth。 | `managed/process.md`, `managed/doc-sync.md`, `local/prd.md`, `local/tdd.md`, `local/security.md`, `local/epics/` |
 
 Repo-specific expert skills 可存在於 `.agents/skills/<skill-name>/SKILL.md`，但不包含上述 managed control skills。這些 expert skills 是 consuming repo-owned，template upgrade 不可覆蓋；`runtime-adapter` 需讀取 frontmatter 並選擇本次任務相關的 expert skills。
 
@@ -255,21 +271,22 @@ flowchart TD
 
 ## 相容性檢查
 
-聲稱 repo 使用 governance v2.2.3 前，依 `docs/governance/MANIFEST.md` 的 compatibility checklist 檢查。
+聲稱 repo 使用 governance v2.2.4 前，依 `docs/governance/MANIFEST.md` 的 compatibility checklist 檢查。
 
 最少要確認：
 
 - `AGENTS.md` 存在並指向 `docs/governance/*`。
-- `VERSION` 是 `2.2.3` 或更新。
+- `VERSION` 是 `2.2.4` 或更新。
 - `MANIFEST.md` 存在且是 upgrade contract owner。
 - 五個 managed modules 都存在。
 - 六個 managed control skills 都存在。
 - 初始化後的 repo local files 存在。
+- security/privacy/PII/auth/audit/retention lookup 指向 `docs/governance/local/security.md`。
 - managed / repo-owned headers 符合 manifest 要求。
 - repo-owned expert skills 若存在，仍保留且沒有被 template-owned control skill allowlist 覆蓋。
 - upgrade denylist 排除 `docs/governance/local/*` 與 `.agents/skills/local/*`。
 - Roadmap 不複製完整 epic child requirement text。
-- Epics 不聲稱 override PRD、TDD、hard gates 或 roadmap priority。
+- Epics 不聲稱 override PRD、TDD、Security、hard gates 或 roadmap priority。
 - 空 local sections 與 placeholders 被視為 `unknown`，不是 accepted truth。
 
 若是在驗證 source template package 本身，才額外確認 local examples 存在且 example headers 符合 manifest。已初始化 consuming repo 不需要 vendor `.example.md` files。

@@ -1,13 +1,19 @@
 ---
 name: decision-advisor
-description: "Use when discussion, notes, roadmap items, epics, PRD drafts, TDD drafts, or implementation plans may promote unresolved assumptions into accepted truth and you need to extract human decisions, recommend safe defaults, route specialist skills, or block unsafe promotion."
+description: "Use when discussion, notes, roadmap items, epics, PRD drafts, TDD drafts, security drafts, or implementation plans may promote unresolved assumptions into accepted truth and you need to extract human decisions, recommend safe defaults, route specialist skills, or block unsafe promotion."
 ---
+<!--
+Managed by repo-governance template.
+Replaceable during template upgrades.
+Do not edit in consuming repos.
+Repo-specific specialization belongs in docs/governance/local/*.
+-->
 
 # Decision Advisor
 
 Decision Advisor is a thin promotion gate. It is not a specialist expert and must not pretend to be one.
 
-Use it to decide whether a discussion can safely become PRD, TDD, epic detail, or an implementation plan.
+Use it to decide whether a discussion can safely become PRD, TDD, security policy, epic detail, or an implementation plan.
 
 ## Why Use This
 
@@ -34,8 +40,8 @@ Use before any of these promotions when unresolved assumptions may become accept
 
 - discussion or meeting notes -> PRD
 - discussion or meeting notes -> TDD
-- roadmap or epic detail -> PRD or TDD
-- PRD or TDD -> implementation plan
+- roadmap or epic detail -> PRD, TDD, or Security
+- PRD, TDD, or Security -> implementation plan
 - implementation plan -> implementation, when the plan contains unresolved product, data, permission, cost, or risk assumptions
 
 Do not use for trivial wording, formatting, typo fixes, refactors with no behavior change, or local implementation choices that are fully reversible and do not affect accepted behavior.
@@ -45,7 +51,7 @@ Do not use for trivial wording, formatting, typo fixes, refactors with no behavi
 Treat these as accepted truth, in priority order:
 
 1. Explicit user decisions in the current task.
-2. Approved PRD, TDD, ADR, policy, roadmap, or epic files.
+2. Approved PRD, TDD, security, ADR, policy, roadmap, or epic files.
 3. Existing repository behavior, tests, schemas, and public contracts.
 4. Clearly stated organizational defaults.
 

@@ -11,7 +11,7 @@ Do not overwrite during template upgrades.
 
 This file is the priority dashboard for what to do next.
 
-Roadmap decides sequencing. PRD owns product behavior and acceptance. TDD owns technical design. Epics own large workstream requirement details.
+Roadmap decides sequencing. PRD owns product behavior and acceptance. TDD owns technical design. Security owns security/privacy constraints. Epics own large workstream requirement details.
 
 Empty sections and placeholders are `unknown`, not accepted priority truth. Add only sequencing decisions that have been accepted by the user or maintainer.
 
@@ -52,11 +52,12 @@ Empty sections and placeholders are `unknown`, not accepted priority truth. Add 
 ## Roadmap Rules
 
 - Keep this file short enough to answer: what is Now, Next, Later, Done, and Parked?
-- Do not duplicate PRD or TDD details here.
+- Do not duplicate PRD, TDD, or Security details here.
 - Do not duplicate full epic child requirements here.
 - Roadmap IDs may point to delivery slices (`E-001A`) or requirements (`E-001-001`).
 - If a roadmap item needs 5+ child requirements, multi-phase tracking, or evidence history, create an epic file under `epics/`.
 - When roadmap sequencing changes, update this file.
 - When accepted product behavior changes, update `prd.md`.
 - When accepted technical design changes, update `tdd.md`.
+- When accepted security, privacy, PII, auth, audit, retention, secrets, or abuse-control policy changes, update `security.md`.
 - When a child requirement status, source, promotion, or evidence changes, update the relevant epic file.

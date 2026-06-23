@@ -30,7 +30,7 @@ Treat the following as release-sensitive unless explicitly ruled out with eviden
 
 Before any release-sensitive action:
 
-1. Read `docs/governance/local/ops.md`.
+1. Read `docs/governance/local/ops.md`, and read `docs/governance/local/security.md` when security/privacy/auth/PII/secrets/audit/retention/abuse controls are affected.
 2. Identify target environment and affected data, schema, config, secrets, auth, billing, external services, data leaving the repo, downloads, and CI/CD path.
 3. Run release-gate or an equivalent release-gate pass.
 4. Continue only if the decision is `go`.
@@ -50,6 +50,7 @@ Do not automatically cross these gates:
 - deploy / release / rollout
 - destructive schema or data change
 - auth / identity change
+- permission, PII, audit, retention, or abuse-control change
 - payments / billing change
 - secrets
 - production config

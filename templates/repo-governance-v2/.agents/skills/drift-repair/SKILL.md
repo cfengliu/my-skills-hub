@@ -1,13 +1,19 @@
 ---
 name: drift-repair
-description: Use when governance docs have drifted or the user asks to repair/reconcile roadmap, epic, PRD, TDD, or ops documentation inconsistencies after planning, implementation, verification, or priority changes.
+description: Use when governance docs have drifted or the user asks to repair/reconcile roadmap, epic, PRD, TDD, security, or ops documentation inconsistencies after planning, implementation, verification, or priority changes.
 ---
+<!--
+Managed by repo-governance template.
+Replaceable during template upgrades.
+Do not edit in consuming repos.
+Repo-specific specialization belongs in docs/governance/local/*.
+-->
 
 # Drift Repair
 
 ## Purpose
 
-Repair drift between governance local truth files without inventing new product, technical, operational, or priority decisions.
+Repair drift between governance local truth files without inventing new product, technical, security, operational, or priority decisions.
 
 This skill changes documentation alignment. It does not choose strategy, approve completion, or replace verifier.
 
@@ -20,7 +26,7 @@ It may validate evidence references, but it does not audit feature completeness.
 - Completion evidence standard: `docs/governance/managed/verification.md`
 - Local priority truth: `docs/governance/local/roadmap.md`
 - Local workstream detail: `docs/governance/local/epics/`
-- Product, technical, and ops owners when relevant: `docs/governance/local/prd.md`, `docs/governance/local/tdd.md`, `docs/governance/local/ops.md`
+- Product, technical, security, and ops owners when relevant: `docs/governance/local/prd.md`, `docs/governance/local/tdd.md`, `docs/governance/local/security.md`, `docs/governance/local/ops.md`
 
 ## Default Scope
 
@@ -31,7 +37,7 @@ Default editable files:
 - `docs/governance/local/roadmap.md`
 - `docs/governance/local/epics/*.md`
 
-Edit `prd.md`, `tdd.md`, or `ops.md` only when the user explicitly asks or the drift is a mechanical stale marker that preserves the domain owner rule.
+Edit `prd.md`, `tdd.md`, `security.md`, or `ops.md` only when the user explicitly asks or the drift is a mechanical stale marker that preserves the domain owner rule.
 
 ## Evidence Boundary
 
@@ -43,7 +49,7 @@ Concrete evidence may include:
 - test paths named by roadmap or epic evidence
 - recorded command results
 - verifier output
-- PRD/TDD/Ops references that contain the claimed promoted truth
+- PRD/TDD/Security/Ops references that contain the claimed promoted truth
 
 Do not treat file existence as proof of completion. Completion evidence requires an explicit verification result, verifier output, or a command result that validates the relevant invariant.
 
@@ -63,6 +69,7 @@ scope:
     - "path or none"
   prd: checked | not-needed | missing
   tdd: checked | not-needed | missing
+  security: checked | not-needed | missing
   ops: checked | not-needed | missing
 repairs:
   - file: "path"
@@ -82,9 +89,9 @@ next_required_check: verifier | human-decision | none
 3. Read only epic files referenced by roadmap or named by the user.
 4. If roadmap references missing epic files, report `blocked` or repair the reference only when the intended existing file is obvious.
 5. Compare roadmap sequencing with epic status, delivery slices, requirement list, evidence, gaps, and closure fields.
-6. Compare epic PRD/TDD/Ops claims with domain owner files only when the epic references promotion, accepted behavior, technical design, commands, release, migration, or environment details.
+6. Compare epic PRD/TDD/Security/Ops claims with domain owner files only when the epic references promotion, accepted behavior, technical design, security/privacy policy, commands, release, migration, or environment details.
 7. Repair mechanical drift directly when concrete evidence references are present and not obviously stale or missing.
-8. Do not infer accepted priorities, accepted requirements, architecture, commands, release targets, or completion evidence from vibes or recent chat alone.
+8. Do not infer accepted priorities, accepted requirements, architecture, security policy, commands, release targets, or completion evidence from vibes or recent chat alone.
 9. If evidence is insufficient, output a proposed repair and the exact human decision or evidence needed.
 10. After editing, report whether verifier is still required before any meaningful completion claim.
 
@@ -97,11 +104,12 @@ Check these cases:
 - Epic says `done` but requirement evidence or verification evidence is missing.
 - Epic has `gaps` or `next` work but roadmap treats the slice as done.
 - Epic delivery slice status conflicts with covered requirement statuses.
-- Requirement `PRD` or `TDD` promotion status conflicts with actual local PRD/TDD content.
+- Requirement `PRD`, `TDD`, or `Security` promotion status conflicts with actual local PRD/TDD/security content.
 - Roadmap duplicates full child requirement detail instead of pointing to epic detail.
 - Done work appears in epic closure but not roadmap `Done Recently`.
 - Parked or cancelled work still appears in roadmap `Now` or `Next`.
 - Ops-sensitive statements in roadmap or epic conflict with `ops.md`.
+- Security/privacy/PII/auth/audit/retention/secrets/abuse-control statements in roadmap or epic conflict with `security.md`.
 
 ## Repair Rules
 
@@ -118,7 +126,7 @@ Check these cases:
 
 - choose the next product priority
 - create new accepted requirements
-- promote requirements into PRD/TDD without explicit accepted evidence
+- promote requirements into PRD/TDD/security without explicit accepted evidence
 - mark work done without verification evidence
 - edit source code
 - perform release-sensitive or destructive actions

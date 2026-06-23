@@ -11,18 +11,19 @@ Do not overwrite during template upgrades.
 
 Epics are requirement ledgers for large workstreams.
 
-Use an epic when a roadmap item needs child requirements, source tracking, PRD/TDD promotion status, evidence, or multi-session delivery history.
+Use an epic when a roadmap item needs child requirements, source tracking, PRD/TDD/Security promotion status, evidence, or multi-session delivery history.
 
 Requirements use `E-001-001`. Delivery slices use `E-001A`.
 
-Empty sections and placeholders are `unknown`, not accepted requirement truth. Only accepted child requirements should be promoted into PRD or TDD.
+Empty sections and placeholders are `unknown`, not accepted requirement truth. Only accepted child requirements should be promoted into PRD, TDD, or Security.
 
 Do not use epics as the priority source. Priority lives in `../roadmap.md`.
 
-Do not use epics as final product or technical truth:
+Do not use epics as final product, technical, or security truth:
 
 - product behavior and acceptance live in `../prd.md`
 - technical design and boundaries live in `../tdd.md`
+- security, privacy, PII, auth, audit, retention, secrets, and abuse controls live in `../security.md`
 - operational constants live in `../ops.md`
 
 ## Epic File Naming
@@ -90,6 +91,7 @@ Delivery slice is an implementation batch. It does not replace Requirement List.
 - Slice: E-001A | not-used
 - PRD: not-promoted | promoted | not-needed
 - TDD: not-promoted | promoted | not-needed
+- Security: not-promoted | promoted | not-needed
 - decisions:
   -
 - existing evidence:
@@ -106,6 +108,7 @@ Delivery slice is an implementation batch. It does not replace Requirement List.
 
 - PRD synced:
 - TDD synced:
+- Security synced:
 - verification evidence:
 - roadmap updated:
 ```
@@ -115,6 +118,6 @@ Delivery slice is an implementation batch. It does not replace Requirement List.
 - Roadmap decides whether an epic is Now, Next, Later, Done, or Parked.
 - Epics track details; they do not set priority by themselves.
 - Delivery slices define implementation batches; Requirement List owns requirement status, acceptance, evidence, gaps, and next step.
-- Only accepted child requirements should be promoted into `../prd.md` or `../tdd.md`.
+- Only accepted child requirements should be promoted into `../prd.md`, `../tdd.md`, or `../security.md`.
 - Do not mark a child requirement `done` unless implementation and verification evidence both exist.
 - If evidence is mixed, use `partially-done` instead of `done`.

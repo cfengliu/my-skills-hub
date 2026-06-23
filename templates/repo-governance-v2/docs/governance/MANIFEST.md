@@ -10,7 +10,7 @@ This manifest owns the template upgrade and compatibility contract.
 
 ## Version
 
-`2.2.3`
+`2.2.4`
 
 ## Replaceable During Upgrade
 
@@ -56,6 +56,7 @@ These files are copied only when initializing a repo. They are not repo-owned tr
 - `docs/governance/local/prd.example.md`
 - `docs/governance/local/tdd.example.md`
 - `docs/governance/local/roadmap.example.md`
+- `docs/governance/local/security.example.md`
 - `docs/governance/local/epics/README.example.md`
 
 These example files are required in the source template package. Initialized consuming repos may omit the `.example.md` files after creating the repo-owned non-example files; template upgrades must not copy examples over initialized local truth.
@@ -89,6 +90,7 @@ Repo-owned extension area:
 - `docs/governance/local/prd.md`
 - `docs/governance/local/tdd.md`
 - `docs/governance/local/roadmap.md`
+- `docs/governance/local/security.md`
 - `docs/governance/local/epics/README.md`
 
 Actual epic files are created by the consuming repo when needed:
@@ -139,14 +141,15 @@ If a path is not clearly allowed, do not overwrite it automatically.
 
 ## Compatibility Checklist
 
-Before claiming a repo is using governance v2.2.3, check:
+Before claiming a repo is using governance v2.2.4, check:
 
 - `AGENTS.md` exists and points to `docs/governance/*`.
-- `docs/governance/VERSION` exists and is `2.2.3` or newer.
+- `docs/governance/VERSION` exists and is `2.2.4` or newer.
 - `docs/governance/MANIFEST.md` exists and owns the upgrade contract.
 - Required managed governance modules exist.
 - Required managed control skills exist.
 - Required repo local files exist after initialization.
+- Security/privacy/PII/auth/audit/retention lookup routes to `docs/governance/local/security.md`.
 - Managed files have the managed header.
 - Repo local files have the repo-owned warning after initialization.
 - Upgrade replace list excludes `docs/governance/local/*`.
@@ -154,7 +157,7 @@ Before claiming a repo is using governance v2.2.3, check:
 - Upgrade replace list excludes all non-managed-control `.agents/skills/*` paths.
 - Repo-specific expert skills remain present and are not treated as template-owned control skills.
 - Roadmap points to epic detail files instead of duplicating full child requirement text.
-- Epics do not claim to override PRD, TDD, hard gates, or roadmap priority.
+- Epics do not claim to override PRD, TDD, Security, hard gates, or roadmap priority.
 - Empty local sections and placeholders are treated as `unknown`, not accepted truth.
 
 When validating the source template package itself, also check:

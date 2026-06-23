@@ -2,6 +2,12 @@
 name: release-gate
 description: Use before deploy, release, rollout, migration, production-like configuration, production data access or mutation, external API/provider calls with repo or user data, third-party downloads, destructive actions, or any environment-changing action to produce a repo-local go, hold, or require-human decision.
 ---
+<!--
+Managed by repo-governance template.
+Replaceable during template upgrades.
+Do not edit in consuming repos.
+Repo-specific specialization belongs in docs/governance/local/*.
+-->
 
 # Release Gate
 
@@ -15,6 +21,7 @@ Release-gate does not verify generic code correctness. Verifier must pass first 
 
 - Release-sensitive, destructive, production-data, and human checkpoint policy: `docs/governance/managed/release.md`
 - Repo-specific release commands, environments, backup, rollback, and operator notes: `docs/governance/local/ops.md`
+- Repo-specific security, privacy, PII, auth, secrets, retention, and abuse controls: `docs/governance/local/security.md`
 - Verification prerequisite for meaningful changes: `docs/governance/managed/verification.md`
 
 ## When to Use
@@ -30,6 +37,7 @@ If no release-sensitive signal is present, record the rule-out reason in verifie
 - changed files
 - verifier summary when applicable
 - `docs/governance/local/ops.md`
+- `docs/governance/local/security.md`, when the action touches security/privacy/auth/PII/secrets/audit/retention/abuse controls
 - target environment
 
 ## Output
@@ -51,7 +59,7 @@ next_action: proceed | fix | ask-human | run-verifier
 
 ## Decision Procedure
 
-1. Load `docs/governance/managed/release.md` and `docs/governance/local/ops.md`.
+1. Load `docs/governance/managed/release.md`, `docs/governance/local/ops.md`, and `docs/governance/local/security.md` when security/privacy/auth/PII/secrets/audit/retention/abuse controls are affected.
 2. Identify release-sensitive actions, target environment, affected data, schema, config, secrets, auth, billing, external services, data leaving the repo, downloads, and CI/CD path.
 3. Confirm meaningful changes have passed verifier or equivalent independent verification.
 4. Return `require-human` when a human checkpoint remains.

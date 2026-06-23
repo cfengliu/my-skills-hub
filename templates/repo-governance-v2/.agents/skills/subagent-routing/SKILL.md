@@ -2,6 +2,12 @@
 name: subagent-routing
 description: Use after an explicit plan or task list exists and before considering subagents, to classify tasks as inline, delegable, main-runtime-only, or blocked while preserving repo hard gates.
 ---
+<!--
+Managed by repo-governance template.
+Replaceable during template upgrades.
+Do not edit in consuming repos.
+Repo-specific specialization belongs in docs/governance/local/*.
+-->
 
 # Subagent Routing
 

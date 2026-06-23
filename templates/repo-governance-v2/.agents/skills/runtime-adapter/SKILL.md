@@ -2,6 +2,12 @@
 name: runtime-adapter
 description: Use at task start when an external workflow runtime needs repo governance context, hard gates, local truth boundaries, and relevant repo-specific entrypoints without taking over planning, implementation, subagent orchestration, verification, release approval, artifact paths, branch strategy, or workflow routing.
 ---
+<!--
+Managed by repo-governance template.
+Replaceable during template upgrades.
+Do not edit in consuming repos.
+Repo-specific specialization belongs in docs/governance/local/*.
+-->
 
 # Runtime Adapter
 
@@ -50,6 +56,7 @@ local_context_refs:
   - docs/governance/local/prd.md
   - docs/governance/local/tdd.md
   - docs/governance/local/roadmap.md
+  - docs/governance/local/security.md
   - docs/governance/local/epics/E-xxx-<topic>.md
 repo_expert_skills:
   - skill: skill-name
@@ -74,6 +81,7 @@ Exclude the template-managed control skill set:
 - `verifier`
 - `release-gate`
 - `drift-repair`
+- `decision-advisor`
 
 Treat remaining skills as repo-owned expert skills. They remain active even when they are not under `.agents/skills/local/*`.
 
@@ -82,6 +90,7 @@ Select only expert skills whose `description` matches the task. Return selected 
 ## Local Context Selection
 
 - Use `ops.md` for commands, environment, release, model policy, and operator notes path.
+- Use `security.md` for security, privacy, PII, auth/authz boundaries, auditability, retention, secrets, and abuse controls.
 - Use `prd.md` for product behavior, UI / UX, user-facing flows, and acceptance.
 - Use `tdd.md` for technical design, architecture, API, schema, data, and verification strategy.
 - Use `roadmap.md` for Now / Next / Later / Done / Parked sequencing.

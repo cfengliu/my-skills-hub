@@ -28,6 +28,7 @@ Inside those constraints, use domain-based authority instead of one global prior
 - product, UI, UX, behavior, acceptance truth, and BDD scenario authority: `docs/governance/local/prd.md`
 - technical design, implementation boundaries, API, schema, data contracts, and Test-Driven Development check authority: `docs/governance/local/tdd.md`
 - commands, environments, deploy targets, release process, model policy, operator notes, backup, restore, and migration procedure: `docs/governance/local/ops.md`
+- security, privacy, PII handling, authentication and authorization boundaries, auditability, retention, secrets handling, and abuse controls: `docs/governance/local/security.md`
 - delivery priority and next-work sequencing: `docs/governance/local/roadmap.md`
 - large workstream child requirement details, source history, promotion status, and evidence: `docs/governance/local/epics/*`
 - template-owned workflow policy and compatibility procedure: `docs/governance/managed/*` and `docs/governance/MANIFEST.md`
@@ -35,7 +36,7 @@ Inside those constraints, use domain-based authority instead of one global prior
 
 User instructions and local files may satisfy or strengthen Section 2 gates. They must not remove or weaken Section 2 gates.
 
-If sources conflict, choose the owner for the current domain. For operational matters, `docs/governance/local/ops.md` overrides stale roadmap, epic, plan, or historical doc statements. Before a meaningful completion claim, stale lower-authority sources must be synchronized or reported as a blocker.
+If sources conflict, choose the owner for the current domain. For operational matters, `docs/governance/local/ops.md` overrides stale roadmap, epic, plan, or historical doc statements. For security/privacy matters, `docs/governance/local/security.md` constrains PRD, TDD, Ops, roadmap, epic, plan, and historical doc statements. Before a meaningful completion claim, stale lower-authority sources must be synchronized or reported as a blocker.
 
 ## 2) Non-overridable Gates
 
@@ -43,7 +44,7 @@ These requirements cannot be weakened by local files, generated plans, runtime d
 
 - meaningful changes and meaningful completion claims require verifier or an equivalent independent verification pass
 - release-sensitive actions require release-gate or an equivalent release-gate pass
-- promoting discussion, notes, roadmap, epic detail, PRD drafts, or Technical Design drafts into accepted PRD, Technical Design (`tdd.md`), epic detail, or implementation plans requires decision-advisor when unresolved assumptions may become accepted truth
+- promoting discussion, notes, roadmap, epic detail, PRD drafts, Technical Design drafts, or security drafts into accepted PRD, Technical Design (`tdd.md`), security, epic detail, or implementation plans requires decision-advisor when unresolved assumptions may become accepted truth
 - secrets must not be written into tracked files
 - destructive actions and production-data actions require the relevant human checkpoint and release-gate handling
 - commit requires explicit user approval
@@ -85,6 +86,7 @@ Repo-owned local truth after initialization:
 - `docs/governance/local/prd.md`
 - `docs/governance/local/tdd.md`
 - `docs/governance/local/roadmap.md`
+- `docs/governance/local/security.md`
 - `docs/governance/local/epics/README.md`
 - `docs/governance/local/epics/E-xxx-<topic>.md`, when a large workstream needs child requirement tracking
 
@@ -112,12 +114,13 @@ Repo-owned local truth uses these roles:
 - `prd.md`: accepted product behavior, UI / UX decisions, user-facing flows, acceptance criteria, and BDD source authority.
 - `tdd.md`: accepted technical design, architecture boundaries, API contracts, data models, verification strategy, and Test-Driven Development source authority.
 - `ops.md`: commands, environments, release process, model policy, operator notes path, and operational constants.
+- `security.md`: security, privacy, PII handling, authentication and authorization boundaries, auditability, retention, secrets handling, and abuse controls.
 - `roadmap.md`: priority dashboard for Now / Next / Later / Done / Parked work.
 - `epics/*`: requirement ledgers for large workstreams, child requirement status, source, PRD/Technical Design promotion, evidence, and next step.
 
 Empty sections, placeholders, or missing local files mean `unknown`, not accepted truth.
 
-Roadmap decides sequencing only. Epics track details only. PRD owns final accepted product truth. Technical Design (`tdd.md`) owns final accepted technical truth. Ops owns operational truth. Requirements use `E-003-001`; delivery slices use `E-003A`; Requirement List owns requirement status, acceptance, evidence, gaps, and next step. If roadmap, epic, plan, or historical docs conflict with the domain owner, treat the stale source as stale and synchronize before making a meaningful completion claim.
+Roadmap decides sequencing only. Epics track details only. PRD owns final accepted product truth. Technical Design (`tdd.md`) owns final accepted technical truth. Ops owns operational truth. Security owns security and privacy truth. Requirements use `E-003-001`; delivery slices use `E-003A`; Requirement List owns requirement status, acceptance, evidence, gaps, and next step. If roadmap, epic, plan, or historical docs conflict with the domain owner, treat the stale source as stale and synchronize before making a meaningful completion claim.
 
 ## 6) Roadmap And Epic Coordination
 
@@ -135,7 +138,7 @@ For progress, roadmap, epic, next-work, done-state, or drift requests:
 
 Runtime-generated specs, plans, scratch notes, review notes, execution artifacts, and temporary files are working materials.
 
-They become canonical only if the user or maintainer explicitly promotes them into local PRD, Technical Design (`tdd.md`), roadmap, epics, ops, or another accepted durable source.
+They become canonical only if the user or maintainer explicitly promotes them into local PRD, Technical Design (`tdd.md`), security, roadmap, epics, ops, or another accepted durable source.
 
 Path alone does not make an artifact canonical.
 
