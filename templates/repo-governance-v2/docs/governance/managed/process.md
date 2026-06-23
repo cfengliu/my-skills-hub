@@ -32,10 +32,14 @@ Intake / tracking:
 meeting note / direct discussion -> roadmap item -> epic when needed
 
 Truth promotion:
-discussion / roadmap item / epic detail -> PRD and/or TDD
+discussion / roadmap item / epic detail -> PRD and/or Technical Design
+
+Methodology derivation:
+PRD -> BDD scenarios -> behavior tests
+Technical Design -> TDD technical checks -> technical tests
 
 Execution:
-PRD / TDD / explicit user instruction -> plan -> implementation
+PRD / Technical Design / explicit user instruction -> plan -> BDD scenario or TDD technical check -> test first -> implementation
 ```
 
 Delivery closure:
@@ -44,11 +48,21 @@ Delivery closure:
 implementation -> verification -> release-gate when applicable -> deployment when requested
 ```
 
-Roadmap and epic entries may organize and track work, but do not by themselves authorize implementation. Accepted PRD/TDD or explicit user instruction defines implementation scope. Delivery closure answers whether completion may be claimed.
+Roadmap and epic entries may organize and track work, but do not by themselves authorize implementation. Accepted PRD and Technical Design define durable implementation scope. Explicit user instruction may define current-task scope when it does not violate hard gates. Delivery closure answers whether completion may be claimed.
+
+BDD applies to product behavior work. The PRD is the durable authority for BDD scenarios, and each scenario must express observable behavior from accepted PRD acceptance criteria. Explicit user instruction may source current-task BDD scenarios; durable product truth still requires promotion into PRD when needed.
+
+Test-Driven Development applies to technical design work. The Technical Design is the durable authority for TDD technical checks, and each check must verify an invariant from accepted technical decisions, contracts, boundaries, or state rules. Explicit user instruction may source current-task technical checks; durable technical truth still requires promotion into Technical Design when needed.
+
+Test first means product behavior work starts from a BDD-backed behavior test, and technical design work starts from a TDD-backed technical check. Trivial wording, formatting, and non-behavioral documentation changes do not need BDD scenarios or tests.
+
+Methodology derivation triggers when meaningful product behavior or meaningful technical implementation is about to become a plan task or implementation task. Meaningful product behavior work must trigger BDD derivation. Meaningful technical implementation work must trigger Test-Driven Development derivation.
+
+Methodology derivation does not trigger for intake, roadmap sequencing, epic tracking, truth promotion by itself, trivial wording, formatting, or non-behavioral documentation changes.
 
 ## Decision Promotion Gate
 
-Run `.agents/skills/decision-advisor/SKILL.md` before promoting discussion, notes, roadmap, epic detail, PRD drafts, or TDD drafts into accepted PRD, TDD, epic detail, or implementation plans when unresolved assumptions may become accepted truth.
+Run `.agents/skills/decision-advisor/SKILL.md` before promoting discussion, notes, roadmap, epic detail, PRD drafts, or Technical Design drafts into accepted PRD, Technical Design (`tdd.md`), epic detail, or implementation plans when unresolved assumptions may become accepted truth.
 
 Do not use decision-advisor for trivial wording, formatting, typo fixes, refactors with no behavior change, or fully reversible local implementation choices that do not affect accepted behavior.
 
