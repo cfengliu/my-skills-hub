@@ -25,10 +25,17 @@ When uncertain, classify upward toward the safer category.
 
 ## Canonical Chains
 
-Promotion pipeline:
+These flows describe lifecycle, not authority order.
 
 ```text
-meeting note / direct discussion -> roadmap item -> epic when needed -> PRD -> TDD when needed -> plan -> implementation
+Intake / tracking:
+meeting note / direct discussion -> roadmap item -> epic when needed
+
+Truth promotion:
+discussion / roadmap item / epic detail -> PRD and/or TDD
+
+Execution:
+PRD / TDD / explicit user instruction -> plan -> implementation
 ```
 
 Delivery closure:
@@ -37,7 +44,7 @@ Delivery closure:
 implementation -> verification -> release-gate when applicable -> deployment when requested
 ```
 
-Promotion answers whether implementation may start. Delivery closure answers whether completion may be claimed.
+Roadmap and epic entries may organize and track work, but do not by themselves authorize implementation. Accepted PRD/TDD or explicit user instruction defines implementation scope. Delivery closure answers whether completion may be claimed.
 
 ## Decision Promotion Gate
 
