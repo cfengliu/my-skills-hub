@@ -83,6 +83,7 @@ default_tools_approval_mode = "prompt"
 
 [mcp_servers.local_ollama_worker.env]
 OLLAMA_WORKER_ALLOWED_ROOTS = "/Users/<you>/Documents/GitHub:/Users/<you>/dev"
+OLLAMA_WORKER_LOCAL_PROVIDER = "ollama"
 OLLAMA_WORKER_DEFAULT_MODEL = "qwen2.5-coder:14b"
 ```
 
@@ -110,6 +111,7 @@ ollama-worker-mcp
 
 環境變數
 OLLAMA_WORKER_ALLOWED_ROOTS=/Users/<you>/Documents/GitHub:/Users/<you>/dev
+OLLAMA_WORKER_LOCAL_PROVIDER=ollama
 OLLAMA_WORKER_DEFAULT_MODEL=qwen2.5-coder:14b
 
 工作目錄

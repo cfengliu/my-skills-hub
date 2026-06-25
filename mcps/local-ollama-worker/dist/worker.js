@@ -36,7 +36,11 @@ export async function resolveAllowedRepoPath({
     throw new Error("OLLAMA_WORKER_ALLOWED_ROOTS must include at least one allowed root.");
   }
 
-  const resolvedRoots = await Promise.all(allowedRoots.map((root) => realpath(path.resolve(root))));
+  const resolvedRoots = await resolveExistingRoots(allowedRoots);
+  if (resolvedRoots.length === 0) {
+    throw new Error("OLLAMA_WORKER_ALLOWED_ROOTS does not contain any existing directories.");
+  }
+
   const allowed = resolvedRoots.some((root) => isPathInside(resolvedRepo, root));
   if (!allowed) {
     throw new Error(`repoPath is not under OLLAMA_WORKER_ALLOWED_ROOTS: ${resolvedRepo}`);
@@ -45,13 +49,31 @@ export async function resolveAllowedRepoPath({
   return resolvedRepo;
 }
 
-export function buildCodexArgs({ model, worktree, finalMessagePath }) {
+async function resolveExistingRoots(roots) {
+  const resolved = [];
+
+  for (const root of roots) {
+    try {
+      resolved.push(await realpath(path.resolve(root)));
+    } catch (error) {
+      if (error?.code !== "ENOENT") {
+        throw error;
+      }
+    }
+  }
+
+  return resolved;
+}
+
+export function buildCodexArgs({ model, localProvider = "ollama", worktree, finalMessagePath }) {
   return [
     "--ask-for-approval",
     "never",
     "exec",
     "--ignore-user-config",
     "--oss",
+    "--local-provider",
+    localProvider,
     "--model",
     model,
     "--cd",
@@ -74,6 +96,7 @@ export async function runLocalModelTask(input, options = {}) {
     allowedRoots: options.allowedRoots,
   });
   const model = input.model || process.env.OLLAMA_WORKER_DEFAULT_MODEL || "qwen2.5-coder:14b";
+  const localProvider = process.env.OLLAMA_WORKER_LOCAL_PROVIDER || "ollama";
   const runId = createRunId();
   const outputRoot = options.outputRoot || path.join(repo, ".codex", "ollama-worker-runs");
   const outputDir = path.join(outputRoot, runId);
@@ -86,6 +109,7 @@ export async function runLocalModelTask(input, options = {}) {
 
   const args = buildCodexArgs({
     model,
+    localProvider,
     worktree: repo,
     finalMessagePath,
   });

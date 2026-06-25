@@ -67,6 +67,18 @@ test("resolveAllowedRepoPath rejects repo paths outside allowed roots", async ()
   });
 });
 
+test("resolveAllowedRepoPath ignores missing allowed roots when another root allows the repo", async () => {
+  await withTempRepo(async (repoRoot) => {
+    const resolved = await resolveAllowedRepoPath({
+      repoPath: repoRoot,
+      processCwd: "/does/not/matter",
+      allowedRoots: [path.join(repoRoot, "missing-root"), path.dirname(repoRoot)],
+    });
+
+    assert.equal(resolved, await realpath(repoRoot));
+  });
+});
+
 test("createRunId includes a random suffix to avoid same-second collisions", () => {
   const first = createRunId(new Date("2026-06-25T12:34:56.000Z"));
   const second = createRunId(new Date("2026-06-25T12:34:56.000Z"));
@@ -79,6 +91,7 @@ test("createRunId includes a random suffix to avoid same-second collisions", () 
 test("buildCodexArgs puts approval mode before exec and prompt stdin marker last", () => {
   const args = buildCodexArgs({
     model: "qwen2.5-coder:14b",
+    localProvider: "ollama",
     worktree: "/tmp/worktree",
     finalMessagePath: "/tmp/out/final.md",
   });
@@ -86,6 +99,10 @@ test("buildCodexArgs puts approval mode before exec and prompt stdin marker last
   assert.deepEqual(args.slice(0, 3), ["--ask-for-approval", "never", "exec"]);
   assert.ok(args.includes("--ignore-user-config"));
   assert.ok(args.includes("--oss"));
+  assert.deepEqual(args.slice(args.indexOf("--local-provider"), args.indexOf("--local-provider") + 2), [
+    "--local-provider",
+    "ollama",
+  ]);
   assert.ok(args.includes("--ephemeral"));
   assert.equal(args.at(-1), "-");
 });
