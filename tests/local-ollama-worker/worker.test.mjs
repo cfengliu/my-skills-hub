@@ -1,8 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { mkdtemp, mkdir, realpath, rm, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
 import path from "node:path";
 import { tmpdir } from "node:os";
+import { promisify } from "node:util";
 
 import {
   buildCodexArgs,
@@ -11,11 +13,24 @@ import {
   runLocalModelTask,
 } from "../../mcps/local-ollama-worker/src/worker.ts";
 
+const execFileAsync = promisify(execFile);
+
 async function withTempRepo(callback) {
   const root = await mkdtemp(path.join(tmpdir(), "ollama-worker-test-"));
 
   try {
     await mkdir(path.join(root, ".git"), { recursive: true });
+    return await callback(root);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+}
+
+async function withRealTempRepo(callback) {
+  const root = await mkdtemp(path.join(tmpdir(), "ollama-worker-git-test-"));
+
+  try {
+    await execFileAsync("git", ["init"], { cwd: root });
     return await callback(root);
   } finally {
     await rm(root, { recursive: true, force: true });
@@ -136,5 +151,35 @@ test("runLocalModelTask writes artifacts and returns paths without embedding pat
     assert.equal(result.patch, undefined);
     assert.match(result.artifacts.patchPath, /patch\.diff$/);
     assert.match(result.artifacts.finalMessagePath, /final\.md$/);
+  });
+});
+
+test("runLocalModelTask patch artifact includes untracked files created by the worker", async () => {
+  await withRealTempRepo(async (repoRoot) => {
+    const result = await runLocalModelTask(
+      {
+        task: "Create a file",
+        repoPath: repoRoot,
+        model: "local-model",
+      },
+      {
+        processCwd: "/not/a/repo",
+        allowedRoots: [path.dirname(repoRoot)],
+        outputRoot: path.join(tmpdir(), "ollama-worker-artifacts"),
+        spawnCodex: async (_command, _args, options) => {
+          await writeFile(path.join(options.cwd, "created-by-worker.txt"), "hello\n", "utf8");
+          await writeFile(path.join(options.outputDir, "final.md"), "created file", "utf8");
+          return { exitCode: 0 };
+        },
+      },
+    );
+
+    const patch = await import("node:fs/promises").then((fs) =>
+      fs.readFile(result.artifacts.patchPath, "utf8"),
+    );
+
+    assert.match(patch, /diff --git a\/created-by-worker\.txt b\/created-by-worker\.txt/);
+    assert.match(patch, /new file mode/);
+    assert.match(patch, /\+hello/);
   });
 });

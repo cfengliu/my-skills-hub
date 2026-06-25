@@ -202,17 +202,50 @@ function spawnCodexProcess(command, args, options) {
   });
 }
 
-function collectGitDiff(repo) {
-  return new Promise((resolve) => {
-    const child = spawn("git", ["diff", "--binary"], {
+async function collectGitDiff(repo) {
+  const trackedDiff = await runGit(repo, ["diff", "--binary"]);
+  const untrackedFilesRaw = await runGit(repo, ["ls-files", "--others", "--exclude-standard", "-z"]);
+  const untrackedFiles = untrackedFilesRaw.split("\0").filter(Boolean);
+  const untrackedDiffs = [];
+
+  for (const file of untrackedFiles) {
+    const diff = await runGit(repo, ["diff", "--binary", "--no-index", "--", "/dev/null", file], {
+      allowExitCodes: [0, 1],
+    });
+    untrackedDiffs.push(normalizeNoIndexDiff(diff, file));
+  }
+
+  return [trackedDiff, ...untrackedDiffs].filter(Boolean).join("\n");
+}
+
+function runGit(repo, args, { allowExitCodes = [0] } = {}) {
+  return new Promise((resolve, reject) => {
+    const child = spawn("git", args, {
       cwd: repo,
       stdio: ["ignore", "pipe", "pipe"],
     });
-    const chunks = [];
-    child.stdout.on("data", (chunk) => chunks.push(chunk));
-    child.on("close", () => resolve(Buffer.concat(chunks).toString("utf8")));
-    child.on("error", () => resolve(""));
+    const stdout = [];
+    const stderr = [];
+
+    child.stdout.on("data", (chunk) => stdout.push(chunk));
+    child.stderr.on("data", (chunk) => stderr.push(chunk));
+    child.on("close", (exitCode) => {
+      const code = exitCode ?? 1;
+      if (!allowExitCodes.includes(code)) {
+        reject(new Error(Buffer.concat(stderr).toString("utf8") || `git ${args.join(" ")} failed`));
+        return;
+      }
+      resolve(Buffer.concat(stdout).toString("utf8"));
+    });
+    child.on("error", reject);
   });
+}
+
+function normalizeNoIndexDiff(diff, file) {
+  return diff
+    .replace(/^diff --git a\/dev\/null b\/(.+)$/m, `diff --git a/${file} b/${file}`)
+    .replace(/^--- \/dev\/null$/m, "--- /dev/null")
+    .replace(/^\+\+\+ b\/(.+)$/m, `+++ b/${file}`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

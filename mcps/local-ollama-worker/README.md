@@ -153,6 +153,13 @@ MCP tool 只回 artifact paths：
 
 外層 AI 要自己讀 `patch.diff`、`final.md`，不要把 patch 當 MCP response 直接吃。
 
+`patch.diff` 包含：
+
+- tracked file changes from `git diff --binary`
+- untracked files from `git ls-files --others --exclude-standard`
+
+所以新增檔案也會以 `new file mode` 出現在 patch artifact。
+
 ## CLI smoke test
 
 ```bash
