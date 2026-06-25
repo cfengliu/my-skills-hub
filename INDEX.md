@@ -59,6 +59,7 @@
 | Skill | Purpose |
 |---|---|
 | `skills/agent-workflows/task-harness` | 先把任務轉成可執行、可驗證、可交給人或 AI Agent 穩定完成的 harness。 |
+| `skills/agent-workflows/mcp-worker-prompt` | 將任務切成 MCP/local/Ollama worker 可安全執行的窄 prompt，限制檔案範圍、副作用與驗證方式，並要求外層 agent 檢查 artifacts。 |
 
 ## Templates
 
