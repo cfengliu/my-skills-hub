@@ -5,6 +5,7 @@ A central place for installable Codex plugins, standalone skills that are not pr
 ## Repository areas
 
 - `plugins/`: Productized, installable Codex plugins.
+- `mcps/`: Local MCP server source trees.
 - `skills/`: Standalone skills that are still incubating and have not been promoted into plugins.
 - `templates/`: Copyable governance, workflow, or project scaffold templates for other repositories.
 - `INDEX.md`: The full catalog. Update it whenever a plugin, skill, or template is added, moved, renamed, or deleted.
@@ -12,6 +13,7 @@ A central place for installable Codex plugins, standalone skills that are not pr
 ## Current assets
 
 - `plugins/engineering`: A Codex plugin for engineering design, boundaries, change safety, security, failure modes, verification, and simplicity.
+- `mcps/local-ollama-worker`: A local MCP server for bounded Ollama-backed Codex worker tasks.
 - `skills/reviews/first-principles-review`: A first-principles review skill for documents, designs, architecture, code, or diffs.
 - `skills/agent-workflows/task-harness`: A skill for turning work into executable, verifiable, and delegable task harnesses.
 - `templates/repo-governance`: An AI collaboration governance scaffold.

@@ -3,6 +3,7 @@
 這個 repo 用三區管理 Codex 能力：
 
 - `plugins/`：已產品化、可安裝的 Codex plugins。
+- `mcps/`：本機 MCP server 原始碼。
 - `skills/`：尚未升級成 plugin 的 standalone skills。
 - `templates/`：可複製到其他 repo 的治理、流程或專案骨架模板。
 
@@ -25,6 +26,21 @@
 | `plugins/engineering/skills/failure-first` | 先思考失敗模式、復原與降級策略。 |
 | `plugins/engineering/skills/security-first` | 先檢查權限、資料保護、濫用與攻擊面。 |
 | `plugins/engineering/skills/verification-first` | 把需求轉成測試、型別、CI 與驗證證據。 |
+
+## MCP Servers
+
+### Local Ollama Worker
+
+- Path: `mcps/local-ollama-worker`
+- Purpose: 本機 MCP server，提供 `run_local_model_task`，把 bounded repo task 交給 nested `codex exec` + local OSS/Ollama model 執行，並只回 artifact paths。
+
+| Asset | Purpose |
+|---|---|
+| `mcps/local-ollama-worker/src/server.ts` | MCP stdio server，宣告 `run_local_model_task` 並處理 initialize、tools/list、tools/call。 |
+| `mcps/local-ollama-worker/src/worker.ts` | MCP 與 CLI 共用 worker：驗證 allowed roots、建立 run artifacts、用 `spawn()` 呼叫 nested Codex。 |
+| `mcps/local-ollama-worker/bin/ollama-worker-mcp` | 本機 npm package 的 MCP server bin，可用 `npm exec --package <local path> -- ollama-worker-mcp` 執行。 |
+| `mcps/local-ollama-worker/bin/ollama-worker-cli` | CLI smoke test bin，直接從 stdin 收 `run_local_model_task` JSON。 |
+| `mcps/local-ollama-worker/README.md` | 安裝到 `~/.codex/local-mcp/ollama-worker/` 與 Codex config 範例。 |
 
 ## Standalone Skills
 
@@ -96,6 +112,7 @@
 ## Upgrade Rules
 
 - plugin 是可安裝單位：`plugins/<plugin-name>`。
+- MCP server 是本機工具原始碼：`mcps/<mcp-name>`。
 - standalone skill 是 incubator：`skills/<category>/<skill-name>`。
 - template 是可複製資產：`templates/<template-name>`。
 - skill 升級成 plugin 時，用搬移：`skills/<category>/<skill-name>` → `plugins/<plugin-name>/skills/<skill-name>`。
