@@ -11,11 +11,36 @@ Use local workers as narrow executors, not planners. The outer agent owns judgme
 
 Use this before calling tools like `run_local_model_task` or any local/Ollama-backed coding worker.
 
-Do not use this for broad product planning, architecture decisions, security-sensitive work, or tasks where the worker must infer intent from repo context.
+Good fits:
+
+- small file edits
+- repeated boilerplate code
+- single test-file case additions
+- deterministic helper functions with clear input/output
+- “edit only this file; do not touch anything else” tasks
+
+Bad fits:
+
+- whole features from vague intent
+- architecture decisions
+- cross-frontend/backend integration
+- work requiring broad repo context
+- security, deployment, migration, or data-risky changes
 
 ## Core rule
 
 Give the worker one small, file-scoped task with explicit verification. Never ask it to “inspect and implement” unless the inspection target is a named file list.
+
+Treat the worker as a cheap junior executor, not an autonomous engineer. It may hallucinate tool calls, install dependencies, import wrong modules, violate contracts, or time out unless constrained.
+
+## Control loop
+
+1. Slice the task small.
+2. Name exact files.
+3. Ban dependency installs and network.
+4. Provide fixed verification commands.
+5. Review artifacts, diff, and actual workspace state yourself.
+6. Fix or retry only with a narrower correction prompt.
 
 ## Prompt template
 
