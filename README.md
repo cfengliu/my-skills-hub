@@ -16,6 +16,7 @@ A central place for installable Codex plugins, standalone skills that are not pr
 - `mcps/local-ollama-worker`: A local MCP server for bounded Ollama-backed Codex worker tasks.
 - `skills/reviews/first-principles-review`: A first-principles review skill for documents, designs, architecture, code, or diffs.
 - `skills/agent-workflows/task-harness`: A skill for turning work into executable, verifiable, and delegable task harnesses.
+- `skills/frontend/css-theme-migration`: A CSS theme migration skill for turning hardcoded dark UI colors into light/dark semantic theme tokens.
 - `templates/repo-governance`: An AI collaboration governance scaffold.
 - `templates/repo-governance-v2`: An upgradeable full AI collaboration governance kit.
 

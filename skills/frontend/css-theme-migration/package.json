@@ -1,0 +1,9 @@
+{
+  "name": "css-theme-migration-skill",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "colors": "node scripts/extract-colors.mjs",
+    "check:colors": "node scripts/check-hardcoded-colors.mjs"
+  }
+}
