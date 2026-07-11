@@ -1,0 +1,4 @@
+interface:
+  display_name: "Extract Session Workflow"
+  short_description: "Extract reusable workflows from conversation sessions"
+  default_prompt: "Use $extract-session-workflow to extract a reusable workflow from this conversation session, preserving decisions, triggers, outputs, evidence, and verification."
