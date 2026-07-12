@@ -61,6 +61,7 @@
 | `skills/agent-workflows/task-harness` | 先把任務轉成可執行、可驗證、可交給人或 AI Agent 穩定完成的 harness。 |
 | `skills/agent-workflows/mcp-worker-prompt` | 將任務切成 MCP/local/Ollama worker 可安全執行的窄 prompt，限制檔案範圍、副作用與驗證方式，並要求外層 agent 檢查 artifacts。 |
 | `skills/agent-workflows/extract-session-workflow` | 從對話 session、Codex thread、agent run 或 handoff log 抽取可重複執行的 workflow，保留觸發條件、決策點、輸出、驗證 gate 與 evidence strength。 |
+| `skills/agent-workflows/repository-drift-control` | 對 repo 文件、governance 與 agent instructions 做斷捨離：刪除重複與過期殘留、合併規則、釐清 owner、簡化結構並保留 accepted truth 與 hard gates。 |
 
 ### Frontend
 
