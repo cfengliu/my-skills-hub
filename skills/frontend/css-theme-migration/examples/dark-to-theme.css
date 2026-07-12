@@ -1,0 +1,42 @@
+/* BEFORE */
+.card {
+  background: #111827;
+  color: #f9fafb;
+  border: 1px solid #374151;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* AFTER */
+:root {
+  color-scheme: light;
+  --color-surface: #ffffff;
+  --color-text: #0f172a;
+  --color-border: #e2e8f0;
+  --color-hover: #f8fafc;
+  --shadow-color: rgba(15, 23, 42, 0.12);
+}
+
+[data-theme="dark"],
+.dark {
+  color-scheme: dark;
+  --color-surface: #111827;
+  --color-text: #f9fafb;
+  --color-border: #374151;
+  --color-hover: rgba(255, 255, 255, 0.06);
+  --shadow-color: rgba(0, 0, 0, 0.35);
+}
+
+.card {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 12px 30px var(--shadow-color);
+}
+
+.card:hover {
+  background: var(--color-hover);
+}

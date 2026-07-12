@@ -1,0 +1,7 @@
+.venv/
+
+.DS_Store
+.superpowers/
+.worktrees/
+
+.codex/ollama-worker-runs/

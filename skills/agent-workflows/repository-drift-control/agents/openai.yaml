@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repository Drift Control"
+  short_description: "Declutter repository docs without losing truth"
+  default_prompt: "Use $repository-drift-control to simplify repository documents, consolidate duplicated rules, remove stale residue, and preserve accepted truth, traceability, and hard gates."

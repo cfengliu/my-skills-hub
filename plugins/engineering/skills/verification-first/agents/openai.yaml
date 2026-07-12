@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verification First"
+  short_description: "Turn requirements into tests and checks"
+  default_prompt: "Use $verification-first to create a verification strategy from requirements and edge cases."

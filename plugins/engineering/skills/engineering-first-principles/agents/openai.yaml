@@ -1,0 +1,4 @@
+interface:
+  display_name: "Engineering First Principles"
+  short_description: "7-step engineering system design workflow"
+  default_prompt: "Use $engineering-first-principles to design this software system with the seven first-principles checks."

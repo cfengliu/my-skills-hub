@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security First"
+  short_description: "Protect assets, permissions, secrets, and cost"
+  default_prompt: "Use $security-first to threat-model assets, trust boundaries, authz, inputs, secrets, quotas, and audit logs."
