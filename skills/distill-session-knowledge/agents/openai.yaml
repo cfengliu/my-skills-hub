@@ -1,0 +1,4 @@
+interface:
+  display_name: "Session Knowledge Distillation"
+  short_description: "Extract reusable lessons and repeatable workflows"
+  default_prompt: "Use $distill-session-knowledge to extract evidence-backed lessons and repeatable workflows from this session, then recommend what to preserve and where."
