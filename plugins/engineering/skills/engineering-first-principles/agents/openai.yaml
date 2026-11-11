@@ -1,4 +1,0 @@
-interface:
-  display_name: "Engineering First Principles"
-  short_description: "Risk-based engineering skill selection"
-  default_prompt: "Use $engineering-first-principles to select the engineering concerns needed for this task and produce a focused, verifiable result."

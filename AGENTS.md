@@ -1,65 +1,21 @@
 # AGENTS.md
 
-## 語言
+## 語言與輸出
 
-- 一律用台灣中文回答。
-- code comment 一律用英文。
+- 一律用台灣中文回答；code comment 用英文。
+- 制定或修改規則、模板時，逐句檢查必要性，刪除無助於決策、修改或驗證的內容。
 
-## 輸出時
+## Repo 結構
 
-- 制定或修改規則、模板時，AI 必須逐句檢查「這句有沒有必要」；沒有必要就刪掉，只輸出能推進決策、修改或驗證的內容。
+- 目前只維護 standalone skills，放在 `skills/<category>/<skill-name>/`。
+- category 依領域、角色或使用場景命名；category 與 skill 資料夾名稱使用 kebab-case。
+- 每個 skill 必須自包含；主要內容放在自己的 `SKILL.md`，必要資源放在同一資料夾。
+- 有實際內容才建立 category 或 supporting folders；不在 repo root 直接放 skill，不建立 `dist/`。
+- `INDEX.md` 只做 catalog，列出 category、用途、每個 skill 的路徑與用途。
 
-## Repo 目標
+## SKILL.md
 
-- 這個 repo 維護可安裝的 Codex plugins、standalone skills、本機 MCP servers 與可複製的 templates。
-- `plugins/` 放已產品化、可安裝的 plugin。
-- `skills/` 放還沒升級成 plugin 的 standalone skill。
-- `mcps/` 放本機 MCP server 原始碼與安裝所需資產。
-- `templates/` 放可複製到其他 repo 的治理、流程或專案骨架模板。
-- 同一個 skill 不可同時存在 `plugins/` 與 `skills/`，避免內容 drift。
-- `INDEX.md` 只做 catalog；不可取代實際 plugin、skill 或 template 資料夾。
-
-## Plugin 規則
-
-- 一個 plugin 必須是一個自包含資料夾：`plugins/<plugin-name>/`。
-- plugin 資料夾名稱使用 kebab-case。
-- 每個 plugin 必須包含 `.codex-plugin/plugin.json`。
-- plugin 內的 skills 放在 `plugins/<plugin-name>/skills/<skill-name>/`。
-- plugin 內每個 skill 仍然必須自包含，主要內容放在該 skill 資料夾的 `SKILL.md`。
-- `plugin.json` 的 `name` 必須等於 plugin 資料夾名稱。
-- `plugin.json` 必須包含可驗證的 `version`、`description`、`author.name`、`skills` 與必要 `interface` 欄位。
-- 不要在 plugin 內建立空的 supporting folders；有實際內容時才建立。
-
-## Standalone Skill 規則
-
-- standalone skill 必須放在 `skills/<category>/<skill-name>/`。
-- category 用領域、角色或使用場景命名。
-- category 名稱使用 kebab-case。
-- skill 資料夾名稱使用 kebab-case。
-- 不要建立空 category；有第一個 skill 時才建立 category。
-- standalone skill 升級成 plugin skill 時，必須搬移，不可複製。
-
-## Template 規則
-
-- template 必須放在 `templates/<template-name>/`。
-- template 資料夾名稱使用 kebab-case。
-- template 是可複製資產，不是 Codex plugin，也不是 standalone skill。
-- template 可包含 `AGENTS.md`、`docs/`、`.agents/skills/` 或其他實際會被複製到目標 repo 的檔案。
-- 不要在 template 內建立空的 supporting folders；有實際內容時才建立。
-- template 內容若包含 `SKILL.md`，仍必須符合本文件的 `SKILL.md` 規則。
-- template 內容應泛化成可移植形式；專案專屬常數、路徑、服務名稱或 domain skill 應使用 placeholder 或範例說明。
-
-## MCP 與產物規則
-
-- MCP server 放在 `mcps/<mcp-name>/`，名稱使用 kebab-case。
-- MCP 必須記錄安裝、設定、輸入輸出、執行權限與驗證方式。
-- MCP 的原始碼是維護來源，編譯產物由 build 指令產生。
-- 預設不建立 repo root `dist/`；只有 runtime 不支援巢狀 skill discovery 時，才產生 skill distribution。
-- 不手動修改產物內的 skill；MCP 自己的 `dist/` 不受 skill discovery 條件限制。
-
-## `SKILL.md` 規則
-
-- 每個 `SKILL.md` 開頭必須有 frontmatter：
+每個檔案以 frontmatter 開頭：
 
 ```md
 ---
@@ -68,52 +24,17 @@ description: "Use when ..."
 ---
 ```
 
-- `name` 必須等於 skill 資料夾名稱。
-- `name` 不可加 plugin 或 category 前綴。
-- `description` 必須描述觸發情境。
-- `description` 不可寫成流程摘要。
-- 內文必須直接、可操作、可驗證。
-- 內文必須至少回答：
-  - 什麼情境要用
-  - 為什麼要用
-  - 產出格式是什麼
-  - 具體流程是什麼
-  - 完成前要檢查什麼
-- 範本必須使用 Markdown code fence。
-- 不要新增空泛章節。
-- 不要為了漂亮犧牲可操作性。
+- `name` 等於資料夾名稱，不加 category 前綴。
+- `description` 描述觸發情境，不寫流程摘要。
+- 內文說明使用情境、目的、產出格式、具體流程與完成檢查；指令必須可操作、可驗證。
+- 範本使用 Markdown code fence；只保留有用途的章節。
 
-## `INDEX.md` 規則
+## 變更與驗證
 
-- 新增、移動、改名、刪除 plugin、skill、MCP 或 template 時，必須同步更新 `INDEX.md`。
-- `INDEX.md` 必須列出：
-  - plugin 名稱、用途、path、內含 skills
-  - standalone skill category、用途、path、skill purpose
-  - template 名稱、用途、path、內含 assets
-  - MCP 名稱、用途、path、執行入口
-- `INDEX.md` 不放長篇教學。
-
-## 資產變更流程
-
-1. 判斷正確類型與放置位置：plugin 是可安裝單位、standalone skill 是 incubator、MCP 是本機工具、template 是可複製資產。不要將 runtime-only workflow 放進 template，也不要用 hub 名稱當 plugin 名稱。
-2. 新增時建立必要內容；plugin 包含 manifest，skill 包含有效 frontmatter 與可直接使用的輸出，template 將專案常數泛化。
-3. 搬移或改名時保留內容與 supporting files；同步 plugin manifest 或 skill frontmatter 的 `name`。standalone skill 升級時搬到正確 plugin，保留 supporting files 並更新 manifest，不保留副本。
-4. 刪除前確認不應搬到其他類型或位置；刪除已失去用途的資產與專屬配套。
-5. 更新 `INDEX.md`、受影響的引用與安裝說明，並執行下列驗證。
-
-## 驗證規則
-
-- 修改後必須檢查 Markdown 結構。
-- 新增、移動、改名 skill 後，必須檢查所有 `plugins/*/skills/*/SKILL.md`、`skills/*/*/SKILL.md` 與 `templates/*/**/SKILL.md` 的 `name` 是否等於資料夾名稱。
-- 必須確認 repo root 沒有直接放 skill 資料夾。
-- 必須確認 `INDEX.md` 沒漏掉既有 plugins、standalone skills、MCP 或 templates，且列出的資產路徑存在。
-- 必須確認每個 `plugins/*/.codex-plugin/plugin.json` 存在且可被 plugin validator 驗證。
-
-### 現有驗證指令
-
-```sh
-node scripts/package-plugin.mjs --all --check
-node --test tests/war-room/*.test.mjs tests/local-ollama-worker/*.test.mjs
-```
-
-第一個指令只涵蓋 plugin 名稱、skills 與目錄收錄等部分檢查，不是完整 metadata schema validator；其餘規則仍須核對。第二個指令驗證 MCP 與 War Room 行為，變更相關工具時執行。
+1. 新增時選擇正確 category，建立可直接使用的 skill 與必要資源。
+2. 搬移或改名時保留 supporting files；改名後同步 frontmatter 的 `name`。
+3. 刪除前確認不應搬到其他位置；同步移除失去用途的配套。
+4. 更新 `INDEX.md` 與受影響引用。
+5. 檢查 Markdown 結構、連結、所有 skill 的 frontmatter 與資料夾名稱。
+6. 確認 catalog 完整、列出的路徑存在、沒有重複 skill、空資料夾或 root skill。
+7. 修改執行腳本時，執行相關行為驗證，回報實際結果與略過項目。

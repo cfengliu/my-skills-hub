@@ -1,4 +1,0 @@
-interface:
-  display_name: "Boundary First"
-  short_description: "Cut clear module, data, API, and state boundaries"
-  default_prompt: "Use $boundary-first to define module boundaries, data ownership, API contracts, and state transitions."

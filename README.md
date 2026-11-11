@@ -1,45 +1,11 @@
 # My Skills Hub
 
-A central place for installable Codex plugins, standalone skills that are not productized yet, and templates that can be copied into other repositories.
+可獨立安裝與維護的 Codex skills。完整用途與路徑見 [INDEX.md](INDEX.md)。
 
-## Repository areas
+## 使用
 
-- `plugins/`: Productized, installable Codex plugins.
-- `mcps/`: Local MCP server source trees.
-- `skills/`: Standalone skills that are still incubating and have not been promoted into plugins.
-- `templates/`: Copyable governance, workflow, or project scaffold templates for other repositories.
-- `INDEX.md`: The full catalog. Update it whenever a plugin, skill, or template is added, moved, renamed, or deleted.
+將需要的 skill 資料夾完整複製到 `~/.codex/skills/<skill-name>/`，包含其中的 scripts、examples 與 agents 設定。
 
-See [`INDEX.md`](INDEX.md) for assets, purposes, and paths.
+## 維護
 
-## Plugin package / install
-
-Check one plugin:
-
-```bash
-node scripts/package-plugin.mjs engineering --check
-```
-
-Sync one plugin to the local Codex plugin location and update the personal marketplace:
-
-```bash
-node scripts/package-plugin.mjs engineering
-```
-
-Check all plugins:
-
-```bash
-node scripts/package-plugin.mjs --all --check
-```
-
-See [`docs/package-plugin.md`](docs/package-plugin.md) for details.
-
-## Maintenance rules
-
-- Do not keep the same skill in both `plugins/` and `skills/`.
-- Every plugin must include `.codex-plugin/plugin.json`.
-- Every skill must be self-contained, with its main content in its own `SKILL.md`.
-- A `SKILL.md` frontmatter `name` must match the skill folder name.
-- Do not create empty supporting folders.
-- Do not create `dist/` by default; only add it if the runtime cannot discover nested skills.
-- After changes, verify Markdown structure, skill names, plugin metadata, and `INDEX.md` coverage.
+遵循 [AGENTS.md](AGENTS.md)。新增、移動、改名或刪除 skill 時，同步更新 `INDEX.md`。
