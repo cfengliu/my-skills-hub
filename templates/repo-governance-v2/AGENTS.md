@@ -1,8 +1,8 @@
 <!--
 Managed by repo-governance template.
 Replaceable during template upgrades.
-Do not put repo-specific rules here.
-Repo-specific truth belongs in docs/governance/local/*.
+Do not edit in consuming repos.
+Repo-specific specialization belongs in docs/governance/local/*.
 -->
 # AGENTS.md
 
@@ -61,68 +61,18 @@ Policy owners:
 - decision promotion gates and unresolved assumption handling: `docs/governance/managed/process.md`, `docs/governance/managed/doc-sync.md`, and `.agents/skills/decision-advisor/SKILL.md`
 - upgrade allowlist, denylist, initialization-only paths, required files, and compatibility checks: `docs/governance/MANIFEST.md`
 
-## 3) Governance Sources
+## 3) Ownership And Initialization
 
-Template-managed governance modules:
+The policy owners in Section 2 define managed procedures. `docs/governance/MANIFEST.md` owns the exact managed control skill set, upgrade allowlist, denylist, required files, and initialization examples.
 
-- `docs/governance/managed/process.md`
-- `docs/governance/managed/verification.md`
-- `docs/governance/managed/release.md`
-- `docs/governance/managed/subagents.md`
-- `docs/governance/managed/doc-sync.md`
+- Managed governance and control skill files may be replaced only according to the manifest.
+- `docs/governance/local/*`, `.agents/skills/local/*`, and expert skills outside the managed control set belong to the consuming repo and must survive upgrades.
+- Discover repo-owned expert skill frontmatter and select relevant skills for the task; see `.agents/skills/runtime-adapter/SKILL.md` when a context handoff is needed.
+- The domain owners in Section 1 become accepted truth only after initialization and confirmation. Empty sections, placeholders, or missing files mean `unknown`.
+- `tdd.md` means Technical Design and owns verification strategy, including Test-Driven Development checks. PRD owns BDD acceptance scenarios.
+- Roadmap owns sequencing; epics own child requirement details. Requirements use `E-003-001`; delivery slices use `E-003A`. Requirement List owns requirement status, acceptance, evidence, gaps, and next step.
 
-Template-managed control skills:
-
-- `.agents/skills/runtime-adapter/SKILL.md`
-- `.agents/skills/subagent-routing/SKILL.md`
-- `.agents/skills/verifier/SKILL.md`
-- `.agents/skills/release-gate/SKILL.md`
-- `.agents/skills/drift-repair/SKILL.md`
-- `.agents/skills/decision-advisor/SKILL.md`
-
-Repo-owned local truth after initialization:
-
-- `docs/governance/local/ops.md`
-- `docs/governance/local/prd.md`
-- `docs/governance/local/tdd.md`
-- `docs/governance/local/roadmap.md`
-- `docs/governance/local/security.md`
-- `docs/governance/local/epics/README.md`
-- `docs/governance/local/epics/E-xxx-<topic>.md`, when a large workstream needs child requirement tracking
-
-Repo-owned skills after initialization:
-
-- `.agents/skills/local/*` for repo-owned local extensions
-- `.agents/skills/<skill-name>/SKILL.md` for repo-specific expert skills, except the template-managed control skills listed above
-
-Repo-specific expert skills remain active when present. The runtime-adapter must discover their frontmatter and select the relevant ones for the current task.
-
-## 4) Ownership
-
-Files under `docs/governance/managed/` and template-managed control skill paths are owned by the repo-governance template and may be replaced during template upgrades.
-
-Files under `docs/governance/local/` are owned by the consuming repo and must not be overwritten during template upgrades.
-
-Files under `.agents/skills/local/*` and repo-specific expert skills outside the managed control skill set are owned by the consuming repo and must not be overwritten during template upgrades.
-
-Template upgrade allowlist, denylist, and required-file contract are authoritative in `docs/governance/MANIFEST.md`.
-
-## 5) Local Truth Model
-
-Repo-owned local truth uses these roles:
-
-- `prd.md`: accepted product behavior, UI / UX decisions, user-facing flows, acceptance criteria, and BDD source authority.
-- `tdd.md`: accepted technical design, architecture boundaries, API contracts, data models, verification strategy, and Test-Driven Development source authority.
-- `ops.md`: commands, environments, release process, model policy, operator notes path, and operational constants.
-- `security.md`: security, privacy, PII handling, authentication and authorization boundaries, auditability, retention, secrets handling, and abuse controls.
-- `roadmap.md`: priority dashboard for Now / Next / Later / Done / Parked work.
-- `epics/*`: requirement ledgers for large workstreams, child requirement status, source, PRD/Technical Design promotion, evidence, and next step.
-
-Empty sections, placeholders, or missing local files mean `unknown`, not accepted truth.
-
-Roadmap decides sequencing only. Epics track details only. PRD owns final accepted product truth. Technical Design (`tdd.md`) owns final accepted technical truth. Ops owns operational truth. Security owns security and privacy truth. Requirements use `E-003-001`; delivery slices use `E-003A`; Requirement List owns requirement status, acceptance, evidence, gaps, and next step. If roadmap, epic, plan, or historical docs conflict with the domain owner, treat the stale source as stale and synchronize before making a meaningful completion claim.
-
-## 6) Roadmap And Epic Coordination
+## 4) Roadmap And Epic Coordination
 
 For progress, roadmap, epic, next-work, done-state, or drift requests:
 
@@ -134,7 +84,7 @@ For progress, roadmap, epic, next-work, done-state, or drift requests:
 - Do not invent priority, accepted requirements, completion evidence, or verification results.
 - Completion claims still require verifier or an equivalent independent verification pass.
 
-## 7) Runtime Artifacts
+## 5) Runtime Artifacts
 
 Runtime-generated specs, plans, scratch notes, review notes, execution artifacts, and temporary files are working materials.
 
@@ -142,7 +92,7 @@ They become canonical only if the user or maintainer explicitly promotes them in
 
 Path alone does not make an artifact canonical.
 
-## 8) Minimum Completion Requirements
+## 6) Minimum Completion Requirements
 
 Meaningful completion reports must include:
 

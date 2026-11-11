@@ -58,12 +58,12 @@ subagent_routing_decision:
 
 ## Decision Procedure
 
-1. Load `docs/governance/managed/subagents.md`.
-2. Classify each planned task as `main-runtime-only`, `delegable`, `inline`, or `blocked_or_unclear`.
-3. Delegate only bounded, low-risk, explicitly scoped tasks whose output can be independently reviewed and verified.
-4. Keep planning, requirement interpretation, architecture, security, release, destructive actions, verifier ownership, release-gate ownership, final diff review, and final judgment in the main runtime.
-5. If scope is unclear or a hard gate may be crossed, mark the task blocked or main-runtime-only.
+1. Read `docs/governance/managed/subagents.md` for delegation eligibility, forbidden responsibilities, output requirements, and main-runtime authority.
+2. Classify each planned task using that policy and its known read/write scope. Mark unresolved scope or gate conflicts as blocked or main-runtime-only.
+3. Return the routing packet without executing tasks or starting agents. Subagent output is evidence; final integration and judgment remain with the main runtime.
 
-## Authority Boundary
+## Completion Check
 
-Subagent output is evidence, not authority. Main runtime owns integration, diff review, verification, doc sync judgment, release-gate handling, and final response.
+- Every planned task has a classification and reason.
+- Delegable tasks have bounded scopes, verification, and escalation conditions.
+- The classification preserves managed policy and does not imply authorization to delegate.

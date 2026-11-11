@@ -10,7 +10,7 @@ This manifest owns the template upgrade and compatibility contract.
 
 ## Version
 
-`2.2.4`
+`2.2.5`
 
 ## Replaceable During Upgrade
 
@@ -141,10 +141,10 @@ If a path is not clearly allowed, do not overwrite it automatically.
 
 ## Compatibility Checklist
 
-Before claiming a repo is using governance v2.2.4, check:
+Before claiming a repo is using governance v2.2.5, check:
 
 - `AGENTS.md` exists and points to `docs/governance/*`.
-- `docs/governance/VERSION` exists and is `2.2.4` or newer.
+- `docs/governance/VERSION` exists and is `2.2.5` or newer.
 - `docs/governance/MANIFEST.md` exists and owns the upgrade contract.
 - Required managed governance modules exist.
 - Required managed control skills exist.

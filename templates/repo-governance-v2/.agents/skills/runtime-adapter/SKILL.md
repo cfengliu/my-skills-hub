@@ -1,6 +1,6 @@
 ---
 name: runtime-adapter
-description: Use at task start when an external workflow runtime needs repo governance context, hard gates, local truth boundaries, and relevant repo-specific entrypoints without taking over planning, implementation, subagent orchestration, verification, release approval, artifact paths, branch strategy, or workflow routing.
+description: "Use when an external workflow runtime needs a compact handoff of repo governance, hard gates, local truth references, and relevant expert skills."
 ---
 <!--
 Managed by repo-governance template.
@@ -11,13 +11,9 @@ Repo-specific specialization belongs in docs/governance/local/*.
 
 # Runtime Adapter
 
-## Scope Lock
+## Purpose
 
-This skill provides repo governance context to the active runtime.
-
-It does not own planning, implementation, subagent orchestration, verification, release approval, artifact paths, branch strategy, or workflow routing.
-
-It may only help the runtime identify relevant governance files, hard gates, local truth boundaries, and repo-specific context entrypoints.
+Provide governance context when the active runtime needs a handoff packet. The active runtime retains planning, execution, orchestration, verification, release approval, artifact paths, and branch decisions.
 
 ## Policy Sources
 
@@ -87,24 +83,8 @@ Treat remaining skills as repo-owned expert skills. They remain active even when
 
 Select only expert skills whose `description` matches the task. Return selected and intentionally skipped expert skills in `repo_expert_skills` so the active runtime can see which domain invariants were considered.
 
-## Local Context Selection
+## Context Selection And Completion
 
-- Use `ops.md` for commands, environment, release, model policy, and operator notes path.
-- Use `security.md` for security, privacy, PII, auth/authz boundaries, auditability, retention, secrets, and abuse controls.
-- Use `prd.md` for product behavior, UI / UX, user-facing flows, and acceptance.
-- Use `tdd.md` for technical design, architecture, API, schema, data, and verification strategy.
-- Use `roadmap.md` for Now / Next / Later / Done / Parked sequencing.
-- Use the relevant epic file only when the task touches a large workstream's child requirement details.
-- Use selected repo expert skills for repo-specific invariants, verification maps, and domain-specific warnings.
+Use the domain lookup in `AGENTS.md` to select local files. Load only files relevant to the task and selected expert skill bodies when their invariants are needed.
 
-Do not load every local file or every expert skill body by default. Frontmatter discovery is enough for selection; load the selected skill body only when its invariants are needed.
-
-## Do Not
-
-- create plans
-- implement code
-- verify completion
-- approve release-sensitive actions
-- choose subagent count, roles, or order
-- decide artifact paths or branch strategy
-- become a workflow router
+Before returning, confirm references exist or are marked unknown, expert skills were selected from their descriptions, and the packet supplies context without taking over workflow or granting approvals.
