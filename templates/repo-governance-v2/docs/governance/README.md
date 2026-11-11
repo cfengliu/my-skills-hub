@@ -6,7 +6,7 @@ Repo-specific specialization belongs in docs/governance/local/*.
 -->
 # Repo Governance
 
-Repo-governance v2.2.4 是給 AI-assisted repo 使用的完整治理套件。
+Repo-governance v2.2.5 是給 AI-assisted repo 使用的完整治理套件。
 
 它不是輕量 template；它是可升級的 repo 憲法系統：
 
@@ -26,7 +26,7 @@ Repo-governance v2.2.4 是給 AI-assisted repo 使用的完整治理套件。
 
 ## 架構
 
-v2.2.4 有兩條使用路徑、三層責任、五個 managed rule owners、六個 managed control skills。
+v2.2.5 有兩條使用路徑、三層責任、五個 managed rule owners、六個 managed control skills。
 
 ### 兩條使用路徑
 
@@ -271,12 +271,12 @@ flowchart TD
 
 ## 相容性檢查
 
-聲稱 repo 使用 governance v2.2.4 前，依 `docs/governance/MANIFEST.md` 的 compatibility checklist 檢查。
+聲稱 repo 使用 governance v2.2.5 前，依 `docs/governance/MANIFEST.md` 的 compatibility checklist 檢查。
 
 最少要確認：
 
 - `AGENTS.md` 存在並指向 `docs/governance/*`。
-- `VERSION` 是 `2.2.4` 或更新。
+- `VERSION` 是 `2.2.5` 或更新。
 - `MANIFEST.md` 存在且是 upgrade contract owner。
 - 五個 managed modules 都存在。
 - 六個 managed control skills 都存在。

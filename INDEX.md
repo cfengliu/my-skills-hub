@@ -1,6 +1,6 @@
 # Skills Hub Index
 
-這個 repo 用三區管理 Codex 能力：
+這個 repo 用四區管理 Codex 能力：
 
 - `plugins/`：已產品化、可安裝的 Codex plugins。
 - `mcps/`：本機 MCP server 原始碼。
@@ -58,7 +58,7 @@
 
 | Skill | Purpose |
 |---|---|
-| `skills/agent-workflows/task-harness` | 先把任務轉成可執行、可驗證、可交給人或 AI Agent 穩定完成的 harness。 |
+| `skills/agent-workflows/task-harness` | 為交接、委派、重複執行或自動化建立單一任務契約，定義範圍、產出與驗收。 |
 | `skills/agent-workflows/mcp-worker-prompt` | 將任務切成 MCP/local/Ollama worker 可安全執行的窄 prompt，限制檔案範圍、副作用與驗證方式，並要求外層 agent 檢查 artifacts。 |
 | `skills/agent-workflows/extract-session-workflow` | 從對話 session、Codex thread、agent run 或 handoff log 抽取可重複執行的 workflow，保留觸發條件、決策點、輸出、驗證 gate 與 evidence strength。 |
 | `skills/agent-workflows/repository-drift-control` | 對 repo 文件、governance 與 agent instructions 做斷捨離：刪除重複與過期殘留、合併規則、釐清 owner、簡化結構並保留 accepted truth 與 hard gates。 |
@@ -72,22 +72,6 @@
 | `skills/frontend/css-theme-migration` | 將 dark-mode-only CSS 或 UI code 遷移成可維護的 light/dark semantic theme token system，保留 visual hierarchy、brand accent 與 contrast。 |
 
 ## Templates
-
-### Repo Governance
-
-- Path: `templates/repo-governance`
-- Purpose: 可複製到任意 repo 的 AI 協作治理骨架，定義 repo source of truth、runtime boundary、human gates、verification、release gate 與 recovery contract。
-
-| Asset | Purpose |
-|---|---|
-| `templates/repo-governance/AGENTS.md` | repo 協作憲章模板，定義指令優先序、runtime boundary、model / subagent policy、source of truth、human gates、verification、release 與 recovery contract。 |
-| `templates/repo-governance/docs/README.md` | `docs/` 入口與按需讀取 canonical truth 的導覽模板。 |
-| `templates/repo-governance/docs/process.md` | promotion pipeline、delivery closure、planning threshold、planned task execution routing、runtime artifact sync 與 completion claim taxonomy 模板。 |
-| `templates/repo-governance/docs/ops.md` | model policy、dev server、verification、backup/restore、deploy/release 與 destructive change 操作常數模板。 |
-| `templates/repo-governance/.agents/skills/runtime-adapter` | generic repo-local control skill：選擇最小必要 expert skills 並注入 canonical repo truth。 |
-| `templates/repo-governance/.agents/skills/subagent-routing` | 泛用 repo-local control skill：在明確 plan / task list 出現後，將任務分類為 main-runtime-only、delegable、inline 或 blocked，且不執行任務。 |
-| `templates/repo-governance/.agents/skills/release-gate` | generic repo-local control skill：對 release-sensitive actions 與 destructive environment actions 做 go / hold / require-human 判定。 |
-| `templates/repo-governance/.agents/skills/verifier` | generic repo-local control skill：獨立驗證 correctness、regressions、repo-truth alignment 與 doc sync。 |
 
 ### Repo Governance v2
 
