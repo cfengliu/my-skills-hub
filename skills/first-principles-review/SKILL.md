@@ -1,117 +1,42 @@
 ---
 name: first-principles-review
-description: Review documents, proposals, requirements, architecture notes, code, modules, or diffs from first principles. Use when Codex must challenge assumptions, constraints, invariants, false confidence, failure modes, dependency choices, duplication, redundancy, or accidental complexity instead of giving a surface-level style review, including requests like "use first principles to inspect this document or code", "用第一原理檢查文件/代碼", or "從第一原理拆解這個設計".
+description: "Use when reviewing a document, proposal, design, code module, or diff to challenge its assumptions, invariants, evidence of correctness, or unnecessary complexity."
 ---
 
 # First Principles Review
 
-## Overview
+Assess whether an artifact achieves its intended job and which parts are necessary. Ground findings in consequences and evidence so the review changes decisions rather than expressing taste.
 
-Evaluate an artifact by reducing it to purpose, constraints, invariants, inputs, outputs, and essential moving parts. Prefer deletion, simplification, consolidation, and clearer boundaries over ornamental abstractions or style commentary.
+## Review
 
-## Assumption Challenge Mode
+1. Identify the intended outcome, who depends on it, and the constraints that actually bind it. Distinguish accepted requirements from preferences, habits, and unproven assumptions.
+2. Derive the minimum inputs, outputs, invariants, dependencies, and failure conditions needed for that outcome. Use this model to judge the existing design rather than assuming its structure is necessary.
+3. Trace the claims that matter to their enforcement:
+   - For documents, check whether definitions, premises, and conclusions support one another and whether rules change an action or decision.
+   - For code, trace data flow, state transitions, ownership, and callers to find where guarantees are enforced or bypassed.
+   - For validation, inspect what the check actually proves. File existence, schema declarations, exit code zero, and generated output alone do not establish use, enforcement, or correctness.
+4. Test simpler alternatives against the same constraints. Flag duplicated responsibility, dead paths, pass-through layers, or abstractions only when removing them preserves required behavior or exposes a justified tradeoff. Repetition may be intentional; explain its actual cost before recommending removal.
+5. Rank findings by their consequences for users, correctness, risk, and maintenance. For each finding, explain the failed premise or mechanism, supporting evidence, and smallest corrective direction. Omit cosmetic preferences unless they hide a substantive problem.
 
-When the user asks to "challenge", "push back", "質疑", "挑戰", or verify whether something is truly ready, bias toward adversarial but constructive review.
+Missing evidence is an uncertainty, not proof of failure. State what would resolve it; call it a blocker only when the requested decision depends on that evidence. Separate observed facts, assumptions, and open questions in claims that affect the verdict.
 
-Focus on false confidence:
-- A script passes but does not verify the core invariant.
-- A schema exists but no runtime path uses it.
-- A command exits 0 while producing empty or useless output.
-- Documentation says a workflow works, but actual cwd/package boundaries disagree.
-- A report can be generated from invalid, partial, or misleading data.
+Review findings do not authorize implementation. If the user also requests fixes, apply the supported changes within that scope.
 
-Do not invent blockers. Separate:
-- **Fact:** directly observed in code, docs, commands, or outputs.
-- **Assumption:** currently required for the conclusion but not proven.
-- **Open question:** missing info that changes the decision.
+## Output
 
-## Workflow
+Lead with the highest-impact findings. Use this structure for each actionable finding:
 
-1. Define the job.
-   - State what the artifact is trying to achieve in one sentence.
-   - Identify who or what depends on it.
-   - Separate hard constraints from habits, conventions, or inherited decisions.
-2. Build the first-principles model.
-   - List required inputs, outputs, invariants, dependencies, and failure conditions.
-   - Mark each important claim as a fact, an assumption, or an open question.
-   - Ask what the simplest correct version would need.
-3. Inspect for fundamental problems.
-   - Trace where reasoning breaks, constraints conflict, or assumptions remain unproven.
-   - Look specifically for false success states: pass-but-not-validated, schema-but-not-enforced, output-but-empty, report-but-invalid, docs-but-wrong-cwd.
-   - Check whether each important guarantee is enforced by code, tests, or commands—not only stated in documentation.
-   - Rank risks by consequence: wrong decision > broken invariant > fake confidence > maintainability drag > cosmetic drift.
-   - Find duplication, redundancy, dead weight, unnecessary layers, and abstractions that only exist to support other abstractions.
-   - Distinguish deliberate reinforcement from accidental duplication. Say so when repetition is justified or materially harmless.
-   - Explain why a structure is unnecessary instead of merely calling it complex.
-4. Produce findings.
-   - Rank issues by impact: wrong premise, broken invariant, constraint mismatch, redundancy, maintainability drag.
-   - Explain each issue in causal terms: what assumption fails, why it fails, and what risk it creates.
-   - Skip style nits unless they directly obscure reasoning or hide duplication.
-5. Recommend a simpler direction.
-   - Suggest the smallest rewrite or refactor direction that restores clarity.
-   - Prefer removing steps, merging duplicated responsibilities, collapsing layers, or enforcing invariants closer to the source.
-   - Do not fully rewrite unless the user explicitly asks for implementation.
+```md
+- Finding: <problem and affected location>
+- Mechanism / consequence: <why it fails and what depends on it>
+- Evidence: <observed behavior or source; label assumptions>
+- Correction: <smallest justified change or verification needed>
+```
 
-## Document Review Lens
+State the intended job and binding constraints when needed to understand the findings. Report no substantive findings when warranted; do not invent issues to fill a template. For a readiness decision, give a scoped verdict, unresolved blockers, and the evidence needed to close them. Distinguish checks performed from checks proposed.
 
-When reviewing documents, proposals, specs, or architecture notes:
+## Completion check
 
-- Verify the problem statement before judging the solution.
-- Separate requirements from preferences and guesses.
-- Flag circular reasoning, undefined terms, missing constraints, and untested leaps from premise to conclusion.
-- Find repeated sections, duplicated requirements, contradictory rules, and process steps that do not change the outcome.
-- Ask whether the document describes the simplest workable system or defends inherited complexity.
-
-## Code Review Lens
-
-When reviewing code, modules, or diffs:
-
-- Trace the real data flow, control flow, and state transitions.
-- Identify duplicated logic, redundant branches, dead adapters, pass-through wrappers, and layers with no unique responsibility.
-- Check whether invariants are enforced in code or only assumed by comments and conventions.
-- Question abstractions that increase call depth without reducing semantic duplication.
-- Prefer merging equivalent paths and deleting accidental complexity before introducing new patterns.
-
-## Output Format
-
-Use this structure unless the user requests another format:
-
-1. Goal
-   - State the artifact's job in one sentence.
-2. Facts and constraints
-   - List the hard requirements, invariants, and external constraints.
-3. Assumptions to challenge
-   - List the key assumptions that need proof.
-4. First-principles findings
-   - Explain the fundamental problems in priority order.
-5. Redundancy and duplication
-   - Call out repeated logic, repeated ideas, unnecessary layers, or no-op process.
-   - Explicitly say when no meaningful redundancy exists.
-6. Simpler direction
-   - Recommend the smallest cleaner design or refactor direction.
-7. Open questions
-   - Name missing context that blocks stronger conclusions.
-8. Readiness verdict
-   - Include when the review is about readiness, acceptance, or whether blockers remain.
-   - Say whether there are P1/P2 blockers.
-   - If ready, state the exact verification evidence required.
-   - If not ready, name the smallest patch that would make it ready.
-
-## Guardrails
-
-- Do not anchor on framework fashion, team habit, or personal taste.
-- Do not reward complexity just because it looks "enterprise".
-- Do not recommend new abstractions until semantic duplication is real.
-- Do not confuse indirection with flexibility.
-- Do not be adversarial for theater; every challenge must tie to a concrete risk.
-- Do not treat missing evidence as failure; label it as an open question unless the system depends on it.
-- Do not accept "exists" as proof of "used" or "validated".
-- Do not accept "passes" as proof unless the command validates the relevant invariant.
-- Say what evidence is missing when context is insufficient.
-- Switch to implementation only after the user explicitly asks to rewrite or refactor.
-
-## Example Triggers
-
-- "Use first principles to review this design document."
-- "Inspect this module from first principles and tell me what is redundant."
-- "Challenge the assumptions in this proposal and recommend a simpler architecture."
+- Each finding has a causal explanation and locatable evidence or an explicit evidence gap.
+- Recommended simplifications still satisfy the binding constraints and account for affected callers.
+- The verdict covers only the inspected scope and what the checks establish.
