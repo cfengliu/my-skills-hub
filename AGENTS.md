@@ -7,11 +7,11 @@
 
 ## Repo 結構
 
-- 目前只維護 standalone skills，放在 `skills/<category>/<skill-name>/`。
-- category 依領域、角色或使用場景命名；category 與 skill 資料夾名稱使用 kebab-case。
+- 目前只維護 standalone skills，放在 `skills/<skill-name>/`。
+- skill 資料夾名稱使用 kebab-case，不設 category 層。
 - 每個 skill 必須自包含；主要內容放在自己的 `SKILL.md`，必要資源放在同一資料夾。
-- 有實際內容才建立 category 或 supporting folders；不在 repo root 直接放 skill，不建立 `dist/`。
-- `INDEX.md` 只做 catalog，列出 category、用途、每個 skill 的路徑與用途。
+- 有實際內容才建立 supporting folders；不在 repo root 直接放 skill，不建立 `dist/`。
+- `INDEX.md` 只做 catalog，列出每個 skill 的路徑與用途。
 
 ## SKILL.md
 
@@ -24,14 +24,14 @@ description: "Use when ..."
 ---
 ```
 
-- `name` 等於資料夾名稱，不加 category 前綴。
+- `name` 等於資料夾名稱，不加分類前綴。
 - `description` 描述觸發情境，不寫流程摘要。
 - 內文說明使用情境、目的、產出格式、具體流程與完成檢查；指令必須可操作、可驗證。
 - 範本使用 Markdown code fence；只保留有用途的章節。
 
 ## 變更與驗證
 
-1. 新增時選擇正確 category，建立可直接使用的 skill 與必要資源。
+1. 新增時建立可直接使用的 skill 與必要資源。
 2. 搬移或改名時保留 supporting files；改名後同步 frontmatter 的 `name`。
 3. 刪除前確認不應搬到其他位置；同步移除失去用途的配套。
 4. 更新 `INDEX.md` 與受影響引用。

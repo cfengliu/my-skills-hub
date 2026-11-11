@@ -1,4 +1,0 @@
-interface:
-  display_name: "CSS Theme Migration"
-  short_description: "Migrate hardcoded CSS colors to theme tokens"
-  default_prompt: "Use $css-theme-migration to migrate hardcoded dark CSS colors into light/dark theme tokens."
