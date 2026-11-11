@@ -2,7 +2,7 @@
 
 Reusable, independently installable Codex skills for task handoffs, session knowledge, documentation maintenance, and critical reviews.
 
-[繁體中文](README.zh-TW.md) · [Skill index](INDEX.md)
+[繁體中文](README.zh-Hant.md) · [Skill index](INDEX.md)
 
 ## Skills
 
