@@ -1,4 +1,0 @@
-interface:
-  display_name: "Change First"
-  short_description: "Isolate likely change points"
-  default_prompt: "Use $change-first to identify likely changes, isolate them, and plan migrations."

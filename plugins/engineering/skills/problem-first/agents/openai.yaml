@@ -1,4 +1,0 @@
-interface:
-  display_name: "Problem First"
-  short_description: "Define the right problem before coding"
-  default_prompt: "Use $problem-first to clarify the problem, users, success criteria, non-goals, and MVP."

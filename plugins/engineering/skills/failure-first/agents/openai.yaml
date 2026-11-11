@@ -1,4 +1,0 @@
-interface:
-  display_name: "Failure First"
-  short_description: "Design for controlled failure and recovery"
-  default_prompt: "Use $failure-first to list failure modes and design timeout, retry, idempotency, fallback, and observability."
