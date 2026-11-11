@@ -9,6 +9,7 @@ Standalone skills 放在 `skills/<category>/<skill-name>/`。
 | Skill | 用途 |
 |---|---|
 | [task-harness](skills/agent-workflows/task-harness/) | 為交接、委派、重複執行或自動化建立任務契約，定義範圍、產出與驗收。 |
+| [distill-session-knowledge](skills/agent-workflows/distill-session-knowledge/) | 從目前 Session 的證據提煉工程經驗，判斷適用範圍並提出可審查的保存建議。 |
 | [extract-session-workflow](skills/agent-workflows/extract-session-workflow/) | 從對話或 Agent 執行紀錄抽取可重用流程，保留決策點、驗證與證據強度。 |
 | [repository-drift-control](skills/agent-workflows/repository-drift-control/) | 刪除文件重複與過期內容、釐清規則來源，保留已接受決策與必要關卡。 |
 
