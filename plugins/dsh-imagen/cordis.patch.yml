@@ -1,0 +1,6 @@
+- insert:
+    - id: imagen-local
+      name: dsh-imagen-local
+      config:
+        command: codex
+        timeoutMs: 180000

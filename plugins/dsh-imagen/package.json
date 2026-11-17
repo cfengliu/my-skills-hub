@@ -1,0 +1,14 @@
+{
+  "name": "dsh-imagen-local",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "DSH /imagen plugin using native Codex ChatGPT image generation",
+  "main": "./host.mjs",
+  "exports": { ".": "./host.mjs", "./client": "./client.js", "./package.json": "./package.json" },
+  "files": ["backend.mjs", "host.mjs", "client.js", "cli.mjs", "cordis.patch.yml", "README.md", "DECISIONS.md"],
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "engines": { "node": ">=24", "dsh": "0.2.2-rc.1" },
+  "peerDependencies": { "@deepseek-ai/dsh-tools": "0.2.2-rc.1", "@deepseek-ai/dsh-llm": "0.2.2-rc.1" },
+  "dsh": { "manifestVersion": 1, "bundle": { "patch": "cordis.patch.yml" }, "client": { "platform": "web" } }
+}
