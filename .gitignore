@@ -5,3 +5,9 @@
 .worktrees/
 
 .codex/ollama-worker-runs/
+
+# Local dependencies, caches, and generated plugin artifacts
+node_modules/
+.cache/
+/plugins/**/*.tgz
+/plugins/dsh-imagen/output/

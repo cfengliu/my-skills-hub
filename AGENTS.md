@@ -7,11 +7,12 @@
 
 ## Repo 結構
 
-- 目前只維護 standalone skills，放在 `skills/<skill-name>/`。
+- Standalone skills 放在 `skills/<skill-name>/`；DSH 插件放在 `plugins/<plugin-name>/`，各自包含文件與必要資源。
+- 插件依賴與打包產物不納入 Git；安裝、測試及打包方式記在插件自己的 README。
 - skill 資料夾名稱使用 kebab-case，不設 category 層。
 - 每個 skill 必須自包含；主要內容放在自己的 `SKILL.md`，必要資源放在同一資料夾。
 - 有實際內容才建立 supporting folders；不在 repo root 直接放 skill，不建立 `dist/`。
-- `INDEX.md` 只做 catalog，列出每個 skill 的路徑與用途。
+- `INDEX.md` 只做 catalog，列出每個 skill 與插件的路徑及用途；兩份 README 保留導覽與共用安裝說明。
 
 ## SKILL.md
 
