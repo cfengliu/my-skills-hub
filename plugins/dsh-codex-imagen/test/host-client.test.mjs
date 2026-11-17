@@ -15,6 +15,7 @@ test('command returns CommandResult and forwards literal prompt to a real user f
   const prompt = '  圖片\n"hello" $(whoami) `shell`  ';
   let forwarded;
   const result = command.handler({ rawInput: prompt, agent: { followup(message) { forwarded = message; } }, signal: new AbortController().signal });
+  assert.equal(command.name, 'codex-imagen');
   assert.equal(result.kind, 'success');
   assert.equal(forwarded.role, 'user');
   assert.deepEqual(forwarded.source, { kind: 'user' });
@@ -39,7 +40,7 @@ test('client registers imagen tool renderer with image child slot and text fallb
   const React = { createElement: (type, props, ...children) => ({ type, props, children }) };
   const script = await readFile(new URL('../client.js', import.meta.url), 'utf8');
   vm.runInNewContext(script, { window: { __ModuleLoader__: { load(value) { module = value; } } } });
-  assert.equal(module.id, 'dsh-imagen-local');
+  assert.equal(module.id, 'dsh-codex-imagen');
   const plugin = module.factory(name => { assert.equal(name, 'react'); return React; });
   plugin.apply({ slots: { inject(name, callback) { assert.equal(name, 'tool.call.toolview'); callback(); }, register(value, component) { row = value; View = component; } } });
   assert.equal(row.key, 'imagen_generate');

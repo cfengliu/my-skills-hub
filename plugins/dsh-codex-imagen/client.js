@@ -1,5 +1,5 @@
 window.__ModuleLoader__.load({
-  id: 'dsh-imagen-local',
+  id: 'dsh-codex-imagen',
   factory(require) {
     const React = require('react');
     function View(p) {
@@ -14,7 +14,7 @@ window.__ModuleLoader__.load({
       );
     }
     return {
-      name: 'imagen-local', inject: ['slots'],
+      name: 'codex-imagen', inject: ['slots'],
       apply(ctx) {
         ctx.slots.inject('tool.call.toolview', () => ctx.slots.register({
           name: 'tool.call.toolview', key: 'imagen_generate',

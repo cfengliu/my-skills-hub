@@ -13,4 +13,5 @@
 
 | Plugin | 用途 |
 |---|---|
-| [dsh-imagen](plugins/dsh-imagen/README.md) | 透過已登入的 Codex CLI，在 DSH 使用 `/imagen` 產生 PNG。 |
+| [dsh-codex-imagen](plugins/dsh-codex-imagen/README.md) | 透過已登入的 Codex CLI，在 DSH 使用 `/codex-imagen` 產生 PNG。 |
+| [dsh-codex-web-search](plugins/dsh-codex-web-search/README.md) | 透過 Codex 原生網頁搜尋，在 DSH 使用 `/codex-search` 查詢資料與來源連結。 |

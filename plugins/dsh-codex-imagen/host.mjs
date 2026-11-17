@@ -2,14 +2,14 @@ import { defineTool } from '@deepseek-ai/dsh-tools';
 import { createUserMessage } from '@deepseek-ai/dsh-llm';
 import { generateImage } from './backend.mjs';
 
-export const name = 'imagen-local';
+export const name = 'codex-imagen';
 export const inject = ['commands', 'tools', 'attachments'];
 
 export function apply(ctx, config = {}) {
   ctx.commands.register({
-    name: 'imagen', description: '透過已登入的 Codex 產生圖片', input: { hint: '描述要產生的圖片' },
+    name: 'codex-imagen', description: '透過已登入的 Codex 產生圖片', input: { hint: '描述要產生的圖片' },
     handler({ agent, rawInput, signal }) {
-      if (!rawInput.trim()) return { kind: 'error', text: '請輸入圖片描述，例如 /imagen 清晨的原始森林。' };
+      if (!rawInput.trim()) return { kind: 'error', text: '請輸入圖片描述，例如 /codex-imagen 清晨的原始森林。' };
       if (rawInput.length > 32000) return { kind: 'error', text: '圖片描述不可超過 32000 字元。' };
       signal.throwIfAborted();
       agent.followup(createUserMessage({

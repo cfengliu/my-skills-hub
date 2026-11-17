@@ -1,0 +1,14 @@
+{
+  "name": "dsh-codex-web-search",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "DSH native Codex web search plugin using a signed-in ChatGPT account",
+  "main": "./host.mjs",
+  "exports": { ".": "./host.mjs", "./package.json": "./package.json" },
+  "files": ["backend.mjs", "rpc.mjs", "host.mjs", "cli.mjs", "cordis.patch.yml", "README.md"],
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "engines": { "node": ">=24", "dsh": "0.2.2-rc.1" },
+  "peerDependencies": { "@deepseek-ai/dsh-tools": "0.2.2-rc.1", "@deepseek-ai/dsh-llm": "0.2.2-rc.1" },
+  "dsh": { "manifestVersion": 1, "bundle": { "patch": "cordis.patch.yml" } }
+}

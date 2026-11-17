@@ -1,13 +1,16 @@
 # My Skills Hub
 
-可重用的 Codex skills，以及本機 DSH 圖片生成插件。
+可重用的 Codex skills，以及透過 Codex 執行圖片生成與網頁搜尋的本機 DSH 插件。
 
 [English](README.md) · [完整目錄](INDEX.md)
 
 ## 找到需要的工具
 
 - [Skills](INDEX.md#skills)：Session 知識萃取與 repo 文件維護。`skills/` 下的每個資料夾都可獨立安裝。
-- [DSH /imagen](plugins/dsh-imagen/README.md)：透過已登入的 Codex CLI 產生 PNG。安裝、開發與驗證方式集中在插件說明。
+- [dsh-codex-imagen](plugins/dsh-codex-imagen/README.md)：透過已登入的 Codex CLI，以 `/codex-imagen` 產生 PNG。
+- [dsh-codex-web-search](plugins/dsh-codex-web-search/README.md)：透過 Codex 原生網頁搜尋，以 `/codex-search` 查詢資料與來源連結。
+
+各插件的安裝、開發與驗證方式集中在自己的說明文件。
 
 ## 安裝 skill
 

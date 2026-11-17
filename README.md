@@ -1,13 +1,16 @@
 # My Skills Hub
 
-Reusable Codex skills and a local DSH image-generation plugin.
+Reusable Codex skills and local DSH plugins for Codex image generation and web search.
 
 [繁體中文](README.zh-Hant.md) · [Catalog](INDEX.md)
 
 ## Find what you need
 
 - [Skills](INDEX.md#skills): session knowledge extraction and repository documentation maintenance. Each folder under `skills/` is independently installable.
-- [DSH /imagen](plugins/dsh-imagen/README.md): generate PNG images through a signed-in Codex CLI. Installation, development, and verification are documented with the plugin.
+- [dsh-codex-imagen](plugins/dsh-codex-imagen/README.md): generate PNG images through a signed-in Codex CLI with `/codex-imagen`.
+- [dsh-codex-web-search](plugins/dsh-codex-web-search/README.md): research queries using native Codex web search with `/codex-search`.
+
+Each plugin documents its installation, development, and verification steps.
 
 ## Install a skill
 

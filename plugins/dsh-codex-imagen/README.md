@@ -1,6 +1,6 @@
-# DSH /imagen
+# dsh-codex-imagen
 
-透過已登入 ChatGPT 的 Codex CLI，在 DSH 輸入 `/imagen 圖片描述` 產生一張 PNG。這是獨立插件，不需要額外 bridge，也沒有 OpenAI API 備援。
+透過已登入 ChatGPT 的 Codex CLI，在 DSH 輸入 `/codex-imagen 圖片描述` 產生一張 PNG。這是獨立插件，不需要額外 bridge，也沒有 OpenAI API 備援。
 
 ## 安裝
 
@@ -9,12 +9,12 @@
 從 repo 根目錄執行：
 
 ```sh
-cd plugins/dsh-imagen
-npm pack
-dsh plugin --profile web add ./dsh-imagen-local-0.1.0.tgz
+cd plugins/dsh-codex-imagen
+npm pack --cache .cache/npm
+dsh plugin --profile web add ./dsh-codex-imagen-0.1.0.tgz
 ```
 
-重新整理 Web GUI，確認指令選單出現 `/imagen`，再輸入 `/imagen 清晨陽光穿過原始森林，寫實攝影`。打包檔由本機產生，不納入 Git。
+重新整理 Web GUI，確認指令選單出現 `/codex-imagen`，再輸入 `/codex-imagen 清晨陽光穿過原始森林，寫實攝影`。打包檔由本機產生，不納入 Git。
 
 插件透過一般 agent turn 呼叫 `imagen_generate`。圖片顯示於工具卡。按停止可取消回合與 Codex 子程序。模型仍需遵循 followup 指示，因此不能在 command dispatch 層保證模型一定只呼叫一次。
 
@@ -70,4 +70,4 @@ Backend 以 `ImageRequest {prompt}` 接收請求，回傳 `GeneratedImage {data,
 
 2026-11-17 在 Codex CLI `0.169.0` 實測登入與原生生圖，backend 產生有效 PNG，原圖為 3,757,366 bytes，保存在 [範例圖片](examples/primeval-forest.png)。當次記錄 31 項自動測試通過，涵蓋取消、逾時、錯誤、路徑限制、指令與 renderer 註冊。
 
-尚未安裝到正在執行的 DSH profile，也尚未在實際瀏覽器驗證圖片卡及停止按鈕。現有 GUI 要求認證，未以 HTTP 401 回應替代瀏覽器驗收。
+2026-11-17 已安裝並啟用於執行中的 DSH `web` profile，取代舊名稱 `dsh-imagen-local`。尚未在實際瀏覽器驗證 `/codex-imagen` 指令選單、圖片卡及停止按鈕。

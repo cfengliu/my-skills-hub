@@ -160,7 +160,7 @@ function connect(options, signal) {
 }
 
 async function initialize(client) {
-  const initialized = await client.request('initialize', { clientInfo: { name: 'dsh_imagen', version: '0.1.0' }, capabilities: { experimentalApi: true } });
+  const initialized = await client.request('initialize', { clientInfo: { name: 'dsh_codex_imagen', version: '0.1.0' }, capabilities: { experimentalApi: true } });
   client.notify('initialized');
   const account = await client.request('account/read', { refreshToken: false });
   if (account.account?.type !== 'chatgpt') throw new Error('Codex requires a signed-in ChatGPT account; API key fallback is disabled');

@@ -1,0 +1,6 @@
+- insert:
+    - id: codex-web-search
+      name: dsh-codex-web-search
+      config:
+        command: codex
+        timeoutMs: 180000
