@@ -1,6 +1,6 @@
 # My Skills Hub
 
-Reusable Codex skills and local DSH plugins for Codex image generation and web search.
+Reusable Codex skills and local DSH plugins for Codex image generation, web search, and audio transcription.
 
 [繁體中文](README.zh-Hant.md) · [Catalog](INDEX.md)
 
@@ -9,6 +9,7 @@ Reusable Codex skills and local DSH plugins for Codex image generation and web s
 - [Skills](INDEX.md#skills): session knowledge extraction and repository documentation maintenance. Each folder under `skills/` is independently installable.
 - [dsh-codex-imagen](plugins/dsh-codex-imagen/README.md): generate PNG images through a signed-in Codex CLI with `/codex-imagen`.
 - [dsh-codex-web-search](plugins/dsh-codex-web-search/README.md): research queries using native Codex web search with `/codex-search`.
+- [dsh-codex-transcribe](plugins/dsh-codex-transcribe/README.md): dictate into the chat draft with a composer microphone button, or transcribe files with `/codex-transcribe`, using the existing Codex ChatGPT login.
 
 Each plugin documents its installation, development, and verification steps.
 

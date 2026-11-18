@@ -15,3 +15,4 @@
 |---|---|
 | [dsh-codex-imagen](plugins/dsh-codex-imagen/README.md) | 透過已登入的 Codex CLI，在 DSH 使用 `/codex-imagen` 產生 PNG。 |
 | [dsh-codex-web-search](plugins/dsh-codex-web-search/README.md) | 透過 Codex 原生網頁搜尋，在 DSH 使用 `/codex-search` 查詢資料與來源連結。 |
+| [dsh-codex-transcribe](plugins/dsh-codex-transcribe/README.md) | 輸入框麥克風錄音並回填草稿；也可用 `/codex-transcribe` 轉錄檔案並下載 TXT。 |

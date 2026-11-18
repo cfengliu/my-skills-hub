@@ -1,0 +1,45 @@
+{
+  "name": "dsh-codex-transcribe",
+  "version": "0.3.3",
+  "private": true,
+  "type": "module",
+  "description": "DSH composer microphone and native Codex dictation using existing ChatGPT login",
+  "main": "./host.mjs",
+  "exports": {
+    ".": "./host.mjs",
+    "./client": "./client.mjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "auth.mjs",
+    "backend.mjs",
+    "host.mjs",
+    "voice.mjs",
+    "client.mjs",
+    "cli.mjs",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=24",
+    "dsh": "0.2.2-rc.1"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-llm": "0.2.2-rc.1",
+    "@deepseek-ai/schemastery": "3.19.0"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "cordis.patch.yml"
+    },
+    "client": {
+      "inject": ["@deepseek-ai/dsh-client-ui-conversation"],
+      "platform": "web"
+    }
+  }
+}
